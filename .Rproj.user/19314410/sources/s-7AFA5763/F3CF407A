@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1524642300674.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F3CF407A",
+    "lastKnownWriteTime" : 1536910220,
+    "last_content_update" : 1536910220254,
+    "path" : "C:/Users/dogu/switchdrive/R project/relMix/relMix/R/relMixGUI.R",
+    "project_path" : "R/relMixGUI.R",
+    "properties" : {
+        "cursorPosition" : "600,42",
+        "scrollLine" : "576"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,7 @@
+library(Familias)
+
+persons <- c("son", "father","NNson", "NNfather","NN1")
+ped1 <- FamiliasPedigree(persons, c("father",NA,"NNfather",NA,NA), 
+                         c(NA,NA,NA,NA,NA), c("male","male","male","male","male"))
+
+pedigrees <- list(ped1)

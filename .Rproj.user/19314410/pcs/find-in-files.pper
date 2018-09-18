@@ -1,0 +1,10 @@
+{
+    "dialog-state" : {
+        "caseSensitive" : false,
+        "filePatterns" : [
+        ],
+        "path" : "C:/Users/dogu/switchdrive/R project/relMix/relMix",
+        "query" : "identical",
+        "regex" : false
+    }
+}

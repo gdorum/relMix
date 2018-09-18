@@ -1,0 +1,7 @@
+{
+    "installOptions" : {
+        "installDependencies" : true,
+        "installFromRepository" : true,
+        "libraryPath" : "\\\\irmfscl02/Userhome/dogu/Documents/R/win-library/3.4"
+    }
+}
