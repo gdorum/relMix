@@ -5,7 +5,7 @@
 #3) Files must have '.' as decimal separator
 #4) All individuals must be represented in all pedigrees
 
-#relMixGUI <- function(){
+relMixGUI <- function(){
   
   options("guiToolkit"="tcltk")
   
@@ -596,8 +596,7 @@
     LRmarker <- numeric(length(markers))
     lik1 <- lik2 <- numeric(length(markers))
     for(i in 1:length(R)){
-      
-      cat("Marker",i,"\n")
+
       #Create locus object for each marker
       alleles <- as.character(allelesAll[[which(names(allelesAll)==markers[i])]])
       afreq <- afreqAll[[which(names(afreqAll)==markers[i])]]
@@ -619,19 +618,23 @@
                                allelenames= newAlleles, MutationModel='Custom', MutationMatrix=mm)
       }
       
-      datamatrix <- createDatamatrix(locus,knownGenos[[which(names(knownGenos)==markers[i])]],idsU=idxU)
+      #datamatrix <- createDatamatrix(locus,knownGenos[[which(names(knownGenos)==markers[i])]],idsU=idxU)
       names(pedigrees) <- c("H1","H2")
       
       if(identical(idxC1,idxC2)){
-          res <- relMix(pedigrees, locus, R=R[[i]], datamatrix, ids=idxC, D=lapply(D[idxC],function(x) c(x,x^2)),di=di, kinship=theta)
-          lik1[i] <- res$H1
-          lik2[i] <- res$H2
-          
+        #Find genotypes for known and unknown individuals involved in the hypothesis
+        datamatrix <- createDatamatrix(locus,knownGenos[[which(names(knownGenos)==markers[i])]],idsU=idxU)
+        res <- relMix(pedigrees, locus, R=R[[i]], datamatrix, ids=idxC, D=lapply(D[idxC],function(x) c(x,x^2)),di=di, kinship=theta)
+        lik1[i] <- res$H1
+        lik2[i] <- res$H2
+        
       } else {
         #relMix must be run twice with different contributors specified
-        #Since we assume that all individuals are represented in all pedigrees, we have the same datamatrix under both hypotheses
-        res1 <- relMix(pedigrees$H1, locus, R=R[[i]], datamatrix, ids=idxC1, D=lapply(D[idxC1],function(x) c(x,x^2)),di=di, kinship=theta)
-        res2 <- relMix(pedigrees$H2, locus, R=R[[i]], datamatrix, ids=idxC2, D=lapply(D[idxC2],function(x) c(x,x^2)),di=di, kinship=theta)
+        #Find genotypes for known and unknown individuals involved in each hypothesis
+        datamatrix1 <- createDatamatrix(locus,knownGenos[[which(names(knownGenos)==markers[i])]],idsU=intersect(idxU,idxC1))
+        datamatrix2 <- createDatamatrix(locus,knownGenos[[which(names(knownGenos)==markers[i])]],idsU=intersect(idxU,idxC2))
+        res1 <- relMix(pedigrees$H1, locus, R=R[[i]], datamatrix1, ids=idxC1, D=lapply(D[idxC1],function(x) c(x,x^2)),di=di, kinship=theta)
+        res2 <- relMix(pedigrees$H2, locus, R=R[[i]], datamatrix2, ids=idxC2, D=lapply(D[idxC2],function(x) c(x,x^2)),di=di, kinship=theta)
         lik1[i] <- res1[[1]]
         lik2[i] <- res2[[1]]
       }
@@ -857,7 +860,7 @@
   })
   
   visible(win) <- TRUE
-#}
+}
 
 
 
