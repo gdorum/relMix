@@ -5,6 +5,7 @@
 #3) Files must have '.' as decimal separator
 #4) All individuals must be represented in all pedigrees
 
+
 relMixGUI <- function(){
   
   options("guiToolkit"="tcltk")
