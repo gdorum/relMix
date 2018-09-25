@@ -11,6 +11,6 @@ To get the latest version, install from GitHub as follows:
  # First install devtools if needed
 if(!require(devtools)) install.packages("devtools")
 
-# Install mut2 from GitHub
+# Install relMix 2.0 from GitHub
 devtools::install_github("thoree/relMix")
 ```
