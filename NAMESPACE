@@ -1,6 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 import(Familias)
-import(paramlink)
 import(gWidgets)
 import(tkrplot)
 importFrom("utils", "read.table", "write.table", "assignInNamespace")
