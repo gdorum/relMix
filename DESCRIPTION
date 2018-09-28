@@ -7,7 +7,7 @@ Author: Guro Dorum, Navreet Kaur, Thore Egeland
 Maintainer: Guro Dorum <guro.dorum@gmail.com>
 Description: Makes relationship inference involving DNA mixtures with unknown profiles. 
 VignetteBuilder: knitr
-Depends: R (>= 3.0), Familias (>= 0.9-7)
+Depends: R (>= 3.0), Familias (>= 2.5)
 Imports: gWidgets, tkrplot
 Suggests: knitr, pander
 License: GPL (>=2)
