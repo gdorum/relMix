@@ -22,12 +22,36 @@ relMixGUI <- function(){
   tableWriter <- function(filename,obj){
     write.table(obj,file=filename,sep="\t",row.names=FALSE,quote=FALSE)
   }
-  
+
+  # Receives a the output of an error checking function and displays
+  # the appropriate error messages. Returns the data frame on
+  # successfull load or NULL on error.
+  process_errors <- function(result) {
+      message = "";
+      if (length(result$error) > 0) {
+          message <- paste(message, "Error(s):\n", result$error, sep="\n");
+          message <- paste(message, "These errors are fatal. You will need to fix the file yourself.", sep="\n");
+      }
+
+      if (length(result$warning) > 0) {
+          message <- paste(message, "Warning(s):\n", result$warning, sep="\n");
+          message <- paste(message, "These warnings are not fatal. You may continue using the program but please be aware that results may be incorrect.", sep="\n");
+      }
+
+      f_errorWindow(message);
+
+      return(result$df);
+  }
+
   f_importprof <- function(h,...) {
     type=h$action #get type of profile
     proffile = gfile(text=paste("Open ",type," file",sep=""),type="open",
                      filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*"))))
-    Data <- tableReader(proffile) #load profile
+
+
+    # check errors
+    Data <- process_errors(checkMixtureFile(proffile));
+
     assign(h$action,Data,envir=mmTK) #save object
   }
   
@@ -106,7 +130,7 @@ relMixGUI <- function(){
   #Pop-up error window
   f_errorWindow <- function(message){
     errorWindow <- gwindow("Error")
-    glabel(message,container=errorWindow)
+    glabel(message,container=errorWindow, expand=TRUE)
     gbutton("ok", container=errorWindow,handler=function(h,...){
       dispose(h$obj)
     })
