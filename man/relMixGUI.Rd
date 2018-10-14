@@ -12,6 +12,8 @@ relMixGUI()
 }
 \details{
 Note that if mutation model 'Stepwise' is used, it is required that the names of all non-silent alleles are positive integers. See \code{\link[Familias]{FamiliasLocus}} for details about the mutation models.
+
+Includes error checking for mixture files.
 }
 \author{
 Guro Dorum
