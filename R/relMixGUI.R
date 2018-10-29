@@ -11,7 +11,7 @@ relMixGUI <- function(){
 
   options("guiToolkit"="tcltk")
 
-  #Files must have '.' as decimal separator
+  # Files must have '.' as decimal separator
   tableReader <- function(filename) {
     tab <- read.table(filename,header=TRUE,sep="\t",stringsAsFactors=FALSE,na.strings=c(NA,""))
     tryCatch( {  if(ncol(tab)==1) tab <- read.table(filename,header=TRUE,sep=",",stringsAsFactors=FALSE,na.strings=c(NA,"")) } ,error=function(e) e)
@@ -31,16 +31,15 @@ relMixGUI <- function(){
       message = "";
       if (length(result$error) > 0) {
           message <- paste(message, "Error(s):\n", result$error, sep="\n");
-          message <- paste(message, "These errors are fatal. You will need to fix the file yourself.", sep="\n");
+          message <- paste(message, "\nThese errors are fatal. You will need to fix the file yourself.", sep="\n");
+          f_errorWindow(message);
+          return(NULL); # Terminate early if there are errors, returning a NULL dataframe
       }
 
       if (length(result$warning) > 0) {
           message <- paste(message, "Warning(s):\n", result$warning, sep="\n");
-          message <- paste(message, "These warnings are not fatal. You may continue using the program but please be aware that results may be incorrect.", sep="\n");
-      }
-
-      if (nchar(message) > 0) {
-          f_errorWindow(message);
+          message <- paste(message, "\nThese warnings are not fatal. You may continue using the program but please be aware that results may be incorrect.", sep="\n");
+          f_warningWindow(message)
       }
 
       return(result$df);
@@ -54,7 +53,7 @@ relMixGUI <- function(){
       if(!exists('mixture',envir=mmTK)) {f_errorWindow("Import mixture profile before reference profiles"); return();}
     }
     if (type == "frequencies") {
-      if(!exists('mixture',envir=mmTK)) {f_errorWindow("Import mixture profile before reference file"); return();}
+      if(!exists('mixture',envir=mmTK)) {f_errorWindow("Import mixture profile before frequencies"); return();}
       if(!exists('reference',envir=mmTK)) {f_errorWindow("Import reference profiles before frequencies"); return();}
     }
 
@@ -149,11 +148,16 @@ relMixGUI <- function(){
   }
   #Pop-up error window
   f_errorWindow <- function(message){
-    errorWindow <- gwindow("Error")
-    glabel(message,container=errorWindow, expand=TRUE)
-    gbutton("ok", container=errorWindow,handler=function(h,...){
-      dispose(h$obj)
-    })
+    # errorWindow <- gwindow("Error", )
+    # glabel(message,container=errorWindow, expand=TRUE)
+    # gbutton("ok", container=errorWindow,handler=function(h,...){
+    #   dispose(h$obj)
+    # })
+    gmessage(message, title="Error", icon="error")
+  }
+
+  f_warningWindow <- function(message) {
+    gmessage(message, title="Warning", icon="warning")
   }
 
   #Makes pop-up window for database
