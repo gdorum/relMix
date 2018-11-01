@@ -1,13 +1,13 @@
 Package: relMix
 Type: Package
 Title: Relationship Inference for DNA Mixtures
-Version: 1.2.3
-Date: 2017-04-03
-Author: Navreet Kaur, Thore Egeland, Guro Dorum
+Version: 2.0
+Date: 2018-10-27
+Author: Guro Dorum, Elias Hernandis, Navreet Kaur, Thore Egeland 
 Maintainer: Guro Dorum <guro.dorum@gmail.com>
 Description: Makes relationship inference involving DNA mixtures with unknown profiles. 
 VignetteBuilder: knitr
-Depends: R (>= 3.0), Familias, paramlink (>= 0.9-7)
+Depends: R (>= 3.0), Familias (>= 2.4)
 Imports: gWidgets, tkrplot
 Suggests: knitr, pander
 License: GPL (>=2)
