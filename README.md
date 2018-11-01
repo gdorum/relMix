@@ -12,5 +12,5 @@ To get the latest version, install from GitHub as follows:
 if(!require(devtools)) install.packages("devtools")
 
 # Install relMix 2.0 from GitHub
-devtools::install_github("thoree/relMix")
+devtools::install_github("gdorum/relMix")
 ```
