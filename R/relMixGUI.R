@@ -516,7 +516,7 @@ relMixGUI <- function(){
 
     #Check that frequencies sum to 1, otherwise scale
     #Round to 4 decimals
-    sums <- sapply(1:length(markerNames),function(i) round(sum(db[db[,1]==markerNames[i],3]),4))
+    sums <- sapply(1:length(markerNames),function(i) sum(db[db[,1]==markerNames[i],3]))
     ix <- which(sums!=1)
     if(length(ix)>0) {
       #gconfirm("Frequencies do not sum to 1. Do you want to scale?", title="Note",icon = "info",handler = function(h,...){
