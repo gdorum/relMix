@@ -61,6 +61,7 @@ relMixGUI <- function(){
                      filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*"))))
 
     # check errors
+    tryCatch({
     if (type == "mixture") {
       Data <- process_errors(checkMixtureFile(proffile));
     } else if (type == "reference") {
@@ -70,7 +71,11 @@ relMixGUI <- function(){
     } else if (type == "frequencies") {
       mix <- get("mixture",envir=mmTK);
       Data <- process_errors(checkFrequenciesFile(proffile, mix));
-    }
+    }}, error = function(e) {
+      # Handle fatal errors due to bad file formats
+      # For example, if when loading a mixture file a frequency file is provided, the error will be caught here
+      f_errorWindow(paste("There was an error loading the file. It does not look like a ", type, " file. Please make sure the file is correct and try again."))
+    })
     assign(h$action,Data,envir=mmTK) #save object
   }
 
