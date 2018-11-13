@@ -50,19 +50,17 @@ checkReferenceFile <- function(filename, mix) {
 
     # Check that marker names are the ones present in the mixture file
     if (!setequal(df$Marker, mix$Marker)) {
-        markerWarnings <- "The marker names on your reference file are different from those in your mix file.";
+        markerError <- "The marker names in your reference file are different from those in your mixture file.";
         comb <- combn(union(df$Marker, mix$Marker), 2);
         for (i in 1:ncol(comb)) {
             m1 <- comb[1,i];
             m2 <- comb[2, i];
             if (levenshteinDistance(m1, m2) == 1) {
-                markerWarnings <- paste(markerWarnings, "Found two markers with very close names in the reference file: did you mean", m1, "or", m2, "?");
-            }
+                markerError <- paste(markerError, "Found two markers with very close names: did you mean", m1, "or", m2, "?")
+              }
         }
-
-        warning <- append(warning, markerWarnings);
+    error <- append(error, markerError);
     }
-
 
 
     # Check all allele reference data is numeric
