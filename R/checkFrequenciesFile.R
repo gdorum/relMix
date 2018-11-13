@@ -49,6 +49,8 @@ checkFrequenciesFile <- function(filename, mix) {
         }
     }
 
+    #If more than one marker
+    if(ncol(df)>2){
     # Check for duplicate markers
     # TODO: this error will never trigger b/c R renames duplicate columns when
     # loading w/ headers
@@ -56,13 +58,14 @@ checkFrequenciesFile <- function(filename, mix) {
         error <- append(error, paste("There are duplicate markers in your frequency table."));
     }
 
-    comb <- combn(union(names(df)[-1], mix$Marker), 2);
-    for (i in 1:ncol(comb)) {
-        m1 <- comb[1,i];
-        m2 <- comb[2, i];
-        if (levenshteinDistance(m1, m2) == 1) {
-            warning <- append(warning, paste("Found two markers with very close names: did you mean", m1, "or", m2, "?"));
-        }
+      comb <- combn(union(names(df)[-1], mix$Marker), 2);
+      for (i in 1:ncol(comb)) {
+          m1 <- comb[1,i];
+          m2 <- comb[2, i];
+          if (levenshteinDistance(m1, m2) == 1) {
+              warning <- append(warning, paste("Found two markers with very close names: did you mean", m1, "or", m2, "?"));
+          }
+      }
     }
 
     # Check that all marker names present in the mixture file are present in the frequency file
