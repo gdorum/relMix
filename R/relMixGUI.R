@@ -515,17 +515,9 @@ relMixGUI <- function(){
     assign('dbF',db,envir=mmTK) #Final database
 
     #Check that frequencies sum to 1, otherwise scale
-    #Round to 4 decimals
     sums <- sapply(1:length(markerNames),function(i) sum(db[db[,1]==markerNames[i],3]))
     ix <- which(sums!=1)
     if(length(ix)>0) {
-      #gconfirm("Frequencies do not sum to 1. Do you want to scale?", title="Note",icon = "info",handler = function(h,...){
-      #   mSums <- markerNames[ix]
-      #   for(m in mSums){
-      #     db[db[,1]==m,3] <- db[db[,1]==m,3]/sum(db[db[,1]==m,3])
-      #   }
-      #   assign('dbF',db,envir=mmTK) #Final database
-      # })
 
       w <- gconfirm(format("Frequencies do not sum to 1. Do you want to scale? If not, a rest allele will be added.",jusity="centre"), title="Note",icon = "info")
       if(svalue(w)){ #Scale
@@ -536,8 +528,6 @@ relMixGUI <- function(){
             for(i in ix){
                 if(sums[i]>1) { #Enforce scaling
                   db[db[,1]==markerNames[i],3] <- db[db[,1]==markerNames[i],3]/sum(db[db[,1]==markerNames[i],3])
-                  # mess <- paste("Enforced scaling for marker ",markerNames[sums[ix]>1])
-                  # gmessage(mess, title="Note",icon = "info")
                 } else { #Rest allele
                     db <- rbind(db,data.frame(Marker=markerNames[i],Allele='r',Frequency=1-sums[i]))
                 }
@@ -576,6 +566,7 @@ relMixGUI <- function(){
 
     E <- get("mixture",envir=mmTK) #get object
     G <- get("reference",envir=mmTK) #get object
+    G$SampleName <- paste0(toupper(substr(G$SampleName, 1, 1)), tolower(substr(G$SampleName, 2, nchar(G$SampleName))))
     #Remove AMEL marker? Or not allow for it?
     R <- f_mixture(E)
     knownGenos <- f_genotypes(G)
@@ -592,16 +583,6 @@ relMixGUI <- function(){
                     Change allele names or choose a different mutation model.",justify="centre"))
     }
 
-    # db2 <- numeric()
-    # for(i in 1:ncol(freqs)){
-    #   ix <- which(!is.na(freqs[,i]))
-    #   a <- alleleNames[ix]
-    #   f <- freqs[ix,i]
-    #   Marker <- rep(markerNames[i],length(ix))
-    #   db2New <- data.frame(Marker,a,f)
-    #   colnames(db2New) <- c("Marker","Allele","Frequency")
-    #   db2 <- rbind(db2,db2New)
-    # }
     #Make lists of alleles and frequencies per marker
     allelesAll <- split(db2$Allele,db2$Marker)
     afreqAll <- split(db2$Frequency,db2$Marker)
@@ -620,7 +601,8 @@ relMixGUI <- function(){
     idxU <- idxC[!idxC%in%idxK] #Contributors with uknown genotypes. Assuming that all individuals are represented in both pedigrees!
 
     #Check if the names of individuals in the reference file correspond to names in pedigree
-    if(any(!unique(G$SampleName)%in%persons1)) { f_errorWindow("Individuals in reference file not found in pedigree"); stop() }
+    notFound <- unique(G$SampleName)[!unique(G$SampleName)%in%persons1]
+    if(length(notFound)>0) { f_errorWindow(c("Following individuals in reference file not found in pedigree:",paste(notFound,collapse=", "))); stop() }
 
     #Dropout/drop-in
     #Set default dropout 0 for all contributors if none is set
@@ -870,7 +852,7 @@ relMixGUI <- function(){
   impFrame <- gframe("Import data",container=dataGroup,horizontal = FALSE)
   objMix <- gbutton(text="Import mixture profile",container=impFrame,handler=f_importprof,action="mixture")
   objRef <- gbutton(text="Import reference profiles",container=impFrame,handler=f_importprof,action="reference")
-  objRef <- gbutton(text="Database",container=impFrame,handler=f_database)
+  objDB <- gbutton(text="Database",container=impFrame,handler=f_database)
 
   ###### Mutations #####
   #Mutation frame
