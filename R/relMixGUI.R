@@ -91,19 +91,20 @@ relMixGUI <- function(){
       #Define the persons involved in the case
       persons <- c("Mother", "Father", "Child")
       sex <- c("female", "male", "male")
-      ped1 <- FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
+      ped <- FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
     } else if(svalue(h$obj)=="Unrelated"){
       #Define the persons involved in the case
       persons <- c("Mother", "Father", "Child")
       sex <- c("female", "male", "male")
-      ped1 <- FamiliasPedigree(id=persons, dadid=c(NA,NA,NA), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
+      ped <- FamiliasPedigree(id=persons, dadid=c(NA,NA,NA), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
     } else {
       pedfile = gfile(text=paste("Open pedigree R file",sep=""),type="open",
                       filter=list("text"=list(patterns=list("*.R")),"all"=list(patterns=list("*"))))
+      process_errors(checkPedigreeFile(pedfile,get("reference",mmTK)))
       source(pedfile)
-      if(!all(exists("persons"),exists("ped1"))) stop("File should define both pedigree and persons")
+      persons <- ped$id
     }
-    assign(paste("ped",h$action,sep=""),ped1,envir=mmTK)
+    assign(paste("ped",h$action,sep=""),ped,envir=mmTK)
     assign(paste("persons_ped",h$action,sep=""),persons,envir=mmTK)
   }
 
@@ -571,7 +572,7 @@ relMixGUI <- function(){
 
     E <- get("mixture",envir=mmTK) #get object
     G <- get("reference",envir=mmTK) #get object
-    G$SampleName <- paste0(toupper(substr(G$SampleName, 1, 1)), tolower(substr(G$SampleName, 2, nchar(G$SampleName))))
+    G$SampleName <- titleize(G$SampleName)
     #Remove AMEL marker? Or not allow for it?
     R <- f_mixture(E)
     knownGenos <- f_genotypes(G)
@@ -848,7 +849,7 @@ relMixGUI <- function(){
   }
 
 
-  win <- gwindow("RelMix",height=500,width=500,visible=FALSE)
+  win <- gwindow("RelMix v2.0",height=500,width=500,visible=FALSE)
   group1 <- ggroup(horizontal = TRUE, container=win,spacing=10)
 
   ###### Import data #####
