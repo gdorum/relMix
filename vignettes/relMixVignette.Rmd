@@ -1,15 +1,15 @@
 ---
-title: "RelMix 1.2"
+title: "RelMix 2.0"
 author: "Guro Dorum"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{relMix 1.2}
+  %\VignetteIndexEntry{relMix 2.0}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette gives an introduction to RelMix 1.2, the graphical user interface of the relMix package. We will present the main features of the GUI with two examples.
+This vignette gives an introduction to RelMix 2.0, the graphical user interface of the relMix package. We will present the main features of the GUI with two examples.
 
 ##Getting started
 
@@ -154,19 +154,18 @@ knitr::include_graphics("mutations_ex2.png")
 ```
 
 ###3. Pedigree
-Since the hypotheses in this example are not covered by the built-in pedigrees, we will provide RelMix with a custom pedigree through an R script. This R script can for instance be exported from Familias 3, but can also be generated manually. The script below shows the code needed to provide the first pedigree where the two contributors are mother and child. Note that the names of the individuals in the pedigree must correspond to the names of individuals in the reference profiles.
+Since the hypotheses in this example are not covered by the built-in pedigrees, we will provide RelMix with a custom pedigree through an R script. This R script can for instance be exported from Familias 3, but can also be generated manually. The script below shows the code needed to provide the first pedigree where the two contributors are mother and child. **Note:** 1) the pedigree must be defined in a variable called "ped", and 2) the names of the individuals in the pedigree (the id) must correspond to the names of individuals in the reference profiles.
 ```{r, eval=FALSE}
 persons <- c("C2","C1")
-ped1 <- FamiliasPedigree(id=persons, dadid=c(NA,NA), momid=c("C1", NA), 
+ped <- FamiliasPedigree(id=persons, dadid=c(NA,NA), momid=c("C1", NA), 
                          sex=c("male", "female"))
-pedigrees <- list(ped1)
+pedigrees <- list(ped)
 ```
 The second pedigree, where the two contributors are unrelated, is defined as below.
 ```{r, eval=FALSE}
 persons <- c("C2","C1")
-ped1 <- FamiliasPedigree(id=c(persons), dadid=c(NA, NA), 
+ped <- FamiliasPedigree(id=c(persons), dadid=c(NA, NA), 
                          momid=c( NA, NA), sex=c("male", "female"))
-pedigrees <- list(ped1)
 ```
 Figure 11 shows how to import the custom pedigrees from R scripts, one script per pedigree.
 ```{r, out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."}

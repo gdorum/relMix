@@ -1,0 +1,5 @@
+SampleName	Marker	Allele1	Allele2
+Mother	VWA	17	18
+Mother	TPOX	9	11
+Father	VWA	16	16
+Father	TPOX	10	12
