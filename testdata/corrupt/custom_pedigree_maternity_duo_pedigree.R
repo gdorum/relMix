@@ -4,5 +4,5 @@
 library(Familias)
 #Mother/child
 persons <- c("C2","C1")
-ped <- FamiliasPedigree(id=c(persons), dadid=c(NA, NA),
-                         momid=c( NA, NA), sex=c("male", "female"))
+pedigree <- FamiliasPedigree(id=persons, dadid=c(NA,NA), momid=c("C1", NA),
+                         sex=c("male", "female"))
