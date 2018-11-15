@@ -23,8 +23,9 @@ checkPedigreeFile <- function(filename, df) {
     if (filename != "") {
         # load custom pedigrees
         library(Familias);
-        source(filename);
-        if(!exists("ped")) {error <- append(error,"The pedigree file must define a pedigree in a variable named 'ped'.")
+        source(filename,local=TRUE);
+
+        if(!exists("ped",inherits=FALSE)) {error <- append(error,"The pedigree file must define a pedigree of type 'FamiliasPedigree' in a variable named 'ped'.")
         } else  allowedKinships <- ped$id;
     }
 
