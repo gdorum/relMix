@@ -42,15 +42,11 @@ checkMixtureFile <- function(filename) {
     }
 
     # If there are two or more sample names, i.e. several replicates,
-    #check that they have equal number of rows
+    #check that they have equal number of rows. Otherwise return an error
     sampleNames <- unique(df$SampleName);
-    if (length(sampleNames) > 1) {
-      if(abs(max(table(df$SampleName)) - min(table(df$SampleName)))>0)
-      #comb <- combn(sampleNames, 2)
-      for (i in 1:ncol(comb)) {
-        if (levenshteinDistance(comb[1,i], comb[2,i]) == 1) {
-          warning <- append(warning, paste("Two very similar sample names were found in the mixture file. Did you mean", comb[1,i], "or", comb[2,i],"?"));
-        }
+    if (length(error) == 0 && length(sampleNames) > 1) {
+      if(abs(max(table(df$SampleName)) - min(table(df$SampleName)))>0){
+          error <- paste("Samples", paste(sampleNames,collapse=" and "), "have unequal number of rows in mixture file.");
       }
     }
 

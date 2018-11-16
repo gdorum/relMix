@@ -7,7 +7,7 @@
 #5) Files must be loaded in order: mixture < reference < frequencies
 
 
-relMixGUI <- function(){
+#relMixGUI <- function(){
 
   options("guiToolkit"="tcltk")
 
@@ -572,7 +572,7 @@ relMixGUI <- function(){
 
     E <- get("mixture",envir=mmTK) #get object
     G <- get("reference",envir=mmTK) #get object
-    G$SampleName <- titleize(G$SampleName)
+    G$SampleName <- sapply(G$SampleName,titleize)
     #Remove AMEL marker? Or not allow for it?
     R <- f_mixture(E)
     knownGenos <- f_genotypes(G)
@@ -898,7 +898,7 @@ relMixGUI <- function(){
   })
 
   visible(win) <- TRUE
-}
+#}
 
 
 
