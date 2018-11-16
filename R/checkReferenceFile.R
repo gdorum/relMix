@@ -62,6 +62,14 @@ checkReferenceFile <- function(filename, mix) {
     error <- append(error, markerError);
     }
 
+    #check that all profiles have equal number of rows. Otherwise return an error
+    sampleNames <- unique(df$SampleName);
+    if (length(error) == 0 && length(sampleNames) > 1) {
+      if(abs(max(table(df$SampleName)) - min(table(df$SampleName)))>0){
+        error <- paste("Profiles", paste(sampleNames,collapse=" and "), "have unequal number of rows.");
+      }
+    }
+
 
     # Check all allele reference data is numeric
     if (length(error) == 0 && !all(sapply(df[,3], is.numeric))) {
