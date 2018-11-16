@@ -7,7 +7,7 @@
 #5) Files must be loaded in order: mixture < reference < frequencies
 
 
-#relMixGUI <- function(){
+relMixGUI <- function(){
 
   options("guiToolkit"="tcltk")
 
@@ -898,7 +898,7 @@
   })
 
   visible(win) <- TRUE
-#}
+}
 
 
 
