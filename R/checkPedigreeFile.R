@@ -1,19 +1,32 @@
-# File checkPedigreeFile.R
-#
-# Elias Hernandis <eliashernandis@gmail.com>
-#
-# Given a pedigree filepath this function attempts to load it.
-# The second parameter is a dataframe with reference data. It is used to compare
-# names of individuals and detect possible misspellings.
-#
-# It returns a list containing a dataframe, a list of warnings and a list of
-# errors. If there are fatal errors, the dataframe will be FALSE. If there are
-# fixable errors (see the README for details), the dataframe will contain the
-# data from the mixture file but with those errors already fixed. The original
-# data file will not be updated. In the event of ambiguous or possibly wrong
-# marker names or sample names, the function will report them as warnings but
-# not fix them automatically.
-
+#' Check a pedigree file
+#'
+#' Given a pedigree file path the function attempts to load it and compare it
+#' to the reference profiles to detect possible errors.
+#'
+#'@param filename Path of the pedigree file
+#'@param df Data frame with reference profiles
+#' @return A list containing
+#' \itemize{
+#' \item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
+#' \item{\code{error}} {A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
+#' If this list is not empty, then the dataframe item will be null.}}
+#' @details The pedigree file must be a .R file defining a pedigree (see the relMix vignette for an example). The data frame with reference data is used to compare names of individuals and detect possible misspellings.
+#' If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
+#' If an error is found, checking stops. The error is described in the error messages.
+#' @examples
+#' \dontrun{
+#' #First load mixture file
+#' mixfile <- system.file("extdata","mixture_silent_ex.txt",package="relMix")
+#' mix <- checkMixtureFile(mixfile);
+#' #Load reference file
+#' reffile <- system.file("extdata","references_silent.txt",package="relMix")
+#' ref <- checkReferenceFile(reffile, mix$df)
+#' #Check pedigree file
+#' pedfile <- system.file("extdata","custom_pedigree_maternity_duo.R",package="relMix")
+#' checkPedigreeFile(pedfile,ref$df);
+#' }
+#' @author Elias Hernandis
+#' @export
 
 checkPedigreeFile <- function(filename, df) {
     warning <- c();
@@ -22,11 +35,12 @@ checkPedigreeFile <- function(filename, df) {
     allowedKinships <- c("Father", "Mother", "Child")
     if (filename != "") {
         # load custom pedigrees
-        library(Familias);
-        source(filename,local=TRUE);
+        #source(filename,local=TRUE);
+      localEnv <- new.env()
+      source(filename,local=localEnv)
 
-        if(!exists("ped",inherits=FALSE)) {error <- append(error,"The pedigree file must define a pedigree of type 'FamiliasPedigree' in a variable named 'ped'.")
-        } else  allowedKinships <- ped$id;
+        if(!"ped1"%in%ls(envir=localEnv)) {error <- append(error,"The pedigree file must define a pedigree of type 'FamiliasPedigree' in a variable named 'ped1'.")
+        } else  allowedKinships <- get("ped1",envir=localEnv)$id;
     }
 
     # check the first "header" column for uppercase names
@@ -57,5 +71,5 @@ checkPedigreeFile <- function(filename, df) {
     #     }
     # }
 
-    return(list(df=df, warning=warning, error=error));
+    return(list(warning=warning, error=error));
 }

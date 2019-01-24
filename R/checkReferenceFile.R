@@ -1,20 +1,31 @@
-# File checkReferenceFile.R
-#
-# Elias Hernandis <eliashernandis@gmail.com>
-#
-# Given a reference filepath this function attempts to load it.
-# The second parameter is a dataframe with mixture data. It is used to compare
-# Marker names and detect possible misspellings.
-#
-# It returns a list containing a dataframe, a list of warnings and a list of
-# errors. If there are fatal errors, the dataframe will be FALSE. If there are
-# fixable errors (see the README for details), the dataframe will contain the
-# data from the mixture file but with those errors already fixed. The original
-# data file will not be updated. In the event of ambiguous or possibly wrong
-# marker names or sample names, the function will report them as warnings but
-# not fix them automatically.
-
-
+#' Check a reference profiles file
+#'
+#' Given a reference profile file name the function attempts to load it and compare it to the mixture file to detect possible errors.
+#' @param filename Path of the reference profiles file
+#' @param mix Data frame with mixture data
+#' @return A list containing
+#' \itemize{
+#'\item{\code{df}} {The loaded data frame, NULL if errors are present}
+#' \item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
+#' \item{\code{error}} {A list of strings describing the errors that ocurred that made it impossible to return a valid data frame.
+#' If this list is not empty, then the data frame item will be null.}}
+#' @details See the relMix vignette for a description of the format of the reference file. The data frame with mixture data is used to compare
+#  marker names and detect possible misspellings.
+#' If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
+#' If an error is found, checking stops and a NULL dataframe is returned. The error is described in the error messages.
+#' @seealso \code{\link{checkMixtureFile}} for information on how to load a mixture file.
+#' @examples
+#' \dontrun{
+#' #Load a mixture file
+#' mixfile <- system.file("extdata","mixture.txt",package="relMix")
+#' mix <- checkMixtureFile(mixfile);
+#' #Note: the mixture dataframe is passed as an argument. If the previous check failed,
+#' #the program should not continue with the reference file check
+#' reffile <- system.file("extdata","references.txt",package="relMix")
+#' checkReferenceFile(reffile, mix$df);
+#' }
+#' @author Elias Hernandis
+#' @export
 checkReferenceFile <- function(filename, mix) {
     r <- commonChecks(filename, "reference file");
     df <- r$df;

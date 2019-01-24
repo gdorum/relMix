@@ -1,19 +1,25 @@
-# File checkMixtureFile.R
-#
-# Elias Hernandis <eliashernandis@gmail.com>
-#
-# Given a mixture filepath this function attempts to load it.
-#
-# It returns a list containing a dataframe, a list of warnings and a list of
-# errors. If there are fatal errors, the dataframe will be FALSE. If there are
-# fixable errors (see the README for details), the dataframe will contain the
-# data from the mixture file but with those errors already fixed. The original
-# data file will not be updated. In the event of ambiguous or possibly wrong
-# marker names or sample names, the function will report them as warnings but
-# not fix them automatically.
-
-# source('util.R')
-
+#' Load and check a mixture file
+#'
+#' Given a mixture file name, returns the loaded data frame along with any detected errors or warnings.
+#' @param filename Path of the mixture file
+#' @return A list containing
+#' \itemize{
+#' \item{df} {The loaded data frame, NULL if errors are present.}
+#' \item{warning} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
+#' \item{error} {A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
+#' If this list is not empty, then the dataframe item will be null.}}
+#' @details If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
+#' If an error is found, checking stops and a NULL dataframe is returned. The error is described in the error messages.
+#' @examples
+#' \dontrun{
+#' mixfile <- system.file("extdata","mixture.txt",package="relMix")
+#' result <- checkMixtureFile(mixfile);
+#' print(result$df);
+#' print(result$warning);
+#' print(result$error);
+#' }
+#' @author Elias Hernandis
+#' @export
 checkMixtureFile <- function(filename) {
     r <- commonChecks(filename, "reference file");
     df <- r$df;

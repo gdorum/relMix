@@ -1,0 +1,3 @@
+SampleName	Marker	Allele1	Allele2	Allele3
+Plasma	VWA	16	17	18
+Plasma	TPOX	9	11	

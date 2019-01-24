@@ -1,34 +1,50 @@
-#Create datamatrix with possible genotypes as input to Familias
-#Since mutations, dropout and drop-in is allowed, all genotypes must be considered
-#Takes as input Familias locus and list of known genotypes,
-#plus index in pedigree for unknown individuals in the mixture
+#' Create data matrix with possible genotype combinations for specified individuals
+#'
+#' A data matrix of genotypes for known individuals and all possible genotypes for unknown individuals is created.
+#' @param locus A Familias locus containing information about the alleles
+#' @param knownGenos List of known genotypes. Each element is a vector with genotype for one individual. The elements must be named
+#' @param idsU Vector of indices for unknown individuals
+#' @return A data matrix of genotypes where each row corresponds to an individual.
+#' @author Guro Dorum
+#' @seealso \code{\link{FamiliasLocus}} and \code{\link{relMix}}.
+#' @examples
+#' #Define alleles and frequencies
+#' alleles <- 1:2
+#' afreq <- c(0.5,0.5)
+#' #Create locus object
+#' locus <- Familias::FamiliasLocus(frequencies=afreq,name="M1",allelenames= alleles)
+#' #Known genotypes of alleged father and mother, child's genotype is uknown
+#' gAF <- c(1,1)
+#' gMO <- c(1,1)
+#' datamatrix <- createDatamatrix(locus,knownGenos=list(AF=gAF,MO=gMO),idsU=c("CH"))
+#' @export
 createDatamatrix <- function(locus,knownGenos,idsU=NULL){
-  
+
   #To reduce the size of datamatrix, we can test here whether
   #1) both drop-in and drop-out is 0, if so we can use generate
-  #2) if mutations are not included we can use paramlink likelihood 
+  #2) if mutations are not included we can use paramlink likelihood
   #   function to remove some impossible genotypes
   #Else, we have to consider all possible gentypes
   nU <- length(idsU)
   origAlleles <- names(locus$alleles)
-  #ix <- which(origAlleles=="silent"|origAlleles=="Silent") 
+  #ix <- which(origAlleles=="silent"|origAlleles=="Silent")
   #if(length(ix)>0) origAlleles <- origAlleles[-ix]
   alleles <- 1:length(origAlleles)
-  
+
 #   #Check if all mutation rates are 0
 #   if(all(c(diag(locus$femaleMutationMatrix),diag(locus$femaleMutationMatrix))==1)){
-#     
+#
 #     m <-  marker(x1,2,gM,alleles=alleles,afreq=afreq)
 #   }
-  
+
   #If there are unknown contributors in the mixture
   if(nU > 0){
-    
+
     #Find all possible genotypes for one person
     allgenos <- allGenos(alleles)
     #Find combinations for all uknown contributors
     grid.subset <- expand.grid(rep(list(1:nrow(allgenos)),nU))
-    
+
     #Then, look up the genotype combinations in allgenos
     #to find the actual genotype
     datamatrixU <- NULL
@@ -42,12 +58,12 @@ createDatamatrix <- function(locus,knownGenos,idsU=NULL){
     datamatrixU <- t(apply(datamatrixU,1,function(y) origAlleles[y]))
     known <- t(sapply(knownGenos,function(x) rep(x,dim(datamatrixU)[2]/2)))
     datamatrix <- rbind(known,datamatrixU)
-  
+
     } else{ #Only known contributors
       datamatrix <- matrix(unlist(knownGenos),nrow=length(knownGenos),byrow=TRUE)
   }
-  
-  
+
+
   #Check if there is a silent allele; if so, must account for a possible
   #silent allele in all known homozygotes
   #if(any(origAlleles=="silent"|origAlleles=="Silent")){
@@ -77,8 +93,8 @@ createDatamatrix <- function(locus,knownGenos,idsU=NULL){
       datamatrix <- rbind(gtall,c(t(apply(A,2,rep,each=nrow(genos)))))
     } else datamatrix <- gtall
   }
-  
-  
+
+
   datamatrix <- as.data.frame(datamatrix)
   rownames(datamatrix) <- c(names(knownGenos),idsU)
   datamatrix

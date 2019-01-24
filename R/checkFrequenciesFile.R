@@ -1,22 +1,35 @@
-# File checkFrequenciesFile.R
-#
-# Elias Hernandis <eliashernandis@gmail.com>
-#
-# Given a frequency database filepath this function attempts to load it.
-# The second parameter is a dataframe with mixture data. It is used to compare
-# Marker names and detect possible misspellings.
-#
-# It returns a list containing a dataframe, a list of warnings and a list of
-# errors. If there are fatal errors, the dataframe will be FALSE. If there are
-# fixable errors (see the README for details), the dataframe will contain the
-# data from the mixture file but with those errors already fixed. The original
-# data file will not be updated. In the event of ambiguous or possibly wrong
-# marker names or sample names, the function will report them as warnings but
-# not fix them automatically.
-
-
-library(sets)
-
+#' Load and check a frequency file
+#'
+#' Loads a frequency database file and compares it against mixture data to check for common errors.
+#'
+#' @param filename Path of the frecuency database file
+#' @param mix Data frame with mixture data. See relMix vignette for description of the format
+#' @return A list containing
+#' \itemize{
+#' \item {\code{df}} {Data frame with frequencies}
+#' \item {\code{warning}} {List of strings describing the errors that ocurred but could be fixed or that do not prevent
+#' the execution of the program.}
+#' \item {\code{error}} {List of strings describing the errors that ocurred that made it imposible to return a valid data frame.
+#' If this list is not empty, then the dataframe item will be NULL}}
+#' @details
+#' The mixture data is used to perform more advanced checks, such as to make sure all alleles present
+#' in the mixture file have an entry in the frequency database.
+#' If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
+#' If an error is found, checking stops and a NULL dataframe is returned. The error is described in the error messages.
+#' @seealso \code{\link{checkMixtureFile}} for information on how to load a mixture file.
+#' @examples
+#' \dontrun{
+#' mixfile <- system.file("extdata","mixture.txt",package="relMix")
+#' mix <- checkMixtureFile(mixfile)
+#' # note: the mixture dataframe is passed as an argument
+#' # if the previous check failed, the program should not continue
+#' # with the frequencies file check
+#' freqfile <- system.file('extdata','frequencies22Markers.txt',package='relMix')
+#' freqs <- checkFrequenciesFile(freqfile, mix$df)
+#' }
+#' @author Elias Hernandis
+#' @importFrom utils combn
+#' @export
 checkFrequenciesFile <- function(filename, mix) {
     r <- commonChecks(filename, "frequencies file");
     df <- r$df;
@@ -35,7 +48,7 @@ checkFrequenciesFile <- function(filename, mix) {
         }
     }
 
-    # Check that are alleles are numeric
+    # Check that all alleles are numeric
     if (length(error) == 0 && !all(sapply(df$Allele, is.numeric))) {
         error <- append(error, "There are values that are not numeric in the Allele column of the frequency file");
     }
