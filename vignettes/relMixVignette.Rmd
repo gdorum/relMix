@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette gives an introduction to RelMix 1.3, the graphical user interface of the relMix package. We will present the main features of the GUI with two examples.
+This vignette gives an introduction to RelMix 1.3, the graphical user interface of the relMix package described in Dørum et al. (2017). We will present the main features of the GUI with two examples.
 
 ##Getting started
 
@@ -91,10 +91,11 @@ knitr::include_graphics("contributors_ex1.png")
 ```
 
 ###5. Dropout and drop-in
-The last step is to specify dropout and drop-in values. By default all values are set to 0. In this case we expect no dropout from the mother so we set her dropout probability to 0, while the child is given a dropout probability of 0.1. The drop-in value is set to 0.05 (Figure 6).
+The last step is to specify dropout and drop-in values. See Dørum et al. (2017) for a detailed description about the drop-in/dropout model. By default all values are set to 0. In this case we expect no dropout from the mother so we set her dropout probability to 0, while the child is given a dropout probability of 0.1. The drop-in value is set to 0.05 (Figure 6).
 ```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."}
 knitr::include_graphics("dropout_ex1.png")
 ```
+
 Note that if the dropout values are not set, an error window will occur. Even if you do not include dropout and drop-in, you must open the dropout window and click on the save button.
 
 ###6. Compute LR
@@ -197,3 +198,6 @@ The resulting LR for example 2 is shown in Figure 14. Note that in pedigree 2 th
 ```{r, out.width =  500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
 knitr::include_graphics("results_ex2.png")
 ```
+
+### References
+Dørum, G., Kaur, N., & Gysi, M. (2017). Pedigree-based relationship inference from complex DNA mixtures. International journal of legal medicine, 131(3), 629-641.
