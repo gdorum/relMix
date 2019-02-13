@@ -7,7 +7,7 @@
 #'@param df Data frame with reference profiles
 #' @return A list containing
 #' \itemize{
-#' \item{ped1} {Pedigree, NULL if errors are present.}
+#' \item{df} {Pedigree, NULL if errors are present.}
 #' \item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
 #' \item{\code{error}} {A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
 #' If this list is not empty, then the dataframe item will be null.}}
@@ -47,8 +47,7 @@ checkPedigreeFile <- function(filename, df) {
       } else{
         ped1 <- get("ped1",envir=localEnv)
         allowedKinships <- ped1$id;
-        #Make names of individuals in pedigree all upper case
-        #allowedKinships <- sapply(allowedKinships, toupper)
+        #Make names of individuals in pedigree with first letter uppercase
         allowedKinships <- sapply(allowedKinships, titleize)
         ped1$id <- allowedKinships
         assign("ped1",ped1,envir=localEnv)
@@ -60,7 +59,6 @@ checkPedigreeFile <- function(filename, df) {
     # check the first "header" column for uppercase names
     if (length(error) == 0) {
       fixedHeaderColumn <- sapply(as.character(df[,1]), titleize)
-      #fixedHeaderColumn <- sapply(as.character(df[,1]), toupper)
         if (!all(fixedHeaderColumn %in%  allowedKinships)) {
             if (filename != "") {
                 error <- append(error, "There are sample names in the reference file that are not defined in the custom pedigree file.");
@@ -89,7 +87,7 @@ checkPedigreeFile <- function(filename, df) {
     #return(list(warning=warning, error=error));
 
     if (length(error) > 0) {
-      return(list(ped1=NULL, warning=NULL, error=error));
+      return(list(df=NULL, warning=NULL, error=error));
     }
     return(list(df=get("ped1",localEnv),warning=warning, error=error));
 }
