@@ -58,13 +58,8 @@ checkPedigreeFile <- function(filename, df) {
 
     # check the first "header" column for uppercase names
     if (length(error) == 0) {
-<<<<<<< HEAD
       fixedHeaderColumn <- sapply(as.character(df[,1]), titleize)
         if (!all(fixedHeaderColumn %in%  allowedKinships)) {
-=======
-        fixedHeaderColumn <- sapply(as.character(df[,1]), titleize)
-        if (!all(fixedHeaderColumn %in%  sapply(allowedKinships, titleize))) {
->>>>>>> 91cede71c45f5f039a53647b5d92a31523359950
             if (filename != "") {
                 error <- append(error, "There are sample names in the reference file that are not defined in the custom pedigree file.");
             } else {
