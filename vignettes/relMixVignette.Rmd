@@ -106,6 +106,8 @@ knitr::include_graphics("results_ex1.png")
 
 
 ##Example 2: Mutations, silent alleles and custom pedigree
+Click the RESTART button before starting on a new case.
+
 In this example we have a two-person mixture with one known contributor, and it is hypothesised whether the second contributor is the child of the first contributor, or someone unrelated. We take silent alleles and mutations into account. Only one locus is considered.
 
 ###1. Import data

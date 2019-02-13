@@ -94,6 +94,7 @@ relMixGUI <- function(){
       #Define the persons involved in the case
       persons <- c("Mother", "Father", "Child")
       sex <- c("female", "male", "male")
+      #Pedigree files exported from Familias use notation "ped1"
       ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
     } else if(gWidgets::svalue(h$obj)=="Unrelated"){
       #Define the persons involved in the case
@@ -103,9 +104,10 @@ relMixGUI <- function(){
     } else {
       pedfile = gWidgets::gfile(text=paste("Open pedigree R file",sep=""),type="open",
                       filter=list("text"=list(patterns=list("*.R")),"all"=list(patterns=list("*"))))
-      process_errors(checkPedigreeFile(pedfile,get("reference",mmTK)))
-      source(pedfile)
-      persons <- ped1$id #Pedigree files exported from Familias use notation "ped1"
+      ped1 <- process_errors(checkPedigreeFile(pedfile,get("reference",mmTK)))
+      #source(pedfile)
+      #persons <- ped1$id #Pedigree files exported from Familias use notation "ped1"
+      persons <- ped1$id
     }
     assign(paste("ped",h$action,sep=""),ped1,envir=mmTK)
     assign(paste("persons_ped",h$action,sep=""),persons,envir=mmTK)
@@ -564,6 +566,7 @@ relMixGUI <- function(){
     E <- get("mixture",envir=mmTK) #get object
     G <- get("reference",envir=mmTK) #get object
     G$SampleName <- sapply(G$SampleName,titleize)
+    #G$SampleName <- sapply(G$SampleName,toupper)
     #Remove AMEL marker? Or not allow for it?
     R <- f_mixture(E)
     knownGenos <- f_genotypes(G)
@@ -597,9 +600,9 @@ relMixGUI <- function(){
     idxC <- union(idxC1,idxC2)
     idxU <- idxC[!idxC%in%idxK] #Contributors with uknown genotypes. Assuming that all individuals are represented in both pedigrees!
 
-    #Check if the names of individuals in the reference file correspond to names in pedigree
-    notFound <- unique(G$SampleName)[!unique(G$SampleName)%in%persons1]
-    if(length(notFound)>0) { f_errorWindow(c("Following individuals in reference file not found in pedigree:",paste(notFound,collapse=", "))); stop() }
+    # #Check if the names of individuals in the reference file correspond to names in pedigree
+    # notFound <- unique(G$SampleName)[!unique(G$SampleName)%in%persons1]
+    # if(length(notFound)>0) { f_errorWindow(c("Following individuals in reference file not found in pedigree:",paste(notFound,collapse=", "))); stop() }
 
     #Dropout/drop-in
     #Set default dropout 0 for all contributors if none is set
