@@ -1,5 +1,5 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-relMix 2.0
+relMix 1.3
 ==========
 
 Installation
