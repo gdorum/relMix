@@ -4,8 +4,16 @@
 \alias{relMix}
 \title{Relationship inference based on mixtures}
 \usage{
-relMix(pedigrees, locus, R, datamatrix, ids, D = rep(list(c(0, 0)),
-  length(ids)), di = 0, kinship = 0)
+relMix(
+  pedigrees,
+  locus,
+  R,
+  datamatrix,
+  ids,
+  D = rep(list(c(0, 0)), length(ids)),
+  di = 0,
+  kinship = 0
+)
 }
 \arguments{
 \item{pedigrees}{A list of pedigrees defined using FamiliasPedigree in Familias}
