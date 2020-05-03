@@ -679,9 +679,10 @@ relMixGUI <- function(){
     Data <- data.frame(Marker=markers,LR=LRmarker,LikH1=lik1,LikH2=lik2,stringsAsFactors=FALSE)
     #Make result window
     LRwindow <- gWidgets2::gwindow("Results",height=800,width=800,visible=FALSE)
-    LRgroup1 <- gWidgets2::ggroup(horizontal = TRUE, container=LRwindow)
+    LRwindowGroup <- gWidgets2::ggroup(horizontal = TRUE, container = LRwindow)
 
-    paramGroup <- gWidgets2::ggroup(horizontal=FALSE,container=LRgroup1)
+    #### left col ####
+    paramGroup <- gWidgets2::ggroup(horizontal=FALSE,container=LRwindowGroup)
     #gWidgets2::size(paramGroup) <- c(250,450)
     #Database options
     databaseData <- data.frame(Parameter=c("theta","Silent allele freq.","Min. allele freq."),Value=unlist(optPar))
@@ -733,9 +734,10 @@ relMixGUI <- function(){
     gWidgets2::size(dropTab) <- list(height=110,width=240,column.widths=c(120,50))
 
 
-    LRgroup2 <- gWidgets2::ggroup(container=LRgroup1,horizontal=FALSE,spacing=7)
+    #### right col ####
+    LRgroup2 <- gWidgets2::ggroup(container=LRwindowGroup,horizontal=FALSE,spacing=7)
     #Plot pedigrees
-    pedGroup <- gWidgets2::ggroup(horizontal=TRUE,container=LRgroup2,spacing=5,expand=TRUE)
+    pedGroup <- gWidgets2::ggroup(horizontal=TRUE,container=LRgroup2,spacing=5)
     #pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
     pedFrame1 <- gWidgets2::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
     #gWidgets2::size(pedFrame1) <- list(height=110,width=240)
@@ -760,9 +762,10 @@ relMixGUI <- function(){
     gWidgets2::add(pedGroup,img2)
     }
     #List of LRs
+    print(format(Data[,1:2],digits=4,scientific=TRUE))
     gWidgets2::glabel(paste("Total LR:",format(prod(LRmarker),digits=4,scientific=TRUE)),container=LRgroup2)
-    tab <- gWidgets2::gtable(format(Data[,1:2],digits=4,scientific=TRUE),container=LRgroup2)
-    #gWidgets2::size(tab) <- list(width=200,column.widths=c(10,50))
+    tab <- gWidgets2::gtable(format(Data[,1:2],digits=4,scientific=TRUE),container=LRgroup2, expand = TRUE)
+    gWidgets2::size(tab) <- list(height = 300, width=200, column.widths = c(100, 100))
 
 
     #Prepare data to write to file
