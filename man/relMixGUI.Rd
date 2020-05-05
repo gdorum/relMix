@@ -14,7 +14,7 @@ Includes error checking for the input files.
 }
 \examples{
 #Examples can be found in the vignette and example data files can be found
-#in the folder "inst\\extdata" in the installation folder for relMix
+#in the folder "inst\extdata" in the installation folder for relMix
 }
 \seealso{
 \code{\link{relMix}} for the main function implemented in \code{relMixGUI}.

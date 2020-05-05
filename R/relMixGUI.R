@@ -60,7 +60,7 @@ relMixGUI <- function(){
       if(!exists('reference',envir=mmTK)) {f_errorWindow("Import reference profiles before frequencies"); return();}
     }
 
-    proffile = gWidgets::gfile(text=paste("Open ",type," file",sep=""),type="open",
+    proffile = gWidgets2::gfile(text=paste("Open ",type," file",sep=""),type="open",
                      filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*"))))
 
     # check errors
@@ -83,26 +83,26 @@ relMixGUI <- function(){
   }
 
   f_export <- function(obj) {
-    savefile = gWidgets::gfile(text=paste("Save file as",sep=""),type="save", initialfilename = "LR.txt")
+    savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initialfilename = "LR.txt")
     #filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*")))
     tableWriter(savefile,obj) #load profile
   }
 
   # Make pedigree
   f_pedigree <- function(h,...){
-    if(gWidgets::svalue(h$obj)=="Paternity"){
+    if(gWidgets2::svalue(h$obj)=="Paternity"){
       #Define the persons involved in the case
       persons <- c("Mother", "Father", "Child")
       sex <- c("female", "male", "male")
       #Pedigree files exported from Familias use notation "ped1"
       ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
-    } else if(gWidgets::svalue(h$obj)=="Unrelated"){
+    } else if(gWidgets2::svalue(h$obj)=="Unrelated"){
       #Define the persons involved in the case
       persons <- c("Mother", "Father", "Child")
       sex <- c("female", "male", "male")
       ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,NA), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
     } else {
-      pedfile = gWidgets::gfile(text=paste("Open pedigree R file",sep=""),type="open",
+      pedfile = gWidgets2::gfile(text=paste("Open pedigree R file",sep=""),type="open",
                       filter=list("text"=list(patterns=list("*.R")),"all"=list(patterns=list("*"))))
       ped1 <- process_errors(checkPedigreeFile(pedfile,get("reference",mmTK)))
       #source(pedfile)
@@ -115,10 +115,10 @@ relMixGUI <- function(){
 
   # f_pedigree <- function(h,...){
   #
-  #   if(gWidgets::svalue(h$obj)=="Paternity"){
+  #   if(gWidgets2::svalue(h$obj)=="Paternity"){
   #     #Define the persons involved in the case
   #     #If pedigree 2, use same individuals as in first pedigree
-  #     if(gWidgets::svalue(h$action)=='2'){
+  #     if(gWidgets2::svalue(h$action)=='2'){
   #       firstPed <- get('ped1',envir=mmTK)
   #       persons1 <- get('persons_ped1',envir=mmTK)
   #       persons <- persons1
@@ -129,9 +129,9 @@ relMixGUI <- function(){
   #     #persons <- c("Mother", "Father", "Child")
   #     #sex <- c("female", "male", "male")
   #     ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
-  #   } else if(gWidgets::svalue(h$obj)=="Unrelated"){
+  #   } else if(gWidgets2::svalue(h$obj)=="Unrelated"){
   #     #Define the persons involved in the case
-  #     if(gWidgets::svalue(h$action)=='2'){
+  #     if(gWidgets2::svalue(h$action)=='2'){
   #       firstPed <- get('ped1',envir=mmTK)
   #       persons1 <- get('persons_ped1',envir=mmTK)
   #       persons <- persons1
@@ -143,7 +143,7 @@ relMixGUI <- function(){
   #     #sex <- c("female", "male", "male")
   #     ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,NA), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
   #   } else {
-  #     pedfile = gWidgets::gfile(text=paste("Open pedigree R file",sep=""),type="open",
+  #     pedfile = gWidgets2::gfile(text=paste("Open pedigree R file",sep=""),type="open",
   #                     filter=list("text"=list(patterns=list("*.R")),"all"=list(patterns=list("*"))))
   #     source(pedfile)
   #     if(!all(exists("persons"),exists("ped1"))) f_errorWindow("File should define both pedigree and persons")#stop("File should define both pedigree and persons")
@@ -154,30 +154,30 @@ relMixGUI <- function(){
 
   #Get values from object and assign to new object in mmTK environment
   f_values <- function(h,...) {
-    r <- gWidgets::svalue(h$obj)
+    r <- gWidgets2::svalue(h$obj)
     assign(h$action,r,envir=mmTK)
   }
   #Pop-up error window
   f_errorWindow <- function(message){
-    # errorWindow <- gWidgets::gwindow("Error", )
-    # gWidgets::glabel(message,container=errorWindow, expand=TRUE)
-    # gWidgets::gbutton("ok", container=errorWindow,handler=function(h,...){
-    #   gWidgets::dispose(h$obj)
+    # errorWindow <- gWidgets2::gwindow("Error", )
+    # gWidgets2::glabel(message,container=errorWindow, expand=TRUE)
+    # gWidgets2::gbutton("ok", container=errorWindow,handler=function(h,...){
+    #   gWidgets2::dispose(h$obj)
     # })
-    gWidgets::gmessage(message, title="Error", icon="error")
+    gWidgets2::gmessage(message, title="Error", icon="error")
   }
 
   f_warningWindow <- function(message) {
-    gWidgets::gmessage(message, title="Warning", icon="warning")
+    gWidgets2::gmessage(message, title="Warning", icon="warning")
   }
 
   #Makes pop-up window for database
   f_database <- function(h,...){
-    freqWindow <- gWidgets::gwindow("Frequency database",visible=FALSE)
-    freqGroup2 <- gWidgets::ggroup(horizontal = TRUE, container=freqWindow,spacing=7)
-    gWidgets::gbutton(text="Import allele frequencies",container=freqGroup2,handler=f_importprof,action="frequencies")
-    optButton <- gWidgets::gbutton("Options", handler=f_options, container=freqGroup2)
-    saveButton <- gWidgets::gbutton(text = 'ok',container=freqWindow, handler = function(h,...){
+    freqWindow <- gWidgets2::gwindow("Frequency database", height = 50, width = 250, visible=FALSE)
+    freqGroup2 <- gWidgets2::ggroup(horizontal = FALSE, container=freqWindow,spacing=7)
+    gWidgets2::gbutton(text="Import allele frequencies",container=freqGroup2,handler=f_importprof,action="frequencies")
+    optButton <- gWidgets2::gbutton("Options", handler=f_options, container=freqGroup2)
+    saveButton <- gWidgets2::gbutton(text = 'ok',container=freqGroup2, handler = function(h,...){
 
       #Get frequencies
       if(!exists('frequencies',envir=mmTK)) {f_errorWindow("Alle frequencies not imported")}
@@ -197,8 +197,8 @@ relMixGUI <- function(){
       ix2 <- G[,2]%in%colnames(freqs)
       m <- unique(M[!ix1,2],G[!ix1,2])
       if(length(m)>0) {
-        errorWindow <- gWidgets::gwindow("Error")
-        gWidgets::glabel(paste("Markers not found in database:",paste(m,collapse=", ")),container=errorWindow)
+        errorWindow <- gWidgets2::gwindow("Error")
+        gWidgets2::glabel(paste("Markers not found in database:",paste(m,collapse=", ")),container=errorWindow)
         stop(paste("Markers not found in database:",paste(m,collapse=", ")))
         #f_errorWindow(paste("Markers not found in database:",paste(m,collapse=", ")))
       }
@@ -208,66 +208,66 @@ relMixGUI <- function(){
       freqsS <- get('freqsS',envir=mmTK)
       db2 <- f_unobserved(freqsS,M,G,optPar$MAF) #Add unobserved alleles
 
-      gWidgets::dispose(freqWindow)
+      gWidgets2::dispose(freqWindow)
     }) #end handler savebutton
 
-    gWidgets::visible(freqWindow) <- TRUE
+    gWidgets2::visible(freqWindow) <- TRUE
   }
 
 
   #Makes pop-up window to fill in mutation details
   f_mutations <- function(h,...){
-    mutWindow <- gWidgets::gwindow("Mutations",visible=FALSE)
-    mutGroup2 <- gWidgets::ggroup(horizontal = TRUE, container=mutWindow,spacing=7)
-    mutFrame2 <- gWidgets::gframe("Mutation model",container=mutGroup2)
-    mutFrame3 <- gWidgets::gframe("Range",container=mutGroup2)
+    mutWindow <- gWidgets2::gwindow("Mutations",visible=FALSE)
+    mutGroup2 <- gWidgets2::ggroup(horizontal = FALSE, container=mutWindow,spacing=7)
+    mutFrame2 <- gWidgets2::gframe("Mutation model",container=mutGroup2)
+    mutFrame3 <- gWidgets2::gframe("Range",container=mutGroup2)
     mutPar <- get('mutPar',mmTK)
     #Range window
-    objRange <- gWidgets::gedit(mutPar$mutRange, width=4, container=mutFrame3)
-    gWidgets::enabled(objRange) <- FALSE
+    objRange <- gWidgets2::gedit(mutPar$mutRange, width=4, container=mutFrame3)
+    gWidgets2::enabled(objRange) <- FALSE
     #Common male and female mutation model
     Mut <- get('Mut',mmTK)
     mutModels <- c("Equal","Proportional","Stepwise")
     comboMut <- gcombobox(mutModels, selected=which(mutModels==Mut),
                           container=mutFrame2, handler=function(h,...) {
-                            #assign("Mut",gWidgets::svalue(h$obj),envir=mmTK)
+                            #assign("Mut",gWidgets2::svalue(h$obj),envir=mmTK)
                             #Range will not be used unless model is Stepwise
                             #assign("range1",mutPar$mutRange,envir=mmTK)
-                            f_changeMutation(gWidgets::svalue(h$obj),objRange)})
+                            f_changeMutation(gWidgets2::svalue(h$obj),objRange)})
     #List to store parameters in
     objMut <- vector('list',3)
     names(objMut) <- c("mutRange","fMutRate","mMutRate")
     objMut[[1]] <- objRange
-    mutFrame4 <- gWidgets::gframe("Mutation rates",container=mutWindow,horizontal=TRUE)
+    mutFrame4 <- gWidgets2::gframe("Mutation rates",container=mutGroup2,horizontal=TRUE)
     #Separate male and female mutation rates
-    gWidgets::glabel("Female",container=mutFrame4)
-    objMut[[2]] <- gWidgets::gedit(mutPar$fMutRate, width=5, container=mutFrame4)
-    gWidgets::glabel("Male",container=mutFrame4)
-    objMut[[3]] <- gWidgets::gedit(mutPar$mMutRate, width=5,container=mutFrame4)
-    saveButton <- gWidgets::gbutton(text = "Save", ,container=mutWindow, handler = function(h,...) {
-      assign("Mut",gWidgets::svalue(comboMut),envir=mmTK)
+    gWidgets2::glabel("Female",container=mutFrame4)
+    objMut[[2]] <- gWidgets2::gedit(mutPar$fMutRate, width=5, container=mutFrame4)
+    gWidgets2::glabel("Male",container=mutFrame4)
+    objMut[[3]] <- gWidgets2::gedit(mutPar$mMutRate, width=5,container=mutFrame4)
+    saveButton <- gWidgets2::gbutton(text = "Save",container=mutGroup2, handler = function(h,...) {
+      assign("Mut",gWidgets2::svalue(comboMut),envir=mmTK)
       saveParameters(objMut,mutWindow,"mutPar")}
     )
-    gWidgets::visible(mutWindow) <- TRUE
+    gWidgets2::visible(mutWindow) <- TRUE
   }
 
   #Set mutation model
   f_changeMutation <- function(mutMod,objRange){
     if(mutMod=="Stepwise"){ #If stepwise, also give option to give a mutation range
       #Common male and female mutation range
-      gWidgets::enabled(objRange) <- TRUE
+      gWidgets2::enabled(objRange) <- TRUE
     }
     if(mutMod=="Equal"){
-      gWidgets::enabled(objRange) <- FALSE
+      gWidgets2::enabled(objRange) <- FALSE
     }
     if(mutMod=="Proportional"){
-      gWidgets::enabled(objRange) <- FALSE
+      gWidgets2::enabled(objRange) <- FALSE
     }
     #if(mutMod=="Custom"){ #If custom, read in mutation model from file
-    #  gWidgets::enabled(objRange) <- FALSE
+    #  gWidgets2::enabled(objRange) <- FALSE
     #  enable(objRateF)<- FALSE
     #  enable(objRateM) <- FALSE
-    #  mutfile = gWidgets::gfile("Open mutation R file",type="open",
+    #  mutfile = gWidgets2::gfile("Open mutation R file",type="open",
     #                  filter=list("text"=list(patterns=list("*.R",".txt")),"all"=list(patterns=list("*"))))
     #  MM <- read.table(mutfile)
     #  assign(paste(h$action,"Mat",sep=""),MM,envir=mmTK)
@@ -277,33 +277,34 @@ relMixGUI <- function(){
   #Makes option pop-up window to fill in theta and silent alleles
   f_options <- function(h,...){
     optPar <- get("optPar",mmTK)
-    optWindow <- gWidgets::gwindow("Options",visible=FALSE)
-    optGroup <- gWidgets::ggroup(horizontal = TRUE, container=optWindow,spacing=7)
+    optWindow <- gWidgets2::gwindow("Options",visible=FALSE)
+    optGroup <- gWidgets2::ggroup(horizontal = FALSE, container=optWindow,spacing=7)
     #Theta
-    gWidgets::glabel("Theta",container=optGroup)
+    gWidgets2::glabel("Theta",container=optGroup)
     objOpt <- vector('list',3)
     names(objOpt) <- c("theta","silent","MAF")
-    objOpt[[1]] <- gWidgets::gedit(optPar$theta, width=5, container=optGroup)
+    objOpt[[1]] <- gWidgets2::gedit(optPar$theta, width=5, container=optGroup)
     #Silent allele
-    gWidgets::glabel("Silent allele frequency",container=optGroup)
-    objOpt[[2]] <- gWidgets::gedit(optPar$silent, width=5, container=optGroup)
+    gWidgets2::glabel("Silent allele frequency",container=optGroup)
+    objOpt[[2]] <- gWidgets2::gedit(optPar$silent, width=5, container=optGroup)
     #Minimum allele frequency
-    gWidgets::glabel("Min. allele frequency",container=optGroup)
-    objOpt[[3]] <- gWidgets::gedit(optPar$MAF, width=5, container=optGroup)
-    saveButton <- gWidgets::gbutton(text = "Save", ,container=optWindow, handler = function(h,...){
+    gWidgets2::glabel("Min. allele frequency",container=optGroup)
+    objOpt[[3]] <- gWidgets2::gedit(optPar$MAF, width=5, container=optGroup)
+    saveButton <- gWidgets2::gbutton(text = "Save",container=optGroup, handler = function(h,...){
       saveParameters(objOpt,optWindow,"optPar")
     })
-    gWidgets::visible(optWindow) <- TRUE
+    gWidgets2::visible(optWindow) <- TRUE
   }
 
   #Makes pop-up window to fill in dropout values per contributor and drop-in
   f_dropout <- function(h,...){
-    dropWindow <- gWidgets::gwindow("Dropout and drop-in",width=500,visible=FALSE)
+    dropWindow <- gWidgets2::gwindow("Dropout and drop-in",width=500,visible=FALSE)
+    dropGroup <- gWidgets2::ggroup(horizontal = FALSE, container = dropWindow)
     #Get pedigree data
     if(!exists("idxC1",envir=mmTK)){
       f_errorWindow("Specify contributors first")
     }
-    dropFrame2 <- gWidgets::gframe("Dropout for each contributor",container=dropWindow)
+    dropFrame2 <- gWidgets2::gframe("Dropout for each contributor",container=dropGroup)
     #Get contributors
     dropliste <- get("dropliste",envir=mmTK)
     #Get default values/values that have already been specified
@@ -316,33 +317,33 @@ relMixGUI <- function(){
     dropNames <- names(dropliste)
     objDrop <- list()
     for(i in 1:length(idxC)){
-      g <- gWidgets::glabel(idxC[i], container=dropFrame2,horizontal=FALSE)
+      g <- gWidgets2::glabel(idxC[i], container=dropFrame2,horizontal=FALSE)
       #Check if a dropout value is already specified, if not set to 0
       val <- ifelse(idxC[i]%in%dropNames,dropliste[[which(dropNames==idxC[i])]],0)
-      objDrop[[i]] <- gWidgets::gedit(format(val,digits=4),width=4,container=dropFrame2)
+      objDrop[[i]] <- gWidgets2::gedit(format(val,digits=4),width=4,container=dropFrame2)
     }
-    dropinFrame <- gWidgets::gframe("Drop-in",container=dropWindow)
+    dropinFrame <- gWidgets2::gframe("Drop-in",container=dropGroup)
     #objDrop[[length(dropliste)]] <- gspinbutton(0,1,by=0.01, value=dropliste[[length(dropliste)]],digits=3,container=dropinFrame)
-    objDrop[[length(idxC)+1]] <- gWidgets::gedit(format(dropliste[[length(dropliste)]],digits=4),width=4,container=dropinFrame)
+    objDrop[[length(idxC)+1]] <- gWidgets2::gedit(format(dropliste[[length(dropliste)]],digits=4),width=4,container=dropinFrame)
     names(objDrop) <- c(idxC,"dropin")
-    saveButton <- gWidgets::gbutton(text = "Save",container=dropWindow, handler = function(h,...) {
+    saveButton <- gWidgets2::gbutton(text = "Save",container=dropGroup, handler = function(h,...) {
       saveParameters(objDrop,dropWindow,"dropliste")
     })
-    gWidgets::visible(dropWindow) <- TRUE
+    gWidgets2::visible(dropWindow) <- TRUE
   }
   #Save button
   saveParameters <- function(objList,window,varName){
     values <- list()
     for(i in 1:length(objList)){
       #If comma used as decimal, replace with dot
-      v <- as.numeric(sub(",",".",gWidgets::svalue(objList[[i]])))
+      v <- as.numeric(sub(",",".",gWidgets2::svalue(objList[[i]])))
       if(length(v)==0) {f_errorWindow("Specify all values"); stop()}
       else if(is.na(v) | (v<0 | v>1) ) {f_errorWindow("Need values in the range 0.0 and 1.0"); stop()}
       else values[[i]] <- v
     }
     names(values) <- names(objList)
     assign(varName,values,envir=mmTK)
-    gWidgets::dispose(window)
+    gWidgets2::dispose(window)
   }
 
   f_contributors <- function(h,...){
@@ -355,8 +356,9 @@ relMixGUI <- function(){
     if(!identical(persons1,persons2)) {
       f_errorWindow("Persons in pedigree 1 and 2 must match!")
     } else{
-      contWindow <- gWidgets::gwindow("Contributors")
-      contFrame <- gWidgets::gframe("Specify contributors in mixture",container=contWindow)
+      contWindow <- gWidgets2::gwindow("Contributors")
+      contGroup <- gWidgets2::ggroup(horizontal = FALSE, container = contWindow)
+      contFrame <- gWidgets2::gframe("Specify contributors in mixture",container=contGroup)
       #Check if contributors have already been specified. If so, set these as checked boxes
       if(!exists("idxC1",envir=mmTK)) idxC1 <- NULL
       if(!exists("idxC2",envir=mmTK)) idxC2 <- NULL
@@ -367,15 +369,15 @@ relMixGUI <- function(){
       persons <- union(persons1,persons2)
 
       #Different contributors under each hypothesis
-      contFrame <- gWidgets::gframe("Contributors in pedigree 1",container=contWindow)
-      gWidgets::gcheckboxgroup(persons, checked=persons1%in%idxC1,horizontal=FALSE,container=contFrame,
+      contFrame <- gWidgets2::gframe("Contributors in pedigree 1",container=contGroup)
+      gWidgets2::gcheckboxgroup(persons, checked=persons1%in%idxC1,horizontal=FALSE,container=contFrame,
                      handler=f_values,action="idxC1")
-      contFrame2 <- gWidgets::gframe("Contributors in pedigree 2",container=contWindow)
-      gWidgets::gcheckboxgroup(persons, checked=persons2%in%idxC2,horizontal=FALSE,container=contFrame2,
+      contFrame2 <- gWidgets2::gframe("Contributors in pedigree 2",container=contGroup)
+      gWidgets2::gcheckboxgroup(persons, checked=persons2%in%idxC2,horizontal=FALSE,container=contFrame2,
                      handler=f_values,action="idxC2")
 
-      gWidgets::gbutton("ok", container=contWindow,handler=function(h,...){
-        gWidgets::dispose(h$obj)
+      gWidgets2::gbutton("ok", container=contGroup,handler=function(h,...){
+        gWidgets2::dispose(h$obj)
       })
     }
   }
@@ -458,7 +460,7 @@ relMixGUI <- function(){
     if(length(alNotDB)>0) { #There are alleles not in database
 
       mess <- paste("Allele",alNotDB, "will be added to marker",markerNames[keepIx], "with frequency",MAF)
-      gWidgets::gmessage(mess, title="Note",icon = "info")
+      gWidgets2::gmessage(mess, title="Note",icon = "info")
       #Add new allele at the end of database
       newData <- data.frame(markerNames[keepIx],alNotDB,MAF)
       colnames(newData) <- c('Marker','Allele','Frequency')
@@ -483,7 +485,7 @@ relMixGUI <- function(){
   f_MAF <- function(db,MAF){
     db <- get('db',mmTK)
     if(any(db$Frequency<MAF)){ #Frequencies below MAF
-      gWidgets::gconfirm("Some frequencies are below the min. allele frequency.
+      gWidgets2::gconfirm("Some frequencies are below the min. allele frequency.
                Change the indicated frequencies?", title="Note",icon = "question",handler = function(h,...){
                  db$Frequency[db$Frequency<MAF] <- MAF
                  assign('db',db,mmTK)
@@ -518,8 +520,8 @@ relMixGUI <- function(){
     ix <- which(sums!=1)
     if(length(ix)>0) {
 
-      w <- gWidgets::gconfirm(format("Frequencies do not sum to 1. Do you want to scale? If not, a rest allele will be added.",jusity="centre"), title="Note",icon = "info")
-      if(gWidgets::svalue(w)){ #Scale
+      w <- gWidgets2::gconfirm(format("Frequencies do not sum to 1. Do you want to scale? If not, a rest allele will be added.",jusity="centre"), title="Note",icon = "info")
+      if(w){ #Scale
         for(m in markerNames[ix]){
             db[db[,1]==m,3] <- db[db[,1]==m,3]/sum(db[db[,1]==m,3])
         }
@@ -533,7 +535,7 @@ relMixGUI <- function(){
             }
         if(any(sums[ix]>1)) {
           mess <- paste("Enforced scaling for markers:",paste(markerNames[sums[ix]>1],collapse=", "))
-          gWidgets::gmessage(mess, title="Note",icon = "info")
+          gWidgets2::gmessage(mess, title="Note",icon = "info")
         }
       }
       assign('dbF',db,envir=mmTK) #Final database
@@ -620,8 +622,8 @@ relMixGUI <- function(){
 
 
     ############# Computations ###########
-    #infoWindowLR <- gWidgets::gwindow("",visible=TRUE)
-    #gWidgets::glabel("Computing LR...",container=infoWindowLR)
+    #infoWindowLR <- gWidgets2::gwindow("",visible=TRUE)
+    #gWidgets2::glabel("Computing LR...",container=infoWindowLR)
 
     markers <- names(R)
     LRmarker <- numeric(length(markers))
@@ -669,32 +671,29 @@ relMixGUI <- function(){
         lik1[i] <- res1[[1]]
         lik2[i] <- res2[[1]]
       }
-
     }
     LRmarker <- lik1/lik2
     #Set NaN's to 0 (likelihood 0 also under H2)
     LRmarker[is.na(LRmarker)] <- 0
 
     Data <- data.frame(Marker=markers,LR=LRmarker,LikH1=lik1,LikH2=lik2,stringsAsFactors=FALSE)
-
     #Make result window
-    LRwindow <- gWidgets::gwindow("Results",height=800,width=800,visible=FALSE,horizontal=TRUE)
-    LRgroup1 <- gWidgets::ggroup(horizontal = TRUE, container=LRwindow)
+    LRwindow <- gWidgets2::gwindow("Results",height=800,width=800,visible=FALSE)
+    LRwindowGroup <- gWidgets2::ggroup(horizontal = TRUE, container = LRwindow)
 
-    paramGroup <- gWidgets::ggroup(horizontal=FALSE,container=LRgroup1)
-    #gWidgets::size(paramGroup) <- c(250,450)
-
+    #### left col ####
+    paramGroup <- gWidgets2::ggroup(horizontal=FALSE,container=LRwindowGroup)
+    #gWidgets2::size(paramGroup) <- c(250,450)
     #Database options
     databaseData <- data.frame(Parameter=c("theta","Silent allele freq.","Min. allele freq."),Value=unlist(optPar))
     databaseData[,1] <- as.character(databaseData[,1])
     databaseData[,2] <- as.character(databaseData[,2])
 
-
-    databaseGroup <- gWidgets::ggroup(horizontal=FALSE,container=paramGroup)
-    databaseFrame <- gWidgets::gframe("Database",container=databaseGroup,horizontal=FALSE)
-    #dataTab <- gWidgets::gtable(databaseData,container=databaseFrame)
-    dataTab <- gWidgets::gtable(format(databaseData, justify = "centre"),container=databaseFrame)
-    gWidgets::size(dataTab) <- list(height=110,width=240,columnWidths=c(120,50))
+    databaseGroup <- gWidgets2::ggroup(horizontal=FALSE,container=paramGroup)
+    databaseFrame <- gWidgets2::gframe("Database",container=databaseGroup,horizontal=FALSE)
+    #dataTab <- gWidgets2::gtable(databaseData,container=databaseFrame)
+    dataTab <- gWidgets2::gtable(format(databaseData, justify = "centre"),container=databaseFrame)
+    gWidgets2::size(dataTab) <- list(height=110,width=240,column.widths=c(120,50))
 
     #Mutations
     if(mutModel=="Stepwise"){
@@ -707,66 +706,66 @@ relMixGUI <- function(){
     mutData2[,2] <- as.character(mutData2[,2])
     mutData <- rbind(mutData,mutData2)
 
-    mutGroup <- gWidgets::ggroup(horizontal=FALSE,container=paramGroup)
-    mutFrame <- gWidgets::gframe("Mutations",container=mutGroup,horizontal=FALSE)
-    #mutTab <- gWidgets::gtable(mutData,container=mutFrame)
-    mutTab <- gWidgets::gtable(format(mutData, justify = "centre"),container=mutFrame)
-    gWidgets::size(mutTab) <- list(height=110,width=240,columnWidths=c(120,50))
+    mutGroup <- gWidgets2::ggroup(horizontal=FALSE,container=paramGroup)
+    mutFrame <- gWidgets2::gframe("Mutations",container=mutGroup,horizontal=FALSE)
+    #mutTab <- gWidgets2::gtable(mutData,container=mutFrame)
+    mutTab <- gWidgets2::gtable(format(mutData, justify = "centre"),container=mutFrame)
+    gWidgets2::size(mutTab) <- list(height=110,width=240,column.widths=c(120,50))
 
-    contGroup <- gWidgets::ggroup(horizontal=FALSE,container=paramGroup)
-    contFrame <- gWidgets::gframe("Contributors",container=contGroup,horizontal=FALSE)
+    contGroup <- gWidgets2::ggroup(horizontal=FALSE,container=paramGroup)
+    contFrame <- gWidgets2::gframe("Contributors",container=contGroup,horizontal=FALSE)
     if(length(idxC1)<length(idxC2)){
       contData <- cbind("Pedigree 1"=idxC1[seq(idxC2)],"Pedigree 2"=idxC2)
     } else{
       contData <- cbind("Pedigree 1"=idxC1,"Pedigree 2"=idxC2[seq(idxC1)])
     }
     contData[is.na(contData)] <- ""
-    contTab <- gWidgets::gtable(format(as.data.frame(contData), justify = "centre"),container=contFrame)
-    gWidgets::size(contTab) <- list(height=90,width=240,columnWidths=c(85,85))
+    contTab <- gWidgets2::gtable(format(as.data.frame(contData), justify = "centre"),container=contFrame)
+    gWidgets2::size(contTab) <- list(height=90,width=240,column.widths=c(85,85))
 
     #Dropout/drop-in
     dropData <- data.frame(Parameter=c(paste("Dropout",names(D)),"Drop-in"),Value=c(unlist(D),di))
     dropData[,1] <- as.character(dropData[,1])
     dropData[,2] <- as.character(dropData[,2])
     colnames(dropData) <- c("Parameter","Value")
-    dropGroup <-  gWidgets::ggroup(horizontal=FALSE,container=paramGroup,spacing=7)
-    dropFrame <- gWidgets::gframe("Dropout and drop-in",container=dropGroup,horizontal=FALSE)
-    dropTab <- gWidgets::gtable(format(dropData,justify="centre"),container=dropFrame)
-    gWidgets::size(dropTab) <- list(height=110,width=240,columnWidths=c(120,50))
+    dropGroup <-  gWidgets2::ggroup(horizontal=FALSE,container=paramGroup,spacing=7)
+    dropFrame <- gWidgets2::gframe("Dropout and drop-in",container=dropGroup,horizontal=FALSE)
+    dropTab <- gWidgets2::gtable(format(dropData,justify="centre"),container=dropFrame)
+    gWidgets2::size(dropTab) <- list(height=110,width=240,column.widths=c(120,50))
 
 
-    LRgroup2 <- gWidgets::ggroup(container=LRgroup1,horizontal=FALSE,spacing=7)
-
+    #### right col ####
+    LRgroup2 <- gWidgets2::ggroup(container=LRwindowGroup,horizontal=FALSE,spacing=7)
     #Plot pedigrees
-    pedGroup <- gWidgets::ggroup(horizontal=TRUE,container=LRgroup2,spacing=5,expand=TRUE)
-    #pedFrame <- gWidgets::gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
-    pedFrame1 <- gWidgets::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
-    #gWidgets::size(pedFrame1) <- list(height=110,width=240)
-    pedFrame2 <- gWidgets::gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
-    #gWidgets::size(pedFrame2) <- list(height=110,width=240)
+    pedGroup <- gWidgets2::ggroup(horizontal=TRUE,container=LRgroup2,spacing=5)
+    #pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
+    pedFrame1 <- gWidgets2::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+    #gWidgets2::size(pedFrame1) <- list(height=110,width=240)
+    pedFrame2 <- gWidgets2::gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+    #gWidgets2::size(pedFrame2) <- list(height=110,width=240)
     if(all(ped1$findex==0 & ped1$mindex==0)) {
-      gWidgets::glabel("No relations",container=pedFrame1)
+      gWidgets2::glabel("No relations",container=pedFrame1)
     }else{
-      img1 <- tkrplot::tkrplot(gWidgets::getToolkitWidget(pedFrame1),
+      img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame1),
                       fun = function() {
                         #err <- try(plot(ped1),silent=TRUE)
                         plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
-      gWidgets::add(pedGroup,img1)
+      gWidgets2::add(pedGroup,img1)
     }
     if(all(ped2$findex==0 & ped2$mindex==0)) {
-      gWidgets::glabel("No relations",container=pedFrame2)
+      gWidgets2::glabel("No relations",container=pedFrame2)
     }else{
-      img2 <- tkrplot::tkrplot(gWidgets::getToolkitWidget(pedFrame2),
+      img2 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame2),
                     fun = function() {
                       #err <- try(plot(ped2),silent=TRUE)
                     plot(ped2,cex=0.8)},hscale=0.4,vscale=0.8)
-    gWidgets::add(pedGroup,img2)
+    gWidgets2::add(pedGroup,img2)
     }
-
     #List of LRs
-    gWidgets::glabel(paste("Total LR:",format(prod(LRmarker),digits=4,scientific=TRUE)),container=LRgroup2)
-    tab <- gWidgets::gtable(format(Data[,1:2],digits=4,scientific=TRUE),container=LRgroup2)
-    #gWidgets::size(tab) <- list(width=200,columnWidths=c(10,50))
+    print(format(Data[,1:2],digits=4,scientific=TRUE))
+    gWidgets2::glabel(paste("Total LR:",format(prod(LRmarker),digits=4,scientific=TRUE)),container=LRgroup2)
+    tab <- gWidgets2::gtable(format(Data[,1:2],digits=4,scientific=TRUE),container=LRgroup2, expand = TRUE)
+    gWidgets2::size(tab) <- list(height = 300, width=200, column.widths = c(100, 100))
 
 
     #Prepare data to write to file
@@ -811,14 +810,13 @@ relMixGUI <- function(){
     rownames(exportData) <- NULL
     colnames(exportData) <- c("Parameter","Value","",colnames(contData),rep("",ncol(exportData)-5))
 
-    LRbut <- gWidgets::gbutton("Save results to file", container=LRgroup2,handler=function(h,...){
+    LRbut <- gWidgets2::gbutton("Save results to file", container=LRgroup2,handler=function(h,...){
       f_export(exportData)
-      gWidgets::dispose(h$obj)
+      gWidgets2::dispose(h$obj)
     })
 
-    gWidgets::visible(LRwindow) <- TRUE
+    gWidgets2::visible(LRwindow) <- TRUE
     }
-
 
   ############################################################
 
@@ -841,62 +839,63 @@ relMixGUI <- function(){
   }
 
 
-  win <- gWidgets::gwindow(paste0("RelMix v",packageVersion("relMix")),height=500,width=500,visible=FALSE)
-  group1 <- gWidgets::ggroup(horizontal = TRUE, container=win,spacing=10)
+  win <- gWidgets2::gwindow(paste0("RelMix v",packageVersion("relMix")),height=500,width=500,visible=FALSE)
+  top <- gWidgets2::ggroup(horizontal = FALSE, container = win)
+  group1 <- gWidgets2::ggroup(horizontal = TRUE, container=top)
 
   ###### Import data #####
   #Buttons for importing files
-  dataGroup <- gWidgets::ggroup(horizontal = FALSE, container=group1,spacing=7)
-  impFrame <- gWidgets::gframe("Import data",container=dataGroup,horizontal = FALSE)
-  objMix <- gWidgets::gbutton(text="Import mixture profile",container=impFrame,handler=f_importprof,action="mixture")
-  objRef <- gWidgets::gbutton(text="Import reference profiles",container=impFrame,handler=f_importprof,action="reference")
-  objDB <- gWidgets::gbutton(text="Database",container=impFrame,handler=f_database)
+  dataGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group1,spacing=7)
+  impFrame <- gWidgets2::gframe("Import data",container=dataGroup,horizontal = FALSE)
+  objMix <- gWidgets2::gbutton(text="Import mixture profile",container=impFrame,handler=f_importprof,action="mixture")
+  objRef <- gWidgets2::gbutton(text="Import reference profiles",container=impFrame,handler=f_importprof,action="reference")
+  objDB <- gWidgets2::gbutton(text="Database",container=impFrame,handler=f_database)
 
   ###### Mutations #####
   #Mutation frame
-  mutFrame <- gWidgets::gframe("Mutations",container=group1,horizontal=FALSE,spacing=7)
-  mutGroup <- gWidgets::ggroup(horizontal = FALSE, container=mutFrame,spacing=7)
-  mutButton <- gWidgets::gbutton("Mutations", handler=f_mutations, container=mutGroup)
+  mutGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group1,spacing=7)
+  mutFrame <- gWidgets2::gframe("Mutations",container=mutGroup,horizontal=FALSE)
+  mutButton <- gWidgets2::gbutton("Mutations", handler=f_mutations,container=mutFrame)
 
-  group2 <- gWidgets::ggroup(horizontal = TRUE, container=win,spacing=10)
+  group2 <- gWidgets2::ggroup(horizontal = TRUE, container=top)
 
   ####### Pedigrees ######
   #Pedigree frame
-  pedGroup <- gWidgets::ggroup(horizontal = FALSE, container=group2,spacing=7)
-  pedFrame <- gWidgets::gframe("Pedigrees",container=pedGroup)
+  pedGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group2,spacing=7)
+  pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup)
   #Should we have the option to include different contributors under each hypothesis???
   #Pedigree 1 button
-  gWidgets::glabel("Pedigree 1",container=pedFrame)
+  gWidgets2::glabel("Pedigree 1",container=pedFrame)
   objPed <- gcombobox(c("Paternity","Unrelated","Custom"), selected=0,container=pedFrame,handler=f_pedigree,action="1")
   #Pedigree 2 button
-  gWidgets::glabel("Pedigree 2",container=pedFrame)
+  gWidgets2::glabel("Pedigree 2",container=pedFrame)
   objPed2 <- gcombobox(c("Paternity","Unrelated","Custom"), selected=0,container=pedFrame,handler=f_pedigree,action="2")
 
   ######## Contributors #######
-  contFrame <- gWidgets::gframe("Contributors",container=group2,horizontal=TRUE)
-  objCont <- gWidgets::gbutton(text="Specify contributors",container=contFrame,handler=f_contributors)
+  contFrame <- gWidgets2::gframe("Contributors",container=group2,horizontal=TRUE)
+  objCont <- gWidgets2::gbutton(text="Specify contributors",container=contFrame,handler=f_contributors)
 
-  ######## Dropout/drop-in #########
-  group3 <- gWidgets::ggroup(horizontal = TRUE, container=win,spacing=10)
+  ####### Dropout/drop-in #########
+  group3 <- gWidgets2::ggroup(horizontal = TRUE, container=top,spacing=10)
   #Dropout button
-  dropFrame <- gWidgets::gframe("Dropout and drop-in",container=group3,horizontal=TRUE)
-  dropButton <- gWidgets::gbutton("Specify dropout and drop-in", handler=f_dropout, container=dropFrame)
+  dropFrame <- gWidgets2::gframe("Dropout and drop-in",container=group3,horizontal=TRUE)
+  dropButton <- gWidgets2::gbutton("Specify dropout and drop-in", handler=f_dropout, container=dropFrame)
 
-  ####### Compute LR ######
-  group4 <- gWidgets::ggroup(horizontal = TRUE, container=win,spacing=10)
+  ###### Compute LR ######
+  group4 <- gWidgets2::ggroup(horizontal = TRUE, container=top,spacing=10)
   #Compute LR button
-  LRbutton <- gWidgets::gbutton("Compute LR", container=group4, handler=function(h,...){
+  LRbutton <- gWidgets2::gbutton("Compute LR", container=group4, handler=function(h,...){
     f_LR()
   })
+
   ####### Restart ######
-  gWidgets::addSpace(group4, 150)
-  restartButton = gWidgets::gbutton(text="RESTART",container=group4,handler=function(h,...) {
-    gWidgets::dispose(win) #remove main window
+  gWidgets2::addSpace(group4, 10)
+  restartButton = gWidgets2::gbutton(text="RESTART",container=group4,handler=function(h,...) {
+    gWidgets2::dispose(win) #remove main window
     relMixGUI() #reopen relMix
   })
 
-  gWidgets::visible(win) <- TRUE
+  gWidgets2::visible(win) <- TRUE
 }
-
 
 
