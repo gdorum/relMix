@@ -507,7 +507,7 @@ relMixGUI <- function(){
 
     #Sort database according to marker, then allele. Silent allele last
     #First reorder levels of Allele
-    aL <- levels(db[,2])
+    aL <- unique(db[,2])
     if(any(aL=='Silent')) { db$Allele <- factor(db$Allele,c(sort(as.numeric(aL[which(!aL=='Silent')])),'Silent'))
     } else db$Allele <- factor(db$Allele,sort(as.numeric(aL)))
 
