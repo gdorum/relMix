@@ -77,13 +77,15 @@ relMixGUI <- function(){
     }}, error = function(e) {
       # Handle fatal errors due to bad file formats
       # For example, if when loading a mixture file a frequency file is provided, the error will be caught here
+      print(e)
       f_errorWindow(paste("There was an error loading the file. It does not look like a ", type, " file. Please make sure the file is correct and try again."))
+      return()
     })
     assign(h$action,Data,envir=mmTK) #save object
   }
 
   f_export <- function(obj) {
-    savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initialfilename = "LR.txt")
+    savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "LR.txt")
     #filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*")))
     tableWriter(savefile,obj) #load profile
   }
@@ -180,10 +182,10 @@ relMixGUI <- function(){
     saveButton <- gWidgets2::gbutton(text = 'ok',container=freqGroup2, handler = function(h,...){
 
       #Get frequencies
-      if(!exists('frequencies',envir=mmTK)) {f_errorWindow("Alle frequencies not imported")}
+      if(!exists('frequencies',envir=mmTK)) {f_errorWindow("Alle frequencies not imported"); return(); }
       # TODO remove these
-      if(!exists('mixture',envir=mmTK)) {f_errorWindow("Import mixture profile before frequencies")}
-      if(!exists('reference',envir=mmTK)) {f_errorWindow("Import reference profiles before frequencies")}
+      if(!exists('mixture',envir=mmTK)) {f_errorWindow("Import mixture profile before frequencies"); return(); }
+      if(!exists('reference',envir=mmTK)) {f_errorWindow("Import reference profiles before frequencies"); return(); }
       A <- get("frequencies",envir=mmTK)
       M <- get("mixture",envir=mmTK)
       G <- get("reference",envir=mmTK)
@@ -508,8 +510,12 @@ relMixGUI <- function(){
     #Sort database according to marker, then allele. Silent allele last
     #First reorder levels of Allele
     aL <- unique(db[,2])
-    if(any(aL=='Silent')) { db$Allele <- factor(db$Allele,c(sort(as.numeric(aL[which(!aL=='Silent')])),'Silent'))
-    } else db$Allele <- factor(db$Allele,sort(as.numeric(aL)))
+    if(any(aL == 'Silent')) {
+      db$Allele <-
+        factor(db$Allele, c(sort(aL[which(!aL == 'Silent')]), 'Silent'))
+    } else {
+      db$Allele <- factor(db$Allele, sort(aL))
+    }
 
     db <- db[order(db$Marker,db$Allele),]
     #Assign database that will be used if scaling is not done
