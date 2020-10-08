@@ -4,11 +4,13 @@
 \name{db}
 \alias{db}
 \title{Allele database}
-\format{A data frame with 324 observations on the following 3 variables:
+\format{
+A data frame with 324 observations on the following 3 variables:
  \describe{
 \item{\code{Marker}}{a factor with levels corresponding to name of markers}
 \item{\code{Allel}}{a numeric vector denoting allele}
-\item{\code{Frequency}}{a numeric vector in (0,1)}}}
+\item{\code{Frequency}}{a numeric vector in (0,1)}}
+}
 \source{
 Dupuy et al. (2013), unpublished.
 }
