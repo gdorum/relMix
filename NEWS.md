@@ -24,3 +24,4 @@ Package has been updated to use `gWidgets2` and `gWidgets2tcltk` instead of `gWi
 * Replace deprecated argument `initialFilename` with updated name `initial.filename` in call to `gWidgets2::gfile` function.
 * Fix a bug where database alleles were being all set to NA.
 * Avoid saving loaded profiles when an error occurs in `f_importprof`.
+* Fix an issue where if an allele was repeated in the mixture file, but not present in the database file, it would get added twice causing an error when Familias is called.
