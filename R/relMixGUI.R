@@ -440,7 +440,9 @@ relMixGUI <- function(){
       #Check if all alleles in mixture and reference exist in database
       idx <- c(aa%in%al)
 
-      if(any(!idx)){
+      # if the allele is missing, schedule it to be added to the database,
+      # unless it was scheduled already
+      if(any(!idx) && !(aa[!idx] %in% alNotDB)){
         cat(i,"\n")
         keepIx <- c(keepIx,rep(ix,sum(!idx))) #Index of marker
         alNotDB <- c(alNotDB,aa[!idx]) #Alleles not found in db
