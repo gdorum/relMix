@@ -1,8 +1,8 @@
 Package: relMix
 Type: Package
 Title: Relationship Inference for DNA Mixtures
-Version: 1.3.2
-Date: 2020-10-28
+Version: 1.3.3
+Date: 2020-12-14
 Authors@R: c(
   person('Guro', 'Dorum', email = 'guro.dorum@gmail.com', role = c('aut')),
   person('Elias', 'Hernandis', email = 'eliashernandis@gmail.com', role = c('ctb', 'cre')),
@@ -14,9 +14,12 @@ Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: 
     Familias,
-    tkrplot,
     gWidgets2,
     gWidgets2tcltk
-Suggests: knitr, pander, rmarkdown
+Suggests: 
+    knitr,
+    pander,
+    rmarkdown,
+    tkrplot
 License: GPL (>=2)
 RoxygenNote: 7.1.1
