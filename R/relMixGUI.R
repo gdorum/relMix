@@ -746,29 +746,34 @@ relMixGUI <- function(){
     LRgroup2 <- gWidgets2::ggroup(container=LRwindowGroup,horizontal=FALSE,spacing=7)
     #Plot pedigrees
     pedGroup <- gWidgets2::ggroup(horizontal=TRUE,container=LRgroup2,spacing=5)
-    #pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
-    pedFrame1 <- gWidgets2::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
-    #gWidgets2::size(pedFrame1) <- list(height=110,width=240)
-    pedFrame2 <- gWidgets2::gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
-    #gWidgets2::size(pedFrame2) <- list(height=110,width=240)
-    if(all(ped1$findex==0 & ped1$mindex==0)) {
-      gWidgets2::glabel("No relations",container=pedFrame1)
-    }else{
-      img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame1),
-                      fun = function() {
-                        #err <- try(plot(ped1),silent=TRUE)
-                        plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
-      gWidgets2::add(pedGroup,img1)
+    if (requireNamespace("tkrplot", quietly = TRUE)) {
+      #pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
+      pedFrame1 <- gWidgets2::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+      #gWidgets2::size(pedFrame1) <- list(height=110,width=240)
+      pedFrame2 <- gWidgets2::gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+      #gWidgets2::size(pedFrame2) <- list(height=110,width=240)
+      if(all(ped1$findex==0 & ped1$mindex==0)) {
+        gWidgets2::glabel("No relations",container=pedFrame1)
+      }else{
+        img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame1),
+                                 fun = function() {
+                                   #err <- try(plot(ped1),silent=TRUE)
+                                   plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
+        gWidgets2::add(pedGroup,img1)
+      }
+      if(all(ped2$findex==0 & ped2$mindex==0)) {
+        gWidgets2::glabel("No relations",container=pedFrame2)
+      }else{
+        img2 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame2),
+                                 fun = function() {
+                                   #err <- try(plot(ped2),silent=TRUE)
+                                   plot(ped2,cex=0.8)},hscale=0.4,vscale=0.8)
+        gWidgets2::add(pedGroup,img2)
+      }
+    } else {
+      gWidgets2::glabel('Plotting is not available because the "tkrplot" package is not installed.', container=pedGroup)
     }
-    if(all(ped2$findex==0 & ped2$mindex==0)) {
-      gWidgets2::glabel("No relations",container=pedFrame2)
-    }else{
-      img2 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame2),
-                    fun = function() {
-                      #err <- try(plot(ped2),silent=TRUE)
-                    plot(ped2,cex=0.8)},hscale=0.4,vscale=0.8)
-    gWidgets2::add(pedGroup,img2)
-    }
+
     #List of LRs
     print(format(Data[,1:2],digits=4,scientific=TRUE))
     gWidgets2::glabel(paste("Total LR:",format(prod(LRmarker),digits=4,scientific=TRUE)),container=LRgroup2)

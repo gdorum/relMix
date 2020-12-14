@@ -11,7 +11,7 @@ vignette: >
 
 This vignette gives an introduction to RelMix 1.3, the graphical user interface of the relMix package described in Dørum et al. (2017). We will present the main features of the GUI with two examples.
 
-##Getting started
+## Getting started
 
 Start RelMix by typing the following command in the R console
 ```{r, eval=FALSE} 
@@ -23,15 +23,15 @@ which will open the user interface seen in Figure 1.
 knitr::include_graphics("relMix_screenshot.png")
 ```
 
-##Example 1: A paternity case
+## Example 1: A paternity case
 
 In this example we consider a paternity case where we have a mixed DNA profile of a mother and child, in addition to reference profiles from the mother and the alleged father.
 
-###1. Import data
+### 1. Import data
 
 The first step in RelMix is to import data. The import files must be either comma, semicolon or tab-separated and must have dots as decimal separators. Examples will be given for the three types of files that are needed: mixture profile, reference profiles and allele frequencies. The mixture profile and reference profiles should contain the same loci in the same order, while the allele frequency file can contain additional loci not in the profiles. RelMix will give an error message if the data file has an error that is fatal for the program. RelMix will return a warning if there is a minor error in the data file that is not fatal for the program.
 
-####1a. Mixture profile
+#### 1a. Mixture profile
 
 Table 1 shows the structure of the mixture file. The first line should contain column names as shown here:  'SampleName', 'Marker', 'Allele1' etc. The mixture profile in this example has a maximum of three unique alleles per markers, but the file may be expanded with columns 'Allele4', 'Allele5' and so on if there are additional observed alleles. In this example there are 22 markers, but only the first five are shown here. Only autosomal markers can be included. Marker names are case sensitive, and an error message will be given if markers are not found in the database.
 ```{r, echo=FALSE, results='asis'}
@@ -42,7 +42,7 @@ pander::pandoc.table(rbind(head(M, 5),data.frame(SampleName='...',Marker='...',A
 
 If there are multiple replicates, the next replicate profile must have a different sample name (e.g. "relMix2") and follow directly after the first replicate (i.e. no blank lines between).
 
-####1b. Reference profiles
+#### 1b. Reference profiles
 
 Table 2 shows the format of the file containing the reference profiles (all reference profiles have to be in the same file). The first line should correspond to the column names seen here. The different reference profiles follow directly after each other, and each profile should have a specific sample name. In our example there are two reference profiles, "Mother" and "Father". The file shoud only contain profiles of individuals defined in the pedigree. **Note:** as long as the built-in pedigrees are used, the reference profiles should be named either "Father", "Mother" or "Child" because these are the only individual IDs that are defined in these pedigrees. If custom pedigrees are provided, any sample name can be used (see example 2 below). Only the first two markers and the last one are shown for each profile.
 
@@ -53,7 +53,7 @@ rownames(G2) <- NULL
 knitr::kable(G2,caption="Table 2: Reference profiles for mother and alleged father in example 1.")
 ```
 
-####1c. Database
+#### 1c. Database
 
 ```{r, out.width = '30%', fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'}
 knitr::include_graphics("database_crop.png")
@@ -75,22 +75,22 @@ When clicking 'Save' here we return to the window in Figure 2, where we need to 
 If a previously unobserved allele (i.e. not in the database) is found in the imported profiles, a notification will be given that the alllele has been added to the database with the minimum allele frequency. If the allele frequencies do not sum to 1, a question will appear of whether you would like to scale the frequencies. If not, a rest allele will be added.
 
 
-###2. Mutations 
+### 2. Mutations 
 In this example we will not consider mutations, so we can ignore the 'Mutations' button.
 
-###3. Pedigree
+### 3. Pedigree
 The pedigrees define the hypotheses.  There are three choices of pedigrees: 'Paternity', 'Unrelated' and 'Custom'. We choose 'Paternity' as the first pedigree and 'Unrelated' (alleged father and child are unrelated) as the second pedigree (Figure 4). In example 2 we show how to define a custom pedigree.
 ```{r, out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 4: Define the pedigrees in example 1."}
 knitr::include_graphics("pedigrees_ex1.png")
 ```
 
-###4. Contributors
+### 4. Contributors
 Clicking the 'Specify contributors' button opens the window in Figure 5. We tick the individuals in the pedigree that are in the mixture, in this case the mother and child. It is possible to have different contributors for each pedigree, but here the contributors are the same under both hypotheses.
 ```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 5: Specify mother and child as the contributors in both pedigrees in example 1."}
 knitr::include_graphics("contributors_ex1.png")
 ```
 
-###5. Dropout and drop-in
+### 5. Dropout and drop-in
 The last step is to specify dropout and drop-in values. See Dørum et al. (2017) for a detailed description about the drop-in/dropout model. By default all values are set to 0. In this case we expect no dropout from the mother so we set her dropout probability to 0, while the child is given a dropout probability of 0.1. The drop-in value is set to 0.05 (Figure 6).
 ```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."}
 knitr::include_graphics("dropout_ex1.png")
@@ -98,21 +98,21 @@ knitr::include_graphics("dropout_ex1.png")
 
 Note that if the dropout values are not set, an error window will occur. Even if you do not include dropout and drop-in, you must open the dropout window and click on the save button.
 
-###6. Compute LR
+### 6. Compute LR
 Finally, we are ready to click the 'Compute LR' button. The result appears in a new pop-up window (Figure 7). The chosen parameters are displayed on the left, top right shows the pedigrees, followed by the total LR and a table displaying the LRs per marker. By clicking "Save results to file", the LRs together with the mixture profiles, reference profiles and the parameters will be saved to file.
 ```{r, out.width = 500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."}
 knitr::include_graphics("results_ex1.png")
 ```
 
 
-##Example 2: Mutations, silent alleles and custom pedigree
+## Example 2: Mutations, silent alleles and custom pedigree
 Click the RESTART button before starting on a new case.
 
 In this example we have a two-person mixture with one known contributor, and it is hypothesised whether the second contributor is the child of the first contributor, or someone unrelated. We take silent alleles and mutations into account. Only one locus is considered.
 
-###1. Import data
+### 1. Import data
 
-####1a. Mixture profile
+#### 1a. Mixture profile
 
 Table 4 shows the mixture file. There is only one observed allele for this locus.
 ```{r, echo=FALSE, results='asis'}
@@ -120,7 +120,7 @@ M <- read.table("mixture_silent_ex.txt",sep="\t",header=TRUE)
 pander::pandoc.table(head(M, 5),missing="",caption="Table 4: Mixture file for example 2.")
 ```
 
-####1b. Reference profiles
+#### 1b. Reference profiles
 In this example there is only one known profile. Since we will provide a custom pedigree, the sample name of the profile can be anything as long as it corresponds to the ID in the pedigree.
 ```{r, echo=FALSE, results='asis'}
 G <- read.table("references_silent.txt",sep="\t",header=TRUE)
@@ -128,7 +128,7 @@ rownames(G) <- NULL
 knitr::kable(G,caption="Table 5: Reference profile for the known contributor (C1) in example 2.")
 ```
 
-####1c. Database
+#### 1c. Database
 The allele frequencies of the one diallelic marker are given in Table 6.
 ```{r, echo=FALSE, results='asis'}
 freqs <- read.table("freqsSilent.txt",sep="\t",header=T,stringsAsFactors=F)
@@ -148,15 +148,15 @@ knitr::include_graphics("scaling_ex2.png")
 
 **Note 2**: The added rest allele is given the name "r". If a stepwise mutation model is chosen (see section below), numeric allele names are required, so in this case scaling must be chosen.
 
-###2. Mutations
-Clicking the mutation button in the main interface opens a new window. By default mutations are not accounted for (mutation rate set to 0). There are three mutation models to choose from. The 'Equal' mutation model assumes that all mutations are equally likely, the 'Proportional' model assumes mutation rates to be proportional to allele frequencies, and the 'Stepwise' mutation model assumes that mutations to closer allelles (fewer sequence repeats difference) are more probable. When 'Stepwise' is chosen, a range must also be specified that indicates the relative probability of mutating n+1 steps versus mutating n steps. This mutation model requires that the allele names are numerics indicating the number of sequence repeats. It does not account for microinvariants, and will treat mutations to and from microinvariants as practically impossible. This option corresponds to the model 'Stepwise (unstationary)' in Familias 3. Mutations to and from silent alleles are not possible for any of the models. See the Familias manual for more details on the mutation models (http://familias.no).
+### 2. Mutations
+Clicking the mutation button in the main interface opens a new window. By default mutations are not accounted for (mutation rate set to 0). There are three mutation models to choose from. The 'Equal' mutation model assumes that all mutations are equally likely, the 'Proportional' model assumes mutation rates to be proportional to allele frequencies, and the 'Stepwise' mutation model assumes that mutations to closer allelles (fewer sequence repeats difference) are more probable. When 'Stepwise' is chosen, a range must also be specified that indicates the relative probability of mutating n+1 steps versus mutating n steps. This mutation model requires that the allele names are numerics indicating the number of sequence repeats. It does not account for microinvariants, and will treat mutations to and from microinvariants as practically impossible. This option corresponds to the model 'Stepwise (unstationary)' in Familias 3. Mutations to and from silent alleles are not possible for any of the models. See the Familias manual for more details on the mutation models (https://familias.no/).
 
 In this example we will use an equal mutation model with mutation rate 0.1 for both males and females.
 ```{r, out.width =  200, fig.retina = NULL,echo=FALSE,fig.cap="Figure 10: Mutations in example 2."}
 knitr::include_graphics("mutations_ex2.png")
 ```
 
-###3. Pedigree
+### 3. Pedigree
 Since the hypotheses in this example are not covered by the built-in pedigrees, we will provide RelMix with custom pedigrees defined in R scripts. The R scripts can for instance be exported from Familias 3, but can also be generated manually. The script below shows the code needed to provide the first pedigree where the two contributors are mother and child. 
 
 ```{r, eval=FALSE}
@@ -182,20 +182,20 @@ Figure 11 shows how to import the custom pedigrees from R scripts, one script pe
 knitr::include_graphics("custom_ped_ex2.png")
 ```
 
-###4. Contributors
+### 4. Contributors
 Both individuals defined in the pedigrees are contributors under both hypotheses. It is only their relationship that changes between the two pedigrees.
 ```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 12: Tick both individuals as contributors to the mixture in both pedigrees."}
 knitr::include_graphics("contributors_ex2.png")
 ```
 
-###5. Dropout and drop-in
+### 5. Dropout and drop-in
 In this example we believe there may be dropout in both contributors' profiles. We set their dropout probabilities to 0.1 and the drop-in value to 0.05.
 
 ```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."}
 knitr::include_graphics("dropout_ex2.png")
 ```
 
-###6. Compute LR
+### 6. Compute LR
 The resulting LR for example 2 is shown in Figure 14. Note that in pedigree 2 there are are no relations to plot.
 ```{r, out.width =  500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
 knitr::include_graphics("results_ex2.png")

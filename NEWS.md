@@ -25,3 +25,7 @@ Package has been updated to use `gWidgets2` and `gWidgets2tcltk` instead of `gWi
 * Fix a bug where database alleles were being all set to NA.
 * Avoid saving loaded profiles when an error occurs in `f_importprof`.
 * Fix an issue where if an allele was repeated in the mixture file, but not present in the database file, it would get added twice causing an error when Familias is called.
+
+##### Minor changes in v. 1.3.3
+
+* Make `tkrplot` a *suggests* dependency so that users which cannot install it can still use the non-plotting functionality of relMix. Now, if `tkrplot` is not available, the pedigrees will not be plotted in the results screen and instead a message explaining the problem will be shown.
