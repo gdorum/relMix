@@ -22,4 +22,4 @@ Suggests:
     rmarkdown,
     tkrplot
 License: GPL (>=2)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
