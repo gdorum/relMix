@@ -31,7 +31,7 @@ gMO <- c(1,1)
 datamatrix <- createDatamatrix(locus,knownGenos=list(AF=gAF,MO=gMO),idsU=c("CH"))
 }
 \seealso{
-\code{\link{FamiliasLocus}} and \code{\link{relMix}}.
+\code{\link{github::thoree/Familias::FamiliasLocus}} and \code{\link{relMix}}.
 }
 \author{
 Guro Dorum
