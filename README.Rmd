@@ -20,6 +20,11 @@ relMix makes relationship inference involving DNA mixtures with unknown profiles
 
 Please follow the instructions here https://www.familias.name/openfamilias.html to install relMix.
 
+``` r
+ # First install devtools if needed
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("gdorum/relMix")
+```
 
 To provide pedigree plots, relMix uses the package `tkrplot`. However, this package has some compatibility issues with MacOS and hence is not included as a *hard* dependency. Users who wish to see pedigree plots in the results screen have to install the package `tkrplot` manually with
 
