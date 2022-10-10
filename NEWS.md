@@ -32,4 +32,4 @@ Package has been updated to use `gWidgets2` and `gWidgets2tcltk` instead of `gWi
 
 ##### Minor changes in v. 1.3.4
 
-* Make `Familias` a *suggests* dependency rather than *imports*. Familias is no longer available on CRAN and requires manual installation. Due to this, relMix is also no longer available on CRAN.
+* `Familias` is installed from GitHub rather than CRAN. The dependency 'Familias' is no longer available on CRAN and is installed from GitHub instead. Due to this, relMix is also no longer available on CRAN.
