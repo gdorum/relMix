@@ -13,10 +13,10 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: 
-    Familias,
     gWidgets2,
     gWidgets2tcltk
 Suggests: 
+    Familias,
     knitr,
     pander,
     rmarkdown,
