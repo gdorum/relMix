@@ -29,3 +29,7 @@ Package has been updated to use `gWidgets2` and `gWidgets2tcltk` instead of `gWi
 ##### Minor changes in v. 1.3.3
 
 * Make `tkrplot` a *suggests* dependency so that users which cannot install it can still use the non-plotting functionality of relMix. Now, if `tkrplot` is not available, the pedigrees will not be plotted in the results screen and instead a message explaining the problem will be shown.
+
+##### Minor changes in v. 1.3.4
+
+* Make `Familias` a *suggests* dependency rather than *imports*. Familias is no longer available on CRAN and requires manual installation. Due to this, relMix is also no longer available on CRAN.
