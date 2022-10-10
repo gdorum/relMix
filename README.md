@@ -12,6 +12,11 @@ function is the graphical user interface `relMixGUI`.
 Please follow the instructions here https://www.familias.name/openfamilias.html
 to install relMix.
 
+``` r
+ # First install devtools if needed
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("gdorum/relMix")
+```
 
 To provide pedigree plots, relMix uses the package `tkrplot`. However,
 this package has some compatibility issues with MacOS and hence is not
