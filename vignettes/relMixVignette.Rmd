@@ -1,5 +1,5 @@
 ---
-title: "RelMix 1.3"
+title: "relMix 1.3"
 author: "Guro Dorum"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
