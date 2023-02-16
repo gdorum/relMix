@@ -2,3 +2,7 @@
 ^\.Rproj\.user$
 README.Rmd
 testdata
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
