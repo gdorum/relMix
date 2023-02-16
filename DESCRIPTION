@@ -23,6 +23,5 @@ Suggests:
     tkrplot
 License: GPL (>=2)
 RoxygenNote: 7.2.1
-Remotes: 
+Remotes:  
     github::thoree/Familias
-URL: https://gdorum.github.io/relMix/

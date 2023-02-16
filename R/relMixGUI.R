@@ -489,6 +489,11 @@ relMixGUI <- function(){
   f_MAF <- function(db,MAF){
     db <- get('db',mmTK)
     if(any(db$Frequency<MAF)){ #Frequencies below MAF
+      # gWidgets2::gconfirm("Some frequencies are below the min. allele frequency.
+      #          Change the indicated frequencies?", title="Note",icon = "question",handler = function(h,...){
+      #db$Frequency[db$Frequency<MAF] <- MAF
+      #assign('db',db,mmTK)
+      #})
       w <- gWidgets2::gconfirm("Some frequencies are below the min. allele frequency.
                 Change the indicated frequencies?", title="Note",icon = "question")
       if(w) {
@@ -521,7 +526,7 @@ relMixGUI <- function(){
 
     db <- db[order(db$Marker,db$Allele),]
     #Assign database that will be used if scaling is not done
-    assign('dbF',db,envir=mmTK) #Final database
+    assign('db',db,envir=mmTK) #Final database
 
     #Check that frequencies sum to 1, otherwise scale
     sums <- sapply(1:length(markerNames),function(i) sum(db[db[,1]==markerNames[i],3]))
@@ -548,7 +553,7 @@ relMixGUI <- function(){
       }
 
     }
-    assign('dbF',db,envir=mmTK) #Final database
+    assign('db',db,envir=mmTK) #Final database
   }
 
 
@@ -581,7 +586,7 @@ relMixGUI <- function(){
     R <- f_mixture(E)
     knownGenos <- f_genotypes(G)
     #Frequencies
-    db2 <- get("dbF",envir=mmTK)
+    db2 <- get("db",envir=mmTK)
     alleleNames <- as.character(db2[,2])
 
 
