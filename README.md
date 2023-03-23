@@ -14,7 +14,7 @@ Install from GitHub as follows:
 ``` r
  # First install devtools if needed
 if(!require(devtools)) install.packages("devtools")
-devtools::install_github("gdorum/relMix")
+devtools::install_github("gdorum/relMix",build_vignettes = TRUE)
 ```
 
 If you encounter problems, please follow the installation instructions found here: https://www.familias.name/openfamilias.html.
