@@ -764,7 +764,8 @@ relMixGUI <- function(){
         img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame1),
                                  fun = function() {
                                    #err <- try(plot(ped1),silent=TRUE)
-                                   plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
+                                   #plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
+                                    plot(ped1,cex=0.8)},hscale=0.6,vscale=1)
         gWidgets2::add(pedGroup,img1)
       }
       if(all(ped2$findex==0 & ped2$mindex==0)) {
@@ -773,7 +774,7 @@ relMixGUI <- function(){
         img2 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame2),
                                  fun = function() {
                                    #err <- try(plot(ped2),silent=TRUE)
-                                   plot(ped2,cex=0.8)},hscale=0.4,vscale=0.8)
+                                   plot(ped2,cex=0.8)},hscale=0.6,vscale=1)
         gWidgets2::add(pedGroup,img2)
       }
     } else {
