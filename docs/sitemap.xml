@@ -1,60 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://gdorum.github.io/relMix/404.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://gdorum.github.io/relMix/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/relMixVignette.html</loc>
+    <loc>https://gdorum.github.io/relMix/articles/relMix.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://gdorum.github.io/relMix/articles/relMixVignette.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://gdorum.github.io/relMix/authors.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://gdorum.github.io/relMix/index.html</loc>
   </url>
   <url>
-    <loc>/reference/allGenos.html</loc>
+    <loc>https://gdorum.github.io/relMix/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/checkFrequenciesFile.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/allGenos.html</loc>
   </url>
   <url>
-    <loc>/reference/checkMixtureFile.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/checkFrequenciesFile.html</loc>
   </url>
   <url>
-    <loc>/reference/checkPedigreeFile.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/checkMixtureFile.html</loc>
   </url>
   <url>
-    <loc>/reference/checkReferenceFile.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/checkPedigreeFile.html</loc>
   </url>
   <url>
-    <loc>/reference/createDatamatrix.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/checkReferenceFile.html</loc>
   </url>
   <url>
-    <loc>/reference/db.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/createDatamatrix.html</loc>
   </url>
   <url>
-    <loc>/reference/db2.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/db.html</loc>
   </url>
   <url>
-    <loc>/reference/generateMix.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/db2.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/generateMix.html</loc>
   </url>
   <url>
-    <loc>/reference/mixLikDrop.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/relMix.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/mixLikDrop.html</loc>
   </url>
   <url>
-    <loc>/reference/relMixGUI.html</loc>
+    <loc>https://gdorum.github.io/relMix/reference/relMix.html</loc>
+  </url>
+  <url>
+    <loc>https://gdorum.github.io/relMix/reference/relMixGUI.html</loc>
   </url>
 </urlset>
