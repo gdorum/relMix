@@ -67,7 +67,7 @@ checkFrequenciesFile <- function(filename, mix) {
     # Check for duplicate markers
     # TODO: this error will never trigger b/c R renames duplicate columns when
     # loading w/ headers
-    if (length(error) == 0 && unique(names(df)[-1]) != names(df)[-1]) {
+    if (length(error) == 0 && anyDuplicated.default(names(df))) {
         error <- append(error, paste("There are duplicate markers in your frequency table."));
     }
 
