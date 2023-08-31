@@ -36,7 +36,8 @@ jobs:
           needs: website
 
       - name: Install tkrplot
-        run: sudo apt install r-cran-tkrplot
+        run: |
+          sudo apt install r-cran-tkrplot
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
