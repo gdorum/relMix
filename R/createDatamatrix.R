@@ -6,7 +6,7 @@
 #' @param idsU Vector of indices for unknown individuals
 #' @return A data matrix of genotypes where each row corresponds to an individual.
 #' @author Guro Dorum
-#' @seealso \code{\link{github::thoree/Familias::FamiliasLocus}} and \code{\link{relMix}}.
+#' @seealso \code{Familias::FamiliasLocus} and \code{\link{relMix}}.
 #' @examples
 #' #Define alleles and frequencies
 #' alleles <- 1:2

@@ -95,23 +95,23 @@
 #' @export
 relMix <- function(pedigrees, locus, R, datamatrix, ids, D=rep(list(c(0,0)),length(ids)),di=0, kinship=0){
 
-  if(class(pedigrees)=='list'){
+  if(inherits(pedigrees,'list')){
       for (i in 1:length(pedigrees)) {
-        if (class(pedigrees[[i]]) != "FamiliasPedigree")
+        if (!inherits(pedigrees[[i]], "FamiliasPedigree"))
           stop("Argument pedigrees should be a list of Familias pedigrees")
 
         if(any(sapply(pedigrees,function(x) any(!ids%in%x$id))))
             stop("Argument ids does not correspond with indices in pedigree")
     }
   }else {
-    if(class(pedigrees) != "FamiliasPedigree")
+    if(inherits(pedigrees, "FamiliasPedigree"))
       stop("Argument pedigrees should be a list of Familias pedigrees")
 
     if(any(!ids%in%pedigrees$id))
       stop("Argument ids does not correspond with indices in pedigree")
   }
-  if(class(R) != "list") R <- list(R)
-  if (class(locus) != "FamiliasLocus")
+  if(!inherits(R,"list")) R <- list(R)
+  if (!inherits(locus, "FamiliasLocus"))
     stop("Argument locus should be a Familias locus")
   if (!is.data.frame(datamatrix))
     stop("Argument datamatrix should be a dataframe")

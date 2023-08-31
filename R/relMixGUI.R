@@ -7,6 +7,7 @@
 #' @examples
 #' #Examples can be found in the vignette and example data files can be found
 #' #in the folder "inst\extdata" in the installation folder for relMix
+#' @import gWidgets2tcltk
 #' @importFrom graphics plot
 #' @importFrom utils read.table write.table packageVersion
 #' @export
