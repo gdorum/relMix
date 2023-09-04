@@ -104,7 +104,7 @@ relMix <- function(pedigrees, locus, R, datamatrix, ids, D=rep(list(c(0,0)),leng
             stop("Argument ids does not correspond with indices in pedigree")
     }
   }else {
-    if(inherits(pedigrees, "FamiliasPedigree"))
+    if(!inherits(pedigrees, "FamiliasPedigree"))
       stop("Argument pedigrees should be a list of Familias pedigrees")
 
     if(any(!ids%in%pedigrees$id))
