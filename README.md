@@ -5,19 +5,19 @@
 
 relMix makes relationship inference involving DNA mixtures with unknown
 profiles and interprets DNA mixtures with related contributors. The main
-function is the graphical user interface `relMixGUI`.
+function is the graphical user interface `relMixGUI`. A tutorial can be
+found here: <https://gdorum.github.io/relMix/articles/relMix.html>
 
 ## Installation
 
-Install from GitHub as follows:
+Please follow the instructions here
+<https://www.familias.name/openfamilias.html> to install relMix.
 
 ``` r
  # First install devtools if needed
 if(!require(devtools)) install.packages("devtools")
-devtools::install_github("gdorum/relMix",build_vignettes = TRUE)
+devtools::install_github("gdorum/relMix")
 ```
-
-If you encounter problems, please follow the installation instructions found here: https://www.familias.name/openfamilias.html.
 
 To provide pedigree plots, relMix uses the package `tkrplot`. However,
 this package has some compatibility issues with MacOS and hence is not

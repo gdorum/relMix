@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # relMix
 
-relMix makes relationship inference involving DNA mixtures with unknown profiles and interprets DNA mixtures with related contributors. The main function is the graphical user interface ``` relMixGUI```.
+relMix makes relationship inference involving DNA mixtures with unknown profiles and interprets DNA mixtures with related contributors. The main function is the graphical user interface ``` relMixGUI```. A tutorial can be found here: https://gdorum.github.io/relMix/articles/relMix.html
 
 ## Installation
 
