@@ -55,7 +55,7 @@ knitr::kable(G2,caption="Table 2: Reference profiles for mother and alleged fath
 
 #### 1c. Database
 
-```{r, out.width = '30%', fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'}
+```{r, out.width = '40%', fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'}
 knitr::include_graphics("database_crop.png")
 ```
 When clicking the database button in the main interface, the window in Figure 2 appears.
