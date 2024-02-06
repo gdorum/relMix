@@ -38,20 +38,40 @@ checkPedigreeFile <- function(filename, df) {
         # load custom pedigrees
         #source(filename,local=TRUE);
       localEnv <- new.env()
-      source(filename,local=localEnv)
+      #source(filename,local=localEnv)
+
+      #Read pedigree from ped file
+      df <- tryCatch(
+        read.table(filename, header=TRUE, sep="\t", stringsAsFactors=FALSE),
+        error = function(e) { NULL });
+      #df <- read.table(filename,header=TRUE)
+      #FamiliasPedigree requries NA instead of 0
+      df$fid[df$fid==0] <- NA
+      df$mid[df$mid==0] <- NA
+      df$sex <- ifelse(df$sex==1,'male','female')
+      # dadid[dadid==0] <- NA
+      # dadid <- ped$ID[dadid]
+      # momid <- ped$MIDX
+      # momid[momid==0] <- NA
+      # momid <- ped$ID[momid]
+      # ped$SEX <- ifelse(ped$SEX==1,"male","female")
+      ped1 <- FamiliasPedigree(id=df$id,dadid=df$fid,momid=df$mid,sex=df$sex)
+
 
     #     if(!"ped1"%in%ls(envir=localEnv)) {error <- append(error,"The pedigree file must define a pedigree of type 'FamiliasPedigree' in a variable named 'ped1'.")
     #     } else  allowedKinships <- get("ped1",envir=localEnv)$id;
     # }
-      if(!"ped1"%in%ls(envir=localEnv)) {error <- append(error,"The pedigree file must define a pedigree of type 'FamiliasPedigree' in a variable named 'ped1'.")
-      } else{
-        ped1 <- get("ped1",envir=localEnv)
+      #if(!"ped1"%in%ls(envir=localEnv)) {error <- append(error,"The pedigree file must define a pedigree of type 'FamiliasPedigree' in a variable named 'ped1'.")
+      #} else{
+        #ped1 <- get("ped1",envir=localEnv)
+        #allowedKinships <- ped1$id;
         allowedKinships <- ped1$id;
         #Make names of individuals in pedigree with first letter uppercase
         allowedKinships <- sapply(allowedKinships, titleize)
+        #ped1$id <- allowedKinships
         ped1$id <- allowedKinships
         assign("ped1",ped1,envir=localEnv)
-      }
+      #}
     }
 
 
@@ -72,6 +92,7 @@ checkPedigreeFile <- function(filename, df) {
         #     df[,1] <- fixedHeaderColumn;
         #
         # }
+
     }
 
     # # Check for very similar kinships
@@ -89,5 +110,6 @@ checkPedigreeFile <- function(filename, df) {
     if (length(error) > 0) {
       return(list(df=NULL, warning=NULL, error=error));
     }
-    return(list(df=get("ped1",localEnv),warning=warning, error=error));
+    #return(list(df=get("ped1",localEnv),warning=warning, error=error));
+    return(list(df=ped1,warning=warning, error=error));
 }

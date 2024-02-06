@@ -13,7 +13,7 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: 
-    Familias (>= 2.5),
+    Familias (>= 2.6.1),
     gWidgets2,
     gWidgets2tcltk
 Suggests: 
@@ -23,6 +23,4 @@ Suggests:
     tkrplot
 License: GPL (>=2)
 RoxygenNote: 7.2.3
-Remotes: 
-    github::thoree/Familias
 URL: https://gdorum.github.io/relMix/
