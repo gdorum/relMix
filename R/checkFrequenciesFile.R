@@ -48,10 +48,10 @@ checkFrequenciesFile <- function(filename, mix) {
         }
     }
 
-    # Check that all alleles are numeric
-    if (length(error) == 0 && !all(sapply(df$Allele, is.numeric))) {
-        error <- append(error, "There are values that are not numeric in the Allele column of the frequency file");
-    }
+    # # Check that all alleles are numeric
+    # if (length(error) == 0 && !all(sapply(df$Allele, is.numeric))) {
+    #     error <- append(error, "There are values that are not numeric in the Allele column of the frequency file");
+    # }
 
     # Check that all frequencies are either numeric or NA
     if (length(error) == 0) {

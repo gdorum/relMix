@@ -24,9 +24,43 @@ relMixGUI <- function(){
     return(tab) #need dataframe to keep allele-names correct!!
   }
 
-  tableWriter <- function(filename,obj){
-    write.table(obj,file=filename,sep="\t",row.names=FALSE,quote=FALSE)
-  }
+  tableWriter <- function(filename,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors){
+
+  cat("---
+  RelMix report
+  `r format(Sys.time())`
+  ---
+
+  <style>
+  body {
+    position: absolute;
+    left: 0px;}
+  </style>
+
+  \`\`\`{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE,tidy=TRUE,
+      tidy.opts=list(width.cutoff=80))
+  \`\`\`
+
+  \`\`\`{r example2, echo=FALSE}
+  knitr::kable(obj1)
+  knitr::kable(obj2)
+  knitr::kable(obj3)
+  knitr::kable(obj4)
+  knitr::kable(obj5)
+  \`\`\`
+
+  <br>
+  <br>
+
+  Pedigrees under H1 and H2 (contributors marked with a dot)
+
+  \`\`\`{r example, echo=FALSE}
+  f_plotPeds(pedigrees,contributors)
+  \`\`\`",
+          file = paste0(filename,".Rmd"))
+  rmarkdown::render(paste0(filename,".Rmd"),output_format = "word_document")
+}
 
   # Receives a the output of an error checking function and displays
   # the appropriate error messages. Returns the data frame on
@@ -82,13 +116,17 @@ relMixGUI <- function(){
       f_errorWindow(paste("There was an error loading the file. It does not look like a ", type, " file. Please make sure the file is correct and try again."))
       return()
     })
+    if(!is.null(Data)) print(paste(type,"file",proffile,"is imported"))
     assign(h$action,Data,envir=mmTK) #save object
   }
 
-  f_export <- function(obj) {
-    savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "LR.txt")
+  f_export <- function(obj1,obj2,obj3,obj4,obj5,pedigrees,contributors) {
+    #savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "LR.txt")
+    savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "RelMix_report")
     #filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*")))
-    tableWriter(savefile,obj) #load profile
+    #tableWriter(savefile,obj) #load profile
+    #tableWriter(savefile,obj,pedigrees)
+    tableWriter(savefile,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors)
   }
 
   # Make pedigree
@@ -97,7 +135,6 @@ relMixGUI <- function(){
       #Define the persons involved in the case
       persons <- c("Mother", "Father", "Child")
       sex <- c("female", "male", "male")
-      #Pedigree files exported from Familias use notation "ped1"
       ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
     } else if(gWidgets2::svalue(h$obj)=="Unrelated"){
       #Define the persons involved in the case
@@ -260,7 +297,7 @@ relMixGUI <- function(){
 
   #Makes pop-up window to fill in dropout values per contributor and drop-in
   f_dropout <- function(h,...){
-    dropWindow <- gWidgets2::gwindow("Dropout and drop-in",width=500,visible=FALSE)
+    dropWindow <- gWidgets2::gwindow("Dropout and drop-in",width=300,visible=FALSE)
     dropGroup <- gWidgets2::ggroup(horizontal = FALSE, container = dropWindow)
     #Get pedigree data
     if(!exists("idxC1",envir=mmTK)){
@@ -282,7 +319,7 @@ relMixGUI <- function(){
       g <- gWidgets2::glabel(idxC[i], container=dropFrame2,horizontal=FALSE)
       #Check if a dropout value is already specified, if not set to 0
       val <- ifelse(idxC[i]%in%dropNames,dropliste[[which(dropNames==idxC[i])]],0)
-      objDrop[[i]] <- gWidgets2::gedit(format(val,digits=4),width=4,container=dropFrame2)
+      objDrop[[i]] <- gWidgets2::gedit(format(val,digits=4),width=2,container=dropFrame2)
     }
     dropinFrame <- gWidgets2::gframe("Drop-in",container=dropGroup)
     #objDrop[[length(dropliste)]] <- gspinbutton(0,1,by=0.01, value=dropliste[[length(dropliste)]],digits=3,container=dropinFrame)
@@ -517,6 +554,41 @@ relMixGUI <- function(){
     assign('db',db,envir=mmTK) #Final database
   }
 
+  # Code by Magnus Dehli Vigeland
+  # Function for plotting a list of pedigrees with typed members specified for each
+  f_plotPeds = function(peds, typed) {
+    npeds <- length(peds)
+
+    # Make sure each pedigree is a list of components
+    pedlist <- lapply(peds, function(p) if(pedtools::is.ped(p)) list(p) else p)
+
+    # Component-wise plot data
+    plotdat <- lapply(1:npeds, function(i) {
+      pedi <- pedlist[[i]]
+      ty <- typed[[i]]
+      lapply(pedi, function(cmp) list(cmp, carrier = ty))
+    })
+
+    # Remove outer list layer
+    plotdat <- unlist(plotdat, recursive = FALSE)
+
+    # Group comps according to original pedigrees
+    ncomps <- lengths(pedlist)
+    groups <- split(seq_along(plotdat), rep(seq_along(ncomps), ncomps))
+
+    # Titles
+    titles <- paste0("H", 1:npeds)
+
+    # Plot!
+    pedtools::plotPedList(plotdat, frames = TRUE, groups = groups, titles = titles,
+                ### Further args to consider/tweak:
+                hatched = pedtools::typedMembers,
+                cex = 1.2,
+                cex.main = 1.2,
+                fmar = 0.02
+    )
+  }
+
 
 
   f_LR <- function(){
@@ -711,41 +783,43 @@ relMixGUI <- function(){
 
     #### right col ####
     LRgroup2 <- gWidgets2::ggroup(container=LRwindowGroup,horizontal=FALSE,spacing=7)
-    #Plot pedigrees
+    #Plot pedigrees. First convert FamiliasPedigree to ped
+    peds <- pedFamilias::Familias2ped(pedigrees, datamatrix = NULL, loci = NULL)
     pedGroup <- gWidgets2::ggroup(horizontal=TRUE,container=LRgroup2,spacing=5)
     if (requireNamespace("tkrplot", quietly = TRUE)) {
-      #pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
-      pedFrame1 <- gWidgets2::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+      pedFrame <- gWidgets2::gframe("Pedigrees: contributors marked with a dot",container=pedGroup,horizontal=TRUE,expand=TRUE)
+      #pedFrame1 <- gWidgets2::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
       #gWidgets2::size(pedFrame1) <- list(height=110,width=240)
-      pedFrame2 <- gWidgets2::gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+      #pedFrame2 <- gWidgets2::gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
       #gWidgets2::size(pedFrame2) <- list(height=110,width=240)
-      if(all(ped1$findex==0 & ped1$mindex==0)) {
-        gWidgets2::glabel("No relations",container=pedFrame1)
-      }else{
-        img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame1),
+      # if(all(ped1$findex==0 & ped1$mindex==0)) {
+      #   gWidgets2::glabel("No relations",container=pedFrame1)
+      # }else{
+        img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame),
                                  fun = function() {
                                    #err <- try(plot(ped1),silent=TRUE)
                                    #plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
-                                    plot(ped1,cex=0.8)},hscale=0.6,vscale=1)
+                                    f_plotPeds(peds,list(idxC1,idxC2))},hscale=1,vscale=0.5)
         gWidgets2::add(pedGroup,img1)
-      }
-      if(all(ped2$findex==0 & ped2$mindex==0)) {
-        gWidgets2::glabel("No relations",container=pedFrame2)
-      }else{
-        img2 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame2),
-                                 fun = function() {
-                                   #err <- try(plot(ped2),silent=TRUE)
-                                   plot(ped2,cex=0.8)},hscale=0.6,vscale=1)
-        gWidgets2::add(pedGroup,img2)
-      }
+      #}
+      # if(all(ped2$findex==0 & ped2$mindex==0)) {
+      #   gWidgets2::glabel("No relations",container=pedFrame2)
+      # }else{
+        # img2 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame2),
+        #                          fun = function() {
+        #                            #err <- try(plot(ped2),silent=TRUE)
+        #                            #plot(ped2,cex=0.8)},hscale=0.6,vscale=1)
+        #                            plot(peds[[2]],cex=1,carrier=idxC2)},hscale=0.6,vscale=1)
+        # gWidgets2::add(pedGroup,img2)
+      #}
     } else {
       gWidgets2::glabel('Plotting is not available because the "tkrplot" package is not installed.', container=pedGroup)
     }
 
     #List of LRs
-    print(format(Data[,1:2],digits=4,scientific=TRUE))
+    print(format(Data[,1:2],digits=4,scientific=TRUE),right=F)
     gWidgets2::glabel(paste("Total LR:",format(prod(LRmarker),digits=4,scientific=TRUE)),container=LRgroup2)
-    tab <- gWidgets2::gtable(format(Data[,1:2],digits=4,scientific=TRUE),container=LRgroup2, expand = TRUE)
+    tab <- gWidgets2::gtable(format(Data[,1:2],digits=4,scientific=TRUE,justify="right"),container=LRgroup2, expand = FALSE)
     gWidgets2::size(tab) <- list(height = 300, width=200, column.widths = c(100, 100))
 
 
@@ -753,6 +827,7 @@ relMixGUI <- function(){
     allParam <- rbind(databaseData,mutData,dropData)
     colnames(contData) <- paste("Contributors",colnames(contData))
     allParam <- cbind(allParam," "=rep("",nrow(allParam)),rbind(contData,matrix("",nrow=nrow(allParam)-nrow(contData),ncol=ncol(contData))))
+    rownames(allParam) <- NULL
     #exportData <- data.frame(c(allParam[,1],"","Marker",Data[,1],"Total"),c(allParam[,2],"","LR",Data[,2],prod(LRmarker)),
     #                         c(rep("",nrow(allParam)+1),"Lik H1",Data[,3],prod(Data[,3])),c(rep("",nrow(allParam)+1),"Lik H2",Data[,4],prod(Data[,4])))
     #Parameters and LR
@@ -760,72 +835,119 @@ relMixGUI <- function(){
     #                         c(rep("",nrow(allParam)+1),"Lik H1",Data[,3],prod(Data[,3])),c(rep("",nrow(allParam)+1),"Lik H2",Data[,4],prod(Data[,4])))
 
     #Reference profiles
-    gtlist <- split(G[,3:4],G[,1])
-    GT <- do.call(cbind,gtlist)
+    #gtlist <- split(G[,3:4],G[,1])
+    #GT <- do.call(cbind,gtlist)
+    GT <- G
+    GT[,3:4] <- apply(G[,3:4],2,prettyNum)
     #Mixture profile
-    mix <- E[-1]
-    colnames(mix) <- c("Marker",paste("Mix.",colnames(mix[,-1]),sep=""))
-    GT <- GT[rep(1:nrow(GT),length(unique(E$SampleName))),]
-    rownames(GT) <- rownames(E)
-    prof <- cbind(E,GT)
-    prof[is.na(prof)] <- ""
+    #mix <- E[-1]
+    mix <- E
+    #colnames(mix) <- c("Marker",paste("Mix.",colnames(mix[,-1]),sep=""))
+    #GT <- GT[rep(1:nrow(GT),length(unique(E$SampleName))),]
+    #rownames(GT) <- rownames(E)
+    #prof <- cbind(E,GT[,-c(1,2)])
+    #prof[is.na(prof)] <- ""
 
     ###### 17.01.24: Add allele freqs to report #####
     alleles_report <- data.frame()
     freqs_report <- data.frame()
     for(i in 1:nrow(mix)){
+      m <- mix$Marker[i]
       #Unique alleles appearing in mixture and genotypes
-      al <- unique(as.numeric(prof[i,-c(1,2)]))[!is.na(unique(as.numeric(prof[i,-c(1,2)])))]
+      al <- unique(c(unlist(GT[GT$Marker==m,-c(1,2)]),unlist(mix[i,-c(1,2)])))
+      al <- al[!is.na(al)]
+      #al <- unique(unlist(prof[i,-c(1,2)]))[!unique(unlist(prof[i,-c(1,2)]))==""]
       #Frequencies for the unique alleles
-      freqs_report <- dplyr::bind_rows(freqs_report,data.frame(t(afreqAll[[mix$Marker[i]]][match(al,allelesAll[[mix$Marker[i]]])])))
+      freqs_report <- dplyr::bind_rows(freqs_report,data.frame(t(afreqAll[[m]][match(al,allelesAll[[m]])])))
       alleles_report <- dplyr::bind_rows(alleles_report,data.frame(t(al)))
     }
     colnames(freqs_report) <- paste0("Allele",1:ncol(freqs_report))
     colnames(alleles_report) <- paste0("Allele",1:ncol(alleles_report))
     nc <- ncol(alleles_report)
-    out <- do.call("data.frame", lapply(1:nc, function(j) cbind(alleles_report[,j], signif(freqs_report[,j],3))))
+    out <- do.call("data.frame", lapply(1:nc, function(j) cbind(alleles_report[,j],signif(freqs_report[,j],3))))
     colnames(out) <- rep(c("Allele","Freq"),times=ncol(alleles_report))
-    allele_info <- cbind(Marker=prof$Marker,out)
+    allele_info <- cbind(Marker=mix$Marker,out)
+    allele_info[is.na(allele_info)] <- ""
+    mix[is.na(mix)] <- ""
     ### end new ###
 
 
-    #LRgt <- cbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1)))
+    # #LRgt <- cbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1)))
     DataTot <- rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4])))
-    fill <- matrix("",nrow=nrow(DataTot),ncol=ncol(prof)-ncol(DataTot))
-    DataTot <- cbind(DataTot,fill)
-    colNames <- c(colnames(Data),rep(" ",ncol(fill)))
-
-    #colNamesFill <- rbind(rep("",length(colNames)),colNames) #Original
-    colNamesFill <- rbind(rep("",length(colNames)),c("--- Likelihoods ---",rep("",ncol(DataTot)-1)),colNames) #New 18.1.24
-    colnames(colNamesFill) <- colnames(DataTot)
-
-    DataTot <- rbind(colNamesFill,DataTot) #Original
-    #DataTot <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(DataTot)-1)),colNamesFill,DataTot) #New 18.1.24
-
-
-
-    colnames(DataTot) <- colnames(prof)
-    #LRgt <- rbind(prof,DataTot) #Original
-    LRgt <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(prof)-1)),colnames(prof),prof,DataTot) #New 18.1.24
-    #LRgt <- rbind(prof,c("--- Sample and reference alleles ---",rep("",ncol(DataTot)-1)),DataTot) #New 18.1.24
-    #LRgt <- rbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1))))
-    #LRgt <- rbind(colnames(LRgt),LRgt) #Original
-    fill <- matrix("",nrow=nrow(allParam),ncol=ncol(LRgt)-ncol(allParam))
-    allParam2 <- rbind(cbind(allParam,fill),rep("",ncol(LRgt)))
-
-    #### New ####
-
+    # fill <- matrix("",nrow=nrow(DataTot),ncol=ncol(prof)-ncol(DataTot))
+    # DataTot <- cbind(DataTot,fill)
+    # colNames <- c(colnames(Data),rep(" ",ncol(fill)))
+    #
+    # #colNamesFill <- rbind(rep("",length(colNames)),colNames) #Original
+    # colNamesFill <- rbind(rep("",length(colNames)),c("--- Likelihoods ---",rep("",ncol(DataTot)-1)),colNames) #New 18.1.24
+    # colnames(colNamesFill) <- colnames(DataTot)
+    #
+    # DataTot <- rbind(colNamesFill,DataTot) #Original
+    # #DataTot <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(DataTot)-1)),colNamesFill,DataTot) #New 18.1.24
+    #
+    #
+    #
+    # colnames(DataTot) <- colnames(prof)
+    # #LRgt <- rbind(prof,DataTot) #Original
+    # LRgt <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(prof)-1)),colnames(prof),prof,DataTot) #New 18.1.24
+    # #LRgt <- rbind(prof,c("--- Sample and reference alleles ---",rep("",ncol(DataTot)-1)),DataTot) #New 18.1.24
+    # #LRgt <- rbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1))))
+    # #LRgt <- rbind(colnames(LRgt),LRgt) #Original
+    # fill <- matrix("",nrow=nrow(allParam),ncol=ncol(LRgt)-ncol(allParam))
+    # allParam2 <- rbind(cbind(allParam,fill),rep("",ncol(LRgt)))
+    #
+    # #### New ####
+    #
     #LRgt <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(LRgt)-1)),LRgt)
 
-    allele_info2 <- rbind(c(" --- Allele frequencies ---",rep("",ncol(allele_info)-1)),colnames(allele_info),allele_info) #Add column names as a row
-    fill2 <- matrix("",nrow=nrow(allele_info2),ncol=ncol(LRgt)-ncol(allele_info2))
-    allele_info2 <- rbind(rep("",ncol(LRgt)),cbind(allele_info2,fill2)) #Add an empty row before allele info
-    colnames(LRgt) <- colnames(allele_info2) <- colnames(allParam2) #give all identical column names
+    # allele_info2 <- rbind(c(" --- Allele frequencies ---",rep("",ncol(allele_info)-1)),colnames(allele_info),allele_info) #Add column names as a row
+    # fill2 <- matrix("",nrow=nrow(allele_info2),ncol=abs(ncol(LRgt)-ncol(allele_info2)))
+    # allele_info2 <- rbind(rep("",ncol(fill2)),cbind(allele_info2,fill2)) #Add an empty row before allele info
+    # colnames(LRgt) <- colnames(allele_info2) <- colnames(allParam2) #give all identical column names
+    #
+    # exportData <- rbind(allParam2,LRgt,allele_info2)
+    # exportData[is.na(exportData)] <- ""
+    # rownames(exportData) <- NULL
+    # colnames(exportData) <- c("Parameter","Value","",colnames(contData),rep("",ncol(exportData)-5))
 
-    exportData <- rbind(allParam2,LRgt,allele_info2)
-    exportData[is.na(exportData)] <- ""
-    rownames(exportData) <- NULL
-    colnames(exportData) <- c("Parameter","Value","",colnames(contData),rep("",ncol(exportData)-5))
+    # #LRgt <- cbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1)))
+    # DataTot <- rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4])))
+    # fill <- matrix("",nrow=nrow(DataTot),ncol=ncol(prof)-ncol(DataTot))
+    # DataTot <- cbind(DataTot,fill)
+    # colNames <- c(colnames(Data),rep(" ",ncol(fill)))
+    #
+    # #colNamesFill <- rbind(rep("",length(colNames)),colNames) #Original
+    # colNamesFill <- rbind(rep("",length(colNames)),c("--- Likelihoods ---",rep("",ncol(DataTot)-1)),colNames) #New 18.1.24
+    # colnames(colNamesFill) <- colnames(DataTot)
+    #
+    # DataTot <- rbind(colNamesFill,DataTot) #Original
+    # #DataTot <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(DataTot)-1)),colNamesFill,DataTot) #New 18.1.24
+    #
+    #
+    #
+    # colnames(DataTot) <- colnames(prof)
+    # #LRgt <- rbind(prof,DataTot) #Original
+    # LRgt <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(prof)-1)),colnames(prof),prof,DataTot) #New 18.1.24
+    # #LRgt <- rbind(prof,c("--- Sample and reference alleles ---",rep("",ncol(DataTot)-1)),DataTot) #New 18.1.24
+    # #LRgt <- rbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1))))
+    # #LRgt <- rbind(colnames(LRgt),LRgt) #Original
+    # fill <- matrix("",nrow=nrow(allParam),ncol=ncol(LRgt)-ncol(allParam))
+    # allParam2 <- rbind(cbind(allParam,fill),rep("",ncol(LRgt)))
+    #
+    # #### New ####
+    #
+    # #LRgt <- rbind(c("--- Sample and reference alleles ---",rep("",ncol(LRgt)-1)),LRgt)
+    #
+    # allele_info2 <- rbind(c(" --- Allele frequencies ---",rep("",ncol(allele_info)-1)),colnames(allele_info),allele_info) #Add column names as a row
+    # fill2 <- matrix("",nrow=nrow(allele_info2),ncol=abs(ncol(LRgt)-ncol(allele_info2)))
+    # allele_info2 <- rbind(rep("",ncol(fill2)),cbind(allele_info2,fill2)) #Add an empty row before allele info
+    # colnames(LRgt) <- colnames(allele_info2) <- colnames(allParam2) #give all identical column names
+    #
+    # exportData <- rbind(allParam2,LRgt,allele_info2)
+    # exportData[is.na(exportData)] <- ""
+    # rownames(exportData) <- NULL
+    # colnames(exportData) <- c("Parameter","Value","",colnames(contData),rep("",ncol(exportData)-5))
+
 
     ###### end new #########
 
@@ -837,7 +959,8 @@ relMixGUI <- function(){
     #colnames(exportData) <- c("Parameter","Value","",colnames(contData),rep("",ncol(exportData)-5))
 
     LRbut <- gWidgets2::gbutton("Save results to file", container=LRgroup2,handler=function(h,...){
-      f_export(exportData)
+      #f_export(exportData,peds)
+      f_export(allParam,mix,GT,DataTot,allele_info,peds,list(idxC1,idxC2))
       gWidgets2::dispose(h$obj)
     })
 
@@ -872,7 +995,7 @@ relMixGUI <- function(){
   ###### Import data #####
   #Buttons for importing files
   dataGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group1,spacing=7)
-  impFrame <- gWidgets2::gframe("Import data",container=dataGroup,horizontal = FALSE)
+  impFrame <- gWidgets2::gframe("1) Import data",container=dataGroup,horizontal = FALSE)
   objMix <- gWidgets2::gbutton(text="Import mixture profile",container=impFrame,handler=f_importprof,action="mixture")
   objRef <- gWidgets2::gbutton(text="Import reference profiles",container=impFrame,handler=f_importprof,action="reference")
   objDB <- gWidgets2::gbutton(text="Database",container=impFrame,handler=f_database)
@@ -880,7 +1003,7 @@ relMixGUI <- function(){
   ###### Mutations #####
   #Mutation frame
   mutGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group1,spacing=7)
-  mutFrame <- gWidgets2::gframe("Mutations",container=mutGroup,horizontal=FALSE)
+  mutFrame <- gWidgets2::gframe("2) Mutations",container=mutGroup,horizontal=FALSE)
   mutButton <- gWidgets2::gbutton("Mutations", handler=f_mutations,container=mutFrame)
 
   group2 <- gWidgets2::ggroup(horizontal = TRUE, container=top)
@@ -888,7 +1011,7 @@ relMixGUI <- function(){
   ####### Pedigrees ######
   #Pedigree frame
   pedGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group2,spacing=7)
-  pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup)
+  pedFrame <- gWidgets2::gframe("3) Pedigrees",container=pedGroup)
   #Should we have the option to include different contributors under each hypothesis???
   #Pedigree 1 button
   gWidgets2::glabel("Pedigree 1",container=pedFrame)
@@ -898,13 +1021,13 @@ relMixGUI <- function(){
   objPed2 <- gcombobox(c("Paternity","Unrelated","Custom"), selected=0,container=pedFrame,handler=f_pedigree,action="2")
 
   ######## Contributors #######
-  contFrame <- gWidgets2::gframe("Contributors",container=group2,horizontal=TRUE)
+  contFrame <- gWidgets2::gframe("4) Contributors",container=group2,horizontal=TRUE)
   objCont <- gWidgets2::gbutton(text="Specify contributors",container=contFrame,handler=f_contributors)
 
   ####### Dropout/drop-in #########
   group3 <- gWidgets2::ggroup(horizontal = TRUE, container=top,spacing=10)
   #Dropout button
-  dropFrame <- gWidgets2::gframe("Dropout and drop-in",container=group3,horizontal=TRUE)
+  dropFrame <- gWidgets2::gframe("5) Dropout and drop-in",container=group3,horizontal=TRUE)
   dropButton <- gWidgets2::gbutton("Specify dropout and drop-in", handler=f_dropout, container=dropFrame)
 
   ###### Compute LR ######

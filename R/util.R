@@ -15,7 +15,7 @@ commonChecks <- function(filename, fileType) {
     error <- c();
     warning <- c();
     df <- tryCatch(
-                   read.table(filename, header=TRUE, sep="\t", stringsAsFactors=FALSE),
+                   read.table(filename, header=TRUE, sep="\t", stringsAsFactors=FALSE, na.strings = c("NA","")),
                    error = function(e) { NULL });
 
     if (is.null(df)) {

@@ -21,7 +21,7 @@
 #' @author Elias Hernandis
 #' @export
 checkMixtureFile <- function(filename) {
-    r <- commonChecks(filename, "reference file");
+    r <- commonChecks(filename, "mixture file");
     df <- r$df;
     warning <- r$warning;
     error <- r$error;
@@ -56,16 +56,16 @@ checkMixtureFile <- function(filename) {
       }
     }
 
-    # Check all allele reference data is numeric
-    numCheck <- apply(df[,3:ncol(df),drop=FALSE],2,function(x) all(sapply(x, is.numeric)))
-    if (length(error) == 0 && !all(numCheck)) {
-           error <- c("There are values that are not numeric in the following columns of the mixture file",
-                      paste(names(df)[3:ncol(df)][!numCheck],collapse=", "));
-    }
-    else if (!all(numCheck)) {
-      error <- append(error,c("There are values that are not numeric in the following columns of the mixture file",
-                      paste(names(df)[3:ncol(df)][!numCheck],collapse=", ")))
-    }
+    # # Check all allele reference data is numeric
+    # numCheck <- apply(df[,3:ncol(df),drop=FALSE],2,function(x) all(sapply(x, is.numeric)))
+    # if (length(error) == 0 && !all(numCheck)) {
+    #        error <- c("There are values that are not numeric in the following columns of the mixture file",
+    #                   paste(names(df)[3:ncol(df)][!numCheck],collapse=", "));
+    # }
+    # else if (!all(numCheck)) {
+    #   error <- append(error,c("There are values that are not numeric in the following columns of the mixture file",
+    #                   paste(names(df)[3:ncol(df)][!numCheck],collapse=", ")))
+    # }
 
     if (length(error) > 0) {
         return(list(df=NULL, warning=NULL, error=error));

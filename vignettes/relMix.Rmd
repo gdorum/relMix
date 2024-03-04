@@ -1,5 +1,5 @@
 ---
-title: "RelMix 1.3"
+title: "RelMix 1.4"
 author: "Guro Dorum"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette gives an introduction to RelMix 1.3, the graphical user interface of the relMix package described in Dørum et al. (2017). We will present the main features of the GUI with two examples.
+This vignette gives an introduction to RelMix 1.4, the graphical user interface of the relMix package described in Dørum et al. (2017). We will present the main features of the GUI with two examples.
 
 ## Getting started
 
@@ -19,7 +19,7 @@ relMixGUI()
 ```
 which will open the user interface seen in Figure 1.
 
-```{r, out.width =  400, fig.retina = NULL,echo=FALSE,fig.cap="Figure 1: The RelMix main window."}
+```{r, out.width =  "100%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 1: The RelMix main window."}
 knitr::include_graphics("relMix_screenshot.png")
 ```
 
@@ -68,7 +68,7 @@ pander::pandoc.table(cbind(rbind(freqs2,rep('...',5)),'...'=rep('...',9)),missin
 ```
 
 Clicking the 'Option' button opens up the window in Figure 3 with three additional settings: a theta value to correct for population substructure, a silent allele frequency and a minimum allele frequency. Any alleles with frequencies below the minimum allele frequency will by default be set to 0.001, this also applies to previously unobserved alleles. For this example we will keep the default values.
-```{r, out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 3: Database options. Theta value, silent allele frequency and minimum allele frequency."}
+```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 3: Database options. Theta value, silent allele frequency and minimum allele frequency."}
 knitr::include_graphics("database_options.png")
 ```
 When clicking 'Save' here we return to the window in Figure 2, where we need to click 'ok' to exit the database settings.
@@ -80,19 +80,19 @@ In this example we will not consider mutations, so we can ignore the 'Mutations'
 
 ### 3. Pedigree
 The pedigrees define the hypotheses.  There are three choices of pedigrees: 'Paternity', 'Unrelated' and 'Custom'. We choose 'Paternity' as the first pedigree and 'Unrelated' (alleged father and child are unrelated) as the second pedigree (Figure 4). In example 2 we show how to define a custom pedigree.
-```{r, out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 4: Define the pedigrees in example 1."}
+```{r, out.width =  "60%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 4: Define the pedigrees in example 1."}
 knitr::include_graphics("pedigrees_ex1.png")
 ```
 
 ### 4. Contributors
 Clicking the 'Specify contributors' button opens the window in Figure 5. We tick the individuals in the pedigree that are in the mixture, in this case the mother and child. It is possible to have different contributors for each pedigree, but here the contributors are the same under both hypotheses.
-```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 5: Specify mother and child as the contributors in both pedigrees in example 1."}
+```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 5: Specify mother and child as the contributors in both pedigrees in example 1."}
 knitr::include_graphics("contributors_ex1.png")
 ```
 
 ### 5. Dropout and drop-in
 The last step is to specify dropout and drop-in values. See Dørum et al. (2017) for a detailed description about the drop-in/dropout model. By default all values are set to 0. In this case we expect no dropout from the mother so we set her dropout probability to 0, while the child is given a dropout probability of 0.1. The drop-in value is set to 0.05 (Figure 6).
-```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."}
+```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."}
 knitr::include_graphics("dropout_ex1.png")
 ```
 
@@ -100,7 +100,7 @@ Note that if the dropout values are not set, an error window will occur. Even if
 
 ### 6. Compute LR
 Finally, we are ready to click the 'Compute LR' button. The result appears in a new pop-up window (Figure 7). The chosen parameters are displayed on the left, top right shows the pedigrees, followed by the total LR and a table displaying the LRs per marker. By clicking "Save results to file", the LRs together with the mixture profiles, reference profiles and the parameters will be saved to file.
-```{r, out.width = 500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."}
+```{r, out.width="100%",, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."}
 knitr::include_graphics("results_ex1.png")
 ```
 
@@ -137,11 +137,11 @@ pander::pandoc.table(freqs,missing="",digits=4,caption="Table 6: Allele frequenc
 ```
 
 In the database options we set the silent allele frequency equal to 0.1 (Figure 8).
-```{r, out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 8: Database options for example 2."}
+```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 8: Database options for example 2."}
 knitr::include_graphics("database_options_ex2.png")
 ```
 When clicking the "Save" button we are asked if we want to scale or add a rest allele since the frequencies no longer sum to 1 now that a silent allele frequency has been added. We click yes to scale.
-```{r, out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 9: Scale frequencies or add rest allele."}
+```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 9: Scale frequencies or add rest allele."}
 knitr::include_graphics("scaling_ex2.png")
 ```
 **Note 1**: A rest allele can only be addded if the sum of frequencies is less than 1. Therefore, enforced scaling will be performed if we click "No" and the sum is larger than 1.
@@ -149,49 +149,47 @@ knitr::include_graphics("scaling_ex2.png")
 **Note 2**: The added rest allele is given the name "r". If a stepwise mutation model is chosen (see section below), numeric allele names are required, so in this case scaling must be chosen.
 
 ### 2. Mutations
-Clicking the mutation button in the main interface opens a new window. By default mutations are not accounted for (mutation rate set to 0). There are three mutation models to choose from. The 'Equal' mutation model assumes that all mutations are equally likely, the 'Proportional' model assumes mutation rates to be proportional to allele frequencies, and the 'Stepwise' mutation model assumes that mutations to closer allelles (fewer sequence repeats difference) are more probable. When 'Stepwise' is chosen, a range must also be specified that indicates the relative probability of mutating n+1 steps versus mutating n steps. This mutation model requires that the allele names are numerics indicating the number of sequence repeats. It does not account for microinvariants, and will treat mutations to and from microinvariants as practically impossible. This option corresponds to the model 'Stepwise (unstationary)' in Familias 3. Mutations to and from silent alleles are not possible for any of the models. See the Familias manual for more details on the mutation models (https://familias.no/).
+Clicking the mutation button in the main interface opens a new window. By default mutations are not accounted for (mutation rate set to 0). There are three mutation models to choose from. The 'Equal' mutation model assumes that all mutations are equally likely, the 'Proportional' model assumes mutation rates to be proportional to allele frequencies, and the 'Stepwise' mutation model assumes that mutations to closer allelles (fewer sequence repeats difference) are more probable. When 'Stepwise' is chosen, a range must also be specified that indicates the relative probability of mutating n+1 steps versus mutating n steps. This mutation model requires that the allele names are numerics indicating the number of sequence repeats. It does not account for microinvariants, and will treat mutations to and from microinvariants as practically impossible. This option corresponds to the model 'Stepwise (unstationary)' in Familias 3. Mutations to and from silent alleles are not possible for any of the models. See the **[Familias](https://familias.no/)** manual for more details on the mutation models.
 
 In this example we will use an equal mutation model with mutation rate 0.1 for both males and females.
-```{r, out.width =  200, fig.retina = NULL,echo=FALSE,fig.cap="Figure 10: Mutations in example 2."}
+```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 10: Mutations in example 2."}
 knitr::include_graphics("mutations_ex2.png")
 ```
 
 ### 3. Pedigree
-Since the hypotheses in this example are not covered by the built-in pedigrees, we will provide RelMix with custom pedigrees defined in R scripts. The R scripts can for instance be exported from Familias 3, but can also be generated manually. The script below shows the code needed to provide the first pedigree where the two contributors are mother and child. 
+Since the hypotheses in this example are not covered by the built-in pedigrees, we will provide RelMix with custom pedigrees defined by a text file in ped format. The ped file can be created e.g. by the online pedigree creator **[QuickPed](https://magnusdv.shinyapps.io/quickped/)**, but can also be generated manually. Table 7 shows the ped file specifying the first pedigree where the two contributors are mother and child. 
 
-```{r, eval=FALSE}
-persons <- c("C2","C1")
-ped1 <- FamiliasPedigree(id=persons, dadid=c(NA,NA), momid=c("C1", NA), 
-                         sex=c("male", "female"))
+```{r, echo=FALSE, results='asis'}
+M <- read.table("custom_pedigree_maternity_duo.ped",sep="\t",header=TRUE, stringsAsFactors=FALSE)
+requireNamespace("pander",quietly=TRUE)
+pander::pandoc.table(M,caption="Table 7: The ped file specifying the mother-child pedigree in example 2.")
 ```
 
-The second pedigree, where the two contributors are unrelated, is defined as below.
-```{r, eval=FALSE}
-persons <- c("C2","C1")
-ped1 <- FamiliasPedigree(id=c(persons), dadid=c(NA, NA), 
-                         momid=c( NA, NA), sex=c("male", "female"))
+The second pedigree, where the two contributors are unrelated, is specified by the ped file in Table 8.
+```{r, echo=FALSE, results='asis'}
+M <- read.table("custom_pedigree_unrelated_duo.ped",sep="\t",header=TRUE, stringsAsFactors=FALSE)
+requireNamespace("pander",quietly=TRUE)
+pander::pandoc.table(M,caption="Table 8: The ped file specifying that the two contributors in example 2 are unrelated.")
 ```
-**Note 1**: Each pedigree must be defined in a variable called "ped1".
 
-**Note 2**: The names of the individuals in a pedigree (the id) must correspond to the names of individuals in the reference profiles.
+**Note**: The names of the individuals in a pedigree (the id) must correspond to the names of individuals in the reference profiles.
 
-**Note 3**: Each pedigree must be defined in a separate R script.
 
 Figure 11 shows how to import the custom pedigrees from R scripts, one script per pedigree.
-```{r, out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."}
+```{r, out.width =  "60%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."}
 knitr::include_graphics("custom_ped_ex2.png")
 ```
 
 ### 4. Contributors
 Both individuals defined in the pedigrees are contributors under both hypotheses. It is only their relationship that changes between the two pedigrees.
-```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 12: Tick both individuals as contributors to the mixture in both pedigrees."}
+```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 12: Tick both individuals as contributors to the mixture in both pedigrees."}
 knitr::include_graphics("contributors_ex2.png")
 ```
 
 ### 5. Dropout and drop-in
 In this example we believe there may be dropout in both contributors' profiles. We set their dropout probabilities to 0.1 and the drop-in value to 0.05.
 
-```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."}
+```{r, out.width =  "40%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."}
 knitr::include_graphics("dropout_ex2.png")
 ```
 
