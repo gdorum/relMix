@@ -1,2 +1,0 @@
-SampleName	Marker	Allele1	Allele2
-C1	M1	1	1

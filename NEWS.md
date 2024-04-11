@@ -4,15 +4,15 @@
 
 New features
   
-* Custom pedigree files in ```relMixGUI``` must be specified by ped files instead of R scripts
+* Custom pedigree files in ```relMixGUI``` must be specified by text files in ped format instead of R scripts
 
 * ```relMixGUI``` now also accept non-numeric allele names
   + The exception is if mutation model "stepwise" is used
 
-* The report file now includes 
+* An improved report file that includes 
   + Allele frequencies used in the LR calculations
   + Plots of pedigrees used under each hypothesis
-  + Is saved as a pdf rather than txt file
+  + And is saved as a word file rather than a txt file
 
 
 

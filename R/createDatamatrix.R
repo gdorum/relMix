@@ -20,22 +20,9 @@
 #' @export
 createDatamatrix <- function(locus,knownGenos,idsU=NULL){
 
-  #To reduce the size of datamatrix, we can test here whether
-  #1) both drop-in and drop-out is 0, if so we can use generate
-  #2) if mutations are not included we can use paramlink likelihood
-  #   function to remove some impossible genotypes
-  #Else, we have to consider all possible gentypes
   nU <- length(idsU)
   origAlleles <- names(locus$alleles)
-  #ix <- which(origAlleles=="silent"|origAlleles=="Silent")
-  #if(length(ix)>0) origAlleles <- origAlleles[-ix]
   alleles <- 1:length(origAlleles)
-
-#   #Check if all mutation rates are 0
-#   if(all(c(diag(locus$femaleMutationMatrix),diag(locus$femaleMutationMatrix))==1)){
-#
-#     m <-  marker(x1,2,gM,alleles=alleles,afreq=afreq)
-#   }
 
   #If there are unknown contributors in the mixture
   if(nU > 0){
@@ -49,9 +36,6 @@ createDatamatrix <- function(locus,knownGenos,idsU=NULL){
     #to find the actual genotype
     datamatrixU <- NULL
     for(i in 1:nrow(grid.subset)){
-      #gt <- allgenos[as.numeric(grid.subset[i,]),,drop=F]
-      #gt <- allgenos[as.numeric(grid.subset[i,]),]
-      #datamatrix <- cbind(datamatrix,data.frame(origAlleles[gt]))
       datamatrixU <- cbind(datamatrixU,allgenos[as.numeric(grid.subset[i,]),,drop=F])
     }
     #Convert back to original allele names
@@ -66,7 +50,6 @@ createDatamatrix <- function(locus,knownGenos,idsU=NULL){
 
   #Check if there is a silent allele; if so, must account for a possible
   #silent allele in all known homozygotes
-  #if(any(origAlleles=="silent"|origAlleles=="Silent")){
   if(any(origAlleles=="s")){
     nK <- length(knownGenos)
     knownGenosS <- lapply(knownGenos,function(x){
@@ -100,9 +83,3 @@ createDatamatrix <- function(locus,knownGenos,idsU=NULL){
   datamatrix
 }
 
-
-# convertAlleles <- function(locus){
-#   newNames <- 1:length(alleles)
-#   names(newNames) <- alleles
-#   newNames
-# }

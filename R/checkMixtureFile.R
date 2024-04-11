@@ -6,10 +6,10 @@
 #' \itemize{
 #' \item{df} {The loaded data frame, NULL if errors are present.}
 #' \item{warning} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
-#' \item{error} {A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
-#' If this list is not empty, then the dataframe item will be null.}}
+#' \item{error} {A list of strings describing the errors that occurred that made it impossible to return a valid data frame.
+#' If this list is not empty, then the data frame item will be null.}}
 #' @details If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
-#' If an error is found, checking stops and a NULL dataframe is returned. The error is described in the error messages.
+#' If an error is found, checking stops and a NULL data frame is returned. The error is described in the error messages.
 #' @examples
 #' \dontrun{
 #' mixfile <- system.file("extdata","mixture.txt",package="relMix")
@@ -55,17 +55,6 @@ checkMixtureFile <- function(filename) {
           error <- paste("Samples", paste(sampleNames,collapse=" and "), "have unequal number of rows in mixture file.");
       }
     }
-
-    # # Check all allele reference data is numeric
-    # numCheck <- apply(df[,3:ncol(df),drop=FALSE],2,function(x) all(sapply(x, is.numeric)))
-    # if (length(error) == 0 && !all(numCheck)) {
-    #        error <- c("There are values that are not numeric in the following columns of the mixture file",
-    #                   paste(names(df)[3:ncol(df)][!numCheck],collapse=", "));
-    # }
-    # else if (!all(numCheck)) {
-    #   error <- append(error,c("There are values that are not numeric in the following columns of the mixture file",
-    #                   paste(names(df)[3:ncol(df)][!numCheck],collapse=", ")))
-    # }
 
     if (length(error) > 0) {
         return(list(df=NULL, warning=NULL, error=error));

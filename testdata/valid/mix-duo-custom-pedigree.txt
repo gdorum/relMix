@@ -1,1 +1,0 @@
-SampleName	Marker	Allele1relMix1	M1	1

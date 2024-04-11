@@ -8,8 +8,13 @@
 #' #Examples can be found in the vignette and example data files can be found
 #' #in the folder "inst\extdata" in the installation folder for relMix
 #' @import gWidgets2tcltk
+#' @import Familias
 #' @importFrom graphics plot
 #' @importFrom utils read.table write.table packageVersion
+#' @importFrom officer fp_text read_docx body_add_par body_add_fpar fpar ftext body_add_plot
+#' @importFrom flextable flextable set_flextable_defaults body_add_flextable set_table_properties
+#' @importFrom pedtools plotPedList typedMembers
+#' @importFrom pedFamilias Familias2ped
 #' @export
 relMixGUI <- function(){
 
@@ -24,43 +29,96 @@ relMixGUI <- function(){
     return(tab) #need dataframe to keep allele-names correct!!
   }
 
-  tableWriter <- function(filename,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors){
+  tableWriter <- function(filename,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors,mixfile,reffile,freqfile){
 
-  cat("---
-  RelMix report
-  `r format(Sys.time())`
-  ---
+    flextable::set_flextable_defaults(split = FALSE,font.size=9,big.mark="")
+    text_style <- officer::fp_text(font.size = 8)
 
-  <style>
-  body {
-    position: absolute;
-    left: 0px;}
-  </style>
 
-  \`\`\`{r setup, include=FALSE}
-  knitr::opts_chunk$set(echo = TRUE,tidy=TRUE,
-      tidy.opts=list(width.cutoff=80))
-  \`\`\`
+    doc <- officer::read_docx()
 
-  \`\`\`{r example2, echo=FALSE}
-  knitr::kable(obj1)
-  knitr::kable(obj2)
-  knitr::kable(obj3)
-  knitr::kable(obj4)
-  knitr::kable(obj5)
-  \`\`\`
+    doc <- officer::body_add_par(doc, paste("RelMix report",format(Sys.time())), style = "Normal")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- officer::body_add_fpar(doc, officer::fpar( officer::ftext(paste("Mixture file:",mixfile), prop = text_style) ) )
+    doc <- officer::body_add_fpar(doc, officer::fpar( officer::ftext(paste("Reference file:",reffile), prop = text_style) ) )
+    doc <- officer::body_add_fpar(doc, officer::fpar( officer::ftext(paste("Frequency file:",freqfile), prop = text_style) ) )
 
-  <br>
-  <br>
+    doc <- officer::body_add_par(doc, value = "")
 
-  Pedigrees under H1 and H2 (contributors marked with a dot)
+    doc <- officer::body_add_par(doc, "Settings", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj1),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
 
-  \`\`\`{r example, echo=FALSE}
-  f_plotPeds(pedigrees,contributors)
-  \`\`\`",
-          file = paste0(filename,".Rmd"))
-  rmarkdown::render(paste0(filename,".Rmd"),output_format = "word_document")
+    doc <- officer::body_add_par(doc, "Mixture profile", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj2),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Reference profiles", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj3),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Likelihood ratios", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj4),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Allele frequencies", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj5),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    p <- f_plotPeds(pedigrees,contributors)
+
+    if (capabilities(what = "png")) {
+      doc <- officer::body_add_par(doc, "Pedigrees: contributors marked with a dot", style = "heading 1")
+      doc <- officer::body_add_plot(doc, value = f_plotPeds(pedigrees,contributors), style = "centered")
+    }
+
+    print(doc,paste0(filename,".docx"))
 }
+
+  # cat("---
+  # RelMix report
+  # `r format(Sys.time())`
+  # ---
+  #
+  # <style>
+  # body {
+  #   position: absolute;
+  #   left: 0px;}
+  # </style>
+  #
+  # \`\`\`{r setup, include=FALSE}
+  # knitr::opts_chunk$set(echo = TRUE,tidy=TRUE,
+  #     tidy.opts=list(width.cutoff=80))
+  # \`\`\`
+  #
+  # \`\`\`{r example2, echo=FALSE}
+  # flextable::flextable(obj1)
+  #
+  # flextable::flextable(obj2)
+  #
+  # flextable::flextable(obj3)
+  #
+  # flextable::flextable(obj4)
+  #
+  # flextable::flextable(obj5)
+  # \`\`\`
+  #
+  # <br>
+  # <br>
+  #
+  # Pedigrees under H1 and H2 (contributors marked with a dot)
+  #
+  # \`\`\`{r example, echo=FALSE}
+  # f_plotPeds(pedigrees,contributors)
+  # \`\`\`",
+  #         file = paste0(filename,".Rmd"))
+  # rmarkdown::render(paste0(filename,".Rmd"),output_format = "word_document")
+
 
   # Receives a the output of an error checking function and displays
   # the appropriate error messages. Returns the data frame on
@@ -118,15 +176,15 @@ relMixGUI <- function(){
     })
     if(!is.null(Data)) print(paste(type,"file",proffile,"is imported"))
     assign(h$action,Data,envir=mmTK) #save object
+    assign(paste0(type,"file"),proffile,envir=mmTK) #save filename
   }
 
-  f_export <- function(obj1,obj2,obj3,obj4,obj5,pedigrees,contributors) {
-    #savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "LR.txt")
+  f_export <- function(obj1,obj2,obj3,obj4,obj5,pedigrees,contributors,mixfile,reffile,freqfile) {
     savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "RelMix_report")
     #filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*")))
     #tableWriter(savefile,obj) #load profile
     #tableWriter(savefile,obj,pedigrees)
-    tableWriter(savefile,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors)
+    tableWriter(savefile,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors,mixfile,reffile,freqfile)
   }
 
   # Make pedigree
@@ -622,6 +680,11 @@ relMixGUI <- function(){
     db2 <- get("db",envir=mmTK)
     alleleNames <- as.character(db2[,2])
 
+    #File names
+    mixfile <- get("mixturefile",envir=mmTK)
+    reffile <- get("referencefile",envir=mmTK)
+    freqfile <- get("frequenciesfile",envir=mmTK)
+
 
     #Check if there are non-numeric allele names and stepwise mutation model
     #If so, give a warning
@@ -854,12 +917,15 @@ relMixGUI <- function(){
     for(i in 1:nrow(mix)){
       m <- mix$Marker[i]
       #Unique alleles appearing in mixture and genotypes
-      al <- unique(c(unlist(GT[GT$Marker==m,-c(1,2)]),unlist(mix[i,-c(1,2)])))
+      al <- unique(c(unlist(GT[GT$Marker==m,-c(1,2)]),unlist(mix[i,-c(1,2)])[unlist(mix[i,-c(1,2)])!=""]))
       al <- al[!is.na(al)]
       #al <- unique(unlist(prof[i,-c(1,2)]))[!unique(unlist(prof[i,-c(1,2)]))==""]
       #Frequencies for the unique alleles
-      freqs_report <- dplyr::bind_rows(freqs_report,data.frame(t(afreqAll[[m]][match(al,allelesAll[[m]])])))
-      alleles_report <- dplyr::bind_rows(alleles_report,data.frame(t(al)))
+      f <- afreqAll[[m]][match(al,allelesAll[[m]])]
+      #freqs_report <- dplyr::bind_rows(freqs_report,data.frame(t(afreqAll[[m]][match(al,allelesAll[[m]])])))
+      #alleles_report <- dplyr::bind_rows(alleles_report,data.frame(t(al)))
+      freqs_report[i,1:length(f)] <- f
+      alleles_report[i,1:length(al)] <- al
     }
     colnames(freqs_report) <- paste0("Allele",1:ncol(freqs_report))
     colnames(alleles_report) <- paste0("Allele",1:ncol(alleles_report))
@@ -868,6 +934,7 @@ relMixGUI <- function(){
     colnames(out) <- rep(c("Allele","Freq"),times=ncol(alleles_report))
     allele_info <- cbind(Marker=mix$Marker,out)
     allele_info[is.na(allele_info)] <- ""
+    colnames(allele_info) <- c("Marker",paste0(colnames(out),rep(1:(ncol(out)/2),each=2)))
     mix[is.na(mix)] <- ""
     ### end new ###
 
@@ -960,7 +1027,7 @@ relMixGUI <- function(){
 
     LRbut <- gWidgets2::gbutton("Save results to file", container=LRgroup2,handler=function(h,...){
       #f_export(exportData,peds)
-      f_export(allParam,mix,GT,DataTot,allele_info,peds,list(idxC1,idxC2))
+      f_export(allParam,mix,GT,DataTot,allele_info,peds,list(idxC1,idxC2),mixfile,reffile,freqfile)
       gWidgets2::dispose(h$obj)
     })
 

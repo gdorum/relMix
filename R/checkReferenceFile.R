@@ -81,16 +81,6 @@ checkReferenceFile <- function(filename, mix) {
       }
     }
 
-
-    # # Check all allele reference data is numeric
-    # if (length(error) == 0 && !all(sapply(df[,3], is.numeric))) {
-    #     error <- "There are values that are not numeric in the Allele1 column";
-    # }
-    #
-    # if (!all(sapply(df[,4], is.numeric))) {
-    #     error <- append(error, "There are values that are not numeric in the Allele2 column");
-    # }
-
     if (length(error) > 0) {
         return(list(df=df, warning=NULL, error=error));
     }

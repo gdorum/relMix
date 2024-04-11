@@ -15,7 +15,11 @@ Depends: R (>= 3.5.0)
 Imports: 
     Familias (>= 2.6.1),
     gWidgets2,
-    gWidgets2tcltk
+    gWidgets2tcltk,
+    flextable,
+    officer,
+    pedFamilias,
+    pedtools
 Suggests: 
     knitr,
     pander,

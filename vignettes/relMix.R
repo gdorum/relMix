@@ -1,7 +1,7 @@
 ## ----eval=FALSE---------------------------------------------------------------
 #  relMixGUI()
 
-## ----out.width =  400, fig.retina = NULL,echo=FALSE,fig.cap="Figure 1: The RelMix main window."----
+## ----out.width =  "100%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 1: The RelMix main window."----
 knitr::include_graphics("relMix_screenshot.png")
 
 ## ----echo=FALSE, results='asis'-----------------------------------------------
@@ -24,19 +24,19 @@ freqs2 <- freqs[11:18,1:5]
 rownames(freqs2) <- NULL
 pander::pandoc.table(cbind(rbind(freqs2,rep('...',5)),'...'=rep('...',9)),missing="",digits=4,caption="Table 3: Excerpt of the allele frequency database in example 1. Dots are used as decimal separator.")
 
-## ----out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 3: Database options. Theta value, silent allele frequency and minimum allele frequency."----
+## ----out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 3: Database options. Theta value, silent allele frequency and minimum allele frequency."----
 knitr::include_graphics("database_options.png")
 
-## ----out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 4: Define the pedigrees in example 1."----
+## ----out.width =  "60%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 4: Define the pedigrees in example 1."----
 knitr::include_graphics("pedigrees_ex1.png")
 
-## ----out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 5: Specify mother and child as the contributors in both pedigrees in example 1."----
+## ----out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 5: Specify mother and child as the contributors in both pedigrees in example 1."----
 knitr::include_graphics("contributors_ex1.png")
 
-## ----out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."----
+## ----out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."----
 knitr::include_graphics("dropout_ex1.png")
 
-## ----out.width = 500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."----
+## ----out.width="100%",, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."----
 knitr::include_graphics("results_ex1.png")
 
 ## ----echo=FALSE, results='asis'-----------------------------------------------
@@ -53,13 +53,13 @@ freqs <- read.table("freqsSilent.txt",sep="\t",header=T,stringsAsFactors=F)
 rownames(freqs) <- NULL
 pander::pandoc.table(freqs,missing="",digits=4,caption="Table 6: Allele frequencies.")
 
-## ----out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 8: Database options for example 2."----
+## ----out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 8: Database options for example 2."----
 knitr::include_graphics("database_options_ex2.png")
 
-## ----out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 9: Scale frequencies or add rest allele."----
+## ----out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 9: Scale frequencies or add rest allele."----
 knitr::include_graphics("scaling_ex2.png")
 
-## ----out.width =  200, fig.retina = NULL,echo=FALSE,fig.cap="Figure 10: Mutations in example 2."----
+## ----out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 10: Mutations in example 2."----
 knitr::include_graphics("mutations_ex2.png")
 
 ## ----echo=FALSE, results='asis'-----------------------------------------------
@@ -72,15 +72,15 @@ M <- read.table("custom_pedigree_unrelated_duo.ped",sep="\t",header=TRUE, string
 requireNamespace("pander",quietly=TRUE)
 pander::pandoc.table(M,caption="Table 8: The ped file specifying that the two contributors in example 2 are unrelated.")
 
-## ----out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."----
+## ----out.width =  "60%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."----
 knitr::include_graphics("custom_ped_ex2.png")
 
-## ----out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 12: Tick both individuals as contributors to the mixture in both pedigrees."----
+## ----out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 12: Tick both individuals as contributors to the mixture in both pedigrees."----
 knitr::include_graphics("contributors_ex2.png")
 
-## ----out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."----
+## ----out.width =  "40%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."----
 knitr::include_graphics("dropout_ex2.png")
 
-## ----out.width =  500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."----
+## ----out.width =  "100%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."----
 knitr::include_graphics("results_ex2.png")
 

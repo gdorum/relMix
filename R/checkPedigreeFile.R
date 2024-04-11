@@ -11,7 +11,7 @@
 #' \item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
 #' \item{\code{error}} {A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
 #' If this list is not empty, then the dataframe item will be null.}}
-#' @details The pedigree file must be a .R file defining a pedigree (see the relMix vignette for an example). The data frame with reference data is used to compare names of individuals and detect possible misspellings.
+#' @details The pedigree file must be a a text file in ped format (see the relMix vignette for an example). The data frame with reference data is used to compare names of individuals and detect possible misspellings.
 #' If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
 #' If an error is found, checking stops. The error is described in the error messages.
 #' @examples
@@ -35,16 +35,14 @@ checkPedigreeFile <- function(filename, df) {
 
     allowedKinships <- c("Father", "Mother", "Child")
     if (filename != "") {
-        # load custom pedigrees
-        #source(filename,local=TRUE);
+
       localEnv <- new.env()
-      #source(filename,local=localEnv)
 
       #Read pedigree from ped file
       df <- tryCatch(
         read.table(filename, header=TRUE, sep="\t", stringsAsFactors=FALSE),
         error = function(e) { NULL });
-      #df <- read.table(filename,header=TRUE)
+      if(!is.null(df)) print(paste("Pedigree file",filename,"is imported"))
       #FamiliasPedigree requries NA instead of 0
       df$fid[df$fid==0] <- NA
       df$mid[df$mid==0] <- NA
