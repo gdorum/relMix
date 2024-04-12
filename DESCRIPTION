@@ -2,10 +2,10 @@ Package: relMix
 Type: Package
 Title: Relationship Inference for DNA Mixtures
 Version: 1.4
-Date: 2024-03-04
+Date: 2024-04-12
 Authors@R: c(
   person('Guro', 'Dorum', email = 'guro.dorum@gmail.com', role = c('aut', 'cre')),
-  person('Elias', 'Hernandis', email = 'eliashernandis@gmail.com', role = c('aut')),
+  person('Elias', 'Hernandis', role = c('aut')),
   person('Navreet', 'Kaur', role = c('ctb')),
   person('Thore', 'Egeland', role = c('ctb')))
 Description: Makes relationship inference involving DNA mixtures with unknown profiles. 

@@ -4,7 +4,7 @@ author: "Guro Dorum"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{relMix 1.3}
+  %\VignetteIndexEntry{relMix 1.4}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
