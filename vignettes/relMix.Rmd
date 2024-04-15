@@ -4,7 +4,7 @@ author: "Guro Dorum"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{relMix 1.4}
+  %\VignetteIndexEntry{RelMix 1.4}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -31,7 +31,7 @@ In this example we consider a paternity case where we have a mixed DNA profile o
 
 ### 1. Import data
 
-The first step in RelMix is to import data. The import files must be either comma, semicolon or tab-separated and must have dots as decimal separators. Examples will be given for the three types of files that are needed: mixture profile, reference profiles and allele frequencies. The mixture profile and reference profiles should contain the same loci in the same order, while the allele frequency file can contain additional loci not in the profiles. RelMix will give an error message if the data file has an error that is fatal for the program. RelMix will return a warning if there is a minor error in the data file that is not fatal for the program.
+The first step in RelMix is to import data. The import files must be either comma, semicolon or tab-separated and must have dots as decimal separators. Examples will be given for the three types of files that are needed: mixture profile, reference profiles and allele frequencies. These files are also found in the folder 'extdata' of the relMix installation. The mixture profile and reference profiles should contain the same loci in the same order, while the allele frequency file can contain additional loci not in the profiles. RelMix will give an error message if the data file has an error that is fatal for the program. RelMix will return a warning if there is a minor error in the data file that is not fatal for the program.
 
 #### 1a. Mixture profile
 
@@ -165,16 +165,16 @@ In the database options we set the silent allele frequency equal to 0.1 (Figure 
 ```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 8: Database options for example 2."}
 knitr::include_graphics("database_options_ex2.png")
 ```
-When clicking the "Save" button we are asked if we want to scale or add a rest allele since the frequencies no longer sum to 1 now that a silent allele frequency has been added. We click yes to scale.
+When clicking the 'ok' button we are asked if we want to scale or add a rest allele since the frequencies no longer sum to 1 now that a silent allele frequency has been added. We click yes to scale.
 
 <br>
 
 ```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 9: Scale frequencies or add rest allele."}
 knitr::include_graphics("scaling_ex2.png")
 ```
-**Note 1**: A rest allele can only be addded if the sum of frequencies is less than 1. Therefore, enforced scaling will be performed if we click "No" and the sum is larger than 1.
+**Note 1**: A rest allele can only be addded if the sum of frequencies is less than 1. Therefore, enforced scaling will be performed if we click 'No' and the sum is larger than 1.
 
-**Note 2**: The added rest allele is given the name "r". If a stepwise mutation model is chosen (see section below), numeric allele names are required, so in this case scaling must be chosen.
+**Note 2**: The added rest allele is given the name 'r'. If a stepwise mutation model is chosen (see section below), numeric allele names are required, so in this case scaling must be chosen.
 
 ### 2. Mutations
 Clicking the mutation button in the main interface opens a new window. By default mutations are not accounted for (mutation rate set to 0). There are three mutation models to choose from. The 'Equal' mutation model assumes that all mutations are equally likely, the 'Proportional' model assumes mutation rates to be proportional to allele frequencies, and the 'Stepwise' mutation model assumes that mutations to closer allelles (fewer sequence repeats difference) are more probable. When 'Stepwise' is chosen, a range must also be specified that indicates the relative probability of mutating n+1 steps versus mutating n steps. This mutation model requires that the allele names are numerics indicating the number of sequence repeats. It does not account for microinvariants, and will treat mutations to and from microinvariants as practically impossible. This option corresponds to the model 'Stepwise (unstationary)' in Familias 3. Mutations to and from silent alleles are not possible for any of the models. See the **[Familias](https://familias.no/)** manual for more details on the mutation models.

@@ -14,10 +14,10 @@ checkPedigreeFile(filename, df)
 \value{
 A list containing
 \itemize{
-\item{df} {Pedigree, NULL if errors are present.}
-\item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
-\item{\code{error}} {A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
-If this list is not empty, then the dataframe item will be null.}}
+\item \code{df} Pedigree, NULL if errors are present.
+\item \code{warning} A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.
+\item \code{error} A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
+If this list is not empty, then the dataframe item will be null.}
 }
 \description{
 Given a pedigree file path the function attempts to load it and compare it

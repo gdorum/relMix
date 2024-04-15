@@ -14,10 +14,10 @@ checkReferenceFile(filename, mix)
 \value{
 A list containing
 \itemize{
-\item{\code{df}} {The loaded data frame, NULL if errors are present}
-\item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
-\item{\code{error}} {A list of strings describing the errors that ocurred that made it impossible to return a valid data frame.
-If this list is not empty, then the data frame item will be null.}}
+\item \code{df} The loaded data frame, NULL if errors are present
+\item \code{warning} A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.
+\item \code{error} A list of strings describing the errors that ocurred that made it impossible to return a valid data frame.
+If this list is not empty, then the data frame item will be null.}
 }
 \description{
 Given a reference profile file name the function attempts to load it and compare it to the mixture file to detect possible errors.

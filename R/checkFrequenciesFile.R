@@ -6,11 +6,11 @@
 #' @param mix Data frame with mixture data. See relMix vignette for description of the format
 #' @return A list containing
 #' \itemize{
-#' \item {\code{df}} {Data frame with frequencies}
-#' \item {\code{warning}} {List of strings describing the errors that occurred but could be fixed or that do not prevent
-#' the execution of the program.}
-#' \item {\code{error}} {List of strings describing the errors that occurred that made it impossible to return a valid data frame.
-#' If this list is not empty, then the data frame item will be NULL}}
+#' \item \code{df} Data frame with frequencies
+#' \item \code{warning} List of strings describing the errors that occurred but could be fixed or that do not prevent
+#' the execution of the program.
+#' \item \code{error} List of strings describing the errors that occurred that made it impossible to return a valid data frame.
+#' If this list is not empty, then the data frame item will be NULL}
 #' @details
 #' The mixture data is used to perform more advanced checks, such as to make sure all alleles present
 #' in the mixture file have an entry in the frequency database.
@@ -60,8 +60,6 @@ checkFrequenciesFile <- function(filename, mix) {
     #If more than one marker
     if(ncol(df)>2){
     # Check for duplicate markers
-    # TODO: this error will never trigger b/c R renames duplicate columns when
-    # loading w/ headers
     if (length(error) == 0 && anyDuplicated.default(names(df))) {
         error <- append(error, paste("There are duplicate markers in your frequency table."));
     }

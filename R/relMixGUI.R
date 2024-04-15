@@ -20,15 +20,6 @@ relMixGUI <- function(){
 
   options("guiToolkit"="tcltk")
 
-  # Files must have '.' as decimal separator
-  tableReader <- function(filename) {
-    tab <- read.table(filename,header=TRUE,sep="\t",stringsAsFactors=FALSE,na.strings=c(NA,""))
-    tryCatch( {  if(ncol(tab)==1) tab <- read.table(filename,header=TRUE,sep=",",stringsAsFactors=FALSE,na.strings=c(NA,"")) } ,error=function(e) e)
-    tryCatch( {  if(ncol(tab)==1) tab <- read.table(filename,header=TRUE,sep=";",stringsAsFactors=FALSE,na.strings=c(NA,"")) } ,error=function(e) e)
-    if(ncol(tab)==1) tab <- read.table(filename,header=TRUE,sep=";",stringsAsFactors=FALSE,na.strings=c(NA,""))
-    return(tab) #need dataframe to keep allele-names correct!!
-  }
-
   tableWriter <- function(filename,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors,mixfile,reffile,freqfile){
 
     flextable::set_flextable_defaults(split = FALSE,font.size=9,big.mark="")

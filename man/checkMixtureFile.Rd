@@ -12,10 +12,10 @@ checkMixtureFile(filename)
 \value{
 A list containing
 \itemize{
-\item{df} {The loaded data frame, NULL if errors are present.}
-\item{warning} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
-\item{error} {A list of strings describing the errors that occurred that made it impossible to return a valid data frame.
-If this list is not empty, then the data frame item will be null.}}
+\item \code{df} The loaded data frame, NULL if errors are present.
+\item \code{warning} A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.
+\item \code{error} A list of strings describing the errors that occurred that made it impossible to return a valid data frame.
+If this list is not empty, then the data frame item will be null.}
 }
 \description{
 Given a mixture file name, returns the loaded data frame along with any detected errors or warnings.

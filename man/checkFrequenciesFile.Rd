@@ -14,11 +14,11 @@ checkFrequenciesFile(filename, mix)
 \value{
 A list containing
 \itemize{
-\item {\code{df}} {Data frame with frequencies}
-\item {\code{warning}} {List of strings describing the errors that occurred but could be fixed or that do not prevent
-the execution of the program.}
-\item {\code{error}} {List of strings describing the errors that occurred that made it impossible to return a valid data frame.
-If this list is not empty, then the data frame item will be NULL}}
+\item \code{df} Data frame with frequencies
+\item \code{warning} List of strings describing the errors that occurred but could be fixed or that do not prevent
+the execution of the program.
+\item \code{error} List of strings describing the errors that occurred that made it impossible to return a valid data frame.
+If this list is not empty, then the data frame item will be NULL}
 }
 \description{
 Loads a frequency database file and compares it against mixture data to check for common errors.

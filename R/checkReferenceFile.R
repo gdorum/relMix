@@ -5,10 +5,10 @@
 #' @param mix Data frame with mixture data
 #' @return A list containing
 #' \itemize{
-#'\item{\code{df}} {The loaded data frame, NULL if errors are present}
-#' \item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
-#' \item{\code{error}} {A list of strings describing the errors that ocurred that made it impossible to return a valid data frame.
-#' If this list is not empty, then the data frame item will be null.}}
+#'\item \code{df} The loaded data frame, NULL if errors are present
+#' \item \code{warning} A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.
+#' \item \code{error} A list of strings describing the errors that ocurred that made it impossible to return a valid data frame.
+#' If this list is not empty, then the data frame item will be null.}
 #' @details See the relMix vignette for a description of the format of the reference file. The data frame with mixture data is used to compare
 #  marker names and detect possible misspellings.
 #' If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
