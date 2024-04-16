@@ -1,8 +1,5 @@
-^.*\.Rproj$
+^.*\.yml$
 ^\.Rproj\.user$
-README.Rmd
-testdata
-^_pkgdown\.yml$
-^docs$
-^pkgdown$
+^.*\.Rproj$
+^README.Rmd
 ^\.github$

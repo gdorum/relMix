@@ -5,10 +5,10 @@
 #' @param mix Data frame with mixture data
 #' @return A list containing
 #' \itemize{
-#'\item{\code{df}} {The loaded data frame, NULL if errors are present}
-#' \item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
-#' \item{\code{error}} {A list of strings describing the errors that ocurred that made it impossible to return a valid data frame.
-#' If this list is not empty, then the data frame item will be null.}}
+#'\item \code{df} The loaded data frame, NULL if errors are present
+#' \item \code{warning} A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.
+#' \item \code{error} A list of strings describing the errors that ocurred that made it impossible to return a valid data frame.
+#' If this list is not empty, then the data frame item will be null.}
 #' @details See the relMix vignette for a description of the format of the reference file. The data frame with mixture data is used to compare
 #  marker names and detect possible misspellings.
 #' If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
@@ -79,16 +79,6 @@ checkReferenceFile <- function(filename, mix) {
       if(abs(max(table(df$SampleName)) - min(table(df$SampleName)))>0){
         error <- paste("Profiles", paste(sampleNames,collapse=" and "), "have unequal number of rows.");
       }
-    }
-
-
-    # Check all allele reference data is numeric
-    if (length(error) == 0 && !all(sapply(df[,3], is.numeric))) {
-        error <- "There are values that are not numeric in the Allele1 column";
-    }
-
-    if (!all(sapply(df[,4], is.numeric))) {
-        error <- append(error, "There are values that are not numeric in the Allele2 column");
     }
 
     if (length(error) > 0) {

@@ -1,11 +1,11 @@
 Package: relMix
 Type: Package
 Title: Relationship Inference for DNA Mixtures
-Version: 1.3.5
-Date: 2023-02-16
+Version: 1.4
+Date: 2024-04-12
 Authors@R: c(
   person('Guro', 'Dorum', email = 'guro.dorum@gmail.com', role = c('aut', 'cre')),
-  person('Elias', 'Hernandis', email = 'eliashernandis@gmail.com', role = c('aut')),
+  person('Elias', 'Hernandis', role = c('aut')),
   person('Navreet', 'Kaur', role = c('ctb')),
   person('Thore', 'Egeland', role = c('ctb')))
 Description: Makes relationship inference involving DNA mixtures with unknown profiles. 
@@ -13,9 +13,13 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: 
-    Familias (>= 2.5),
+    Familias (>= 2.6.1),
     gWidgets2,
-    gWidgets2tcltk
+    gWidgets2tcltk,
+    flextable,
+    officer,
+    pedFamilias,
+    pedtools
 Suggests: 
     knitr,
     pander,
@@ -23,6 +27,4 @@ Suggests:
     tkrplot
 License: GPL (>=2)
 RoxygenNote: 7.2.3
-Remotes: 
-    github::thoree/Familias
 URL: https://gdorum.github.io/relMix/

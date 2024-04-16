@@ -8,25 +8,68 @@
 #' #Examples can be found in the vignette and example data files can be found
 #' #in the folder "inst\extdata" in the installation folder for relMix
 #' @import gWidgets2tcltk
+#' @import Familias
 #' @importFrom graphics plot
 #' @importFrom utils read.table write.table packageVersion
+#' @importFrom officer fp_text read_docx body_add_par body_add_fpar fpar ftext body_add_plot
+#' @importFrom flextable flextable set_flextable_defaults body_add_flextable set_table_properties
+#' @importFrom pedtools plotPedList typedMembers
+#' @importFrom pedFamilias Familias2ped
 #' @export
 relMixGUI <- function(){
 
   options("guiToolkit"="tcltk")
 
-  # Files must have '.' as decimal separator
-  tableReader <- function(filename) {
-    tab <- read.table(filename,header=TRUE,sep="\t",stringsAsFactors=FALSE,na.strings=c(NA,""))
-    tryCatch( {  if(ncol(tab)==1) tab <- read.table(filename,header=TRUE,sep=",",stringsAsFactors=FALSE,na.strings=c(NA,"")) } ,error=function(e) e)
-    tryCatch( {  if(ncol(tab)==1) tab <- read.table(filename,header=TRUE,sep=";",stringsAsFactors=FALSE,na.strings=c(NA,"")) } ,error=function(e) e)
-    if(ncol(tab)==1) tab <- read.table(filename,header=TRUE,sep=";",stringsAsFactors=FALSE,na.strings=c(NA,""))
-    return(tab) #need dataframe to keep allele-names correct!!
-  }
+  tableWriter <- function(filename,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors,mixfile,reffile,freqfile){
 
-  tableWriter <- function(filename,obj){
-    write.table(obj,file=filename,sep="\t",row.names=FALSE,quote=FALSE)
-  }
+    flextable::set_flextable_defaults(split = FALSE,font.size=9,big.mark="")
+    text_style <- officer::fp_text(font.size = 8)
+
+
+    doc <- officer::read_docx()
+
+    doc <- officer::body_add_par(doc, paste("RelMix report",format(Sys.time())), style = "Normal")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- officer::body_add_fpar(doc, officer::fpar( officer::ftext(paste("Mixture file:",mixfile), prop = text_style) ) )
+    doc <- officer::body_add_fpar(doc, officer::fpar( officer::ftext(paste("Reference file:",reffile), prop = text_style) ) )
+    doc <- officer::body_add_fpar(doc, officer::fpar( officer::ftext(paste("Frequency file:",freqfile), prop = text_style) ) )
+
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Settings", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj1),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Mixture profile", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj2),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Reference profiles", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj3),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Likelihood ratios", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj4),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    doc <- officer::body_add_par(doc, "Allele frequencies", style = "heading 1")
+    doc <- officer::body_add_par(doc, value = "")
+    doc <- flextable::body_add_flextable(doc,flextable::set_table_properties(flextable::flextable(obj5),layout ="autofit"),align="left")
+    doc <- officer::body_add_par(doc, value = "")
+
+    p <- f_plotPeds(pedigrees,contributors)
+
+    if (capabilities(what = "png")) {
+      doc <- officer::body_add_par(doc, "Pedigrees: contributors marked with a dot", style = "heading 1")
+      doc <- officer::body_add_plot(doc, value = f_plotPeds(pedigrees,contributors), style = "centered")
+    }
+
+    print(doc,paste0(filename,".docx"))
+}
 
   # Receives a the output of an error checking function and displays
   # the appropriate error messages. Returns the data frame on
@@ -82,13 +125,14 @@ relMixGUI <- function(){
       f_errorWindow(paste("There was an error loading the file. It does not look like a ", type, " file. Please make sure the file is correct and try again."))
       return()
     })
+    if(!is.null(Data)) print(paste(type,"file",proffile,"is imported"))
     assign(h$action,Data,envir=mmTK) #save object
+    assign(paste0(type,"file"),proffile,envir=mmTK) #save filename
   }
 
-  f_export <- function(obj) {
-    savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "LR.txt")
-    #filter=list("text"=list(patterns=list("*.txt","*.csv","*.tab")),"all"=list(patterns=list("*")))
-    tableWriter(savefile,obj) #load profile
+  f_export <- function(obj1,obj2,obj3,obj4,obj5,pedigrees,contributors,mixfile,reffile,freqfile) {
+    savefile = gWidgets2::gfile(text=paste("Save file as",sep=""),type="save", initial.filename = "RelMix_report")
+    tableWriter(savefile,obj1,obj2,obj3,obj4,obj5,pedigrees,contributors,mixfile,reffile,freqfile)
   }
 
   # Make pedigree
@@ -97,7 +141,6 @@ relMixGUI <- function(){
       #Define the persons involved in the case
       persons <- c("Mother", "Father", "Child")
       sex <- c("female", "male", "male")
-      #Pedigree files exported from Familias use notation "ped1"
       ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
     } else if(gWidgets2::svalue(h$obj)=="Unrelated"){
       #Define the persons involved in the case
@@ -105,55 +148,14 @@ relMixGUI <- function(){
       sex <- c("female", "male", "male")
       ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,NA), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
     } else {
-      pedfile = gWidgets2::gfile(text=paste("Open pedigree R file",sep=""),type="open",
-                      filter=list("text"=list(patterns=list("*.R")),"all"=list(patterns=list("*"))))
+      pedfile = gWidgets2::gfile(text=paste("Open pedigree file",sep=""),type="open",
+                       filter=list("text"=list(patterns=list("*.ped")),"all"=list(patterns=list("*"))))
       ped1 <- process_errors(checkPedigreeFile(pedfile,get("reference",mmTK)))
-      #source(pedfile)
-      #persons <- ped1$id #Pedigree files exported from Familias use notation "ped1"
       persons <- ped1$id
     }
     assign(paste("ped",h$action,sep=""),ped1,envir=mmTK)
     assign(paste("persons_ped",h$action,sep=""),persons,envir=mmTK)
   }
-
-  # f_pedigree <- function(h,...){
-  #
-  #   if(gWidgets2::svalue(h$obj)=="Paternity"){
-  #     #Define the persons involved in the case
-  #     #If pedigree 2, use same individuals as in first pedigree
-  #     if(gWidgets2::svalue(h$action)=='2'){
-  #       firstPed <- get('ped1',envir=mmTK)
-  #       persons1 <- get('persons_ped1',envir=mmTK)
-  #       persons <- persons1
-  #     } else{
-  #       persons <- c("Mother", "Father", "Child")
-  #       sex <- c("female", "male", "male")
-  #     }
-  #     #persons <- c("Mother", "Father", "Child")
-  #     #sex <- c("female", "male", "male")
-  #     ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,"Father"), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
-  #   } else if(gWidgets2::svalue(h$obj)=="Unrelated"){
-  #     #Define the persons involved in the case
-  #     if(gWidgets2::svalue(h$action)=='2'){
-  #       firstPed <- get('ped1',envir=mmTK)
-  #       persons1 <- get('persons_ped1',envir=mmTK)
-  #       persons <- persons1
-  #     } else{
-  #       persons <- c("Mother", "Father", "Child")
-  #       sex <- c("female", "male", "male")
-  #     }
-  #     #persons <- c("Mother", "Father", "Child")
-  #     #sex <- c("female", "male", "male")
-  #     ped1 <- Familias::FamiliasPedigree(id=persons, dadid=c(NA,NA,NA), momid=c(NA,NA,"Mother"), sex=c("female", "male", "male"))
-  #   } else {
-  #     pedfile = gWidgets2::gfile(text=paste("Open pedigree R file",sep=""),type="open",
-  #                     filter=list("text"=list(patterns=list("*.R")),"all"=list(patterns=list("*"))))
-  #     source(pedfile)
-  #     if(!all(exists("persons"),exists("ped1"))) f_errorWindow("File should define both pedigree and persons")#stop("File should define both pedigree and persons")
-  #   }
-  #   assign(paste("ped",h$action,sep=""),ped1,envir=mmTK)
-  #   assign(paste("persons_ped",h$action,sep=""),persons,envir=mmTK)
-  # }
 
   #Get values from object and assign to new object in mmTK environment
   f_values <- function(h,...) {
@@ -162,11 +164,6 @@ relMixGUI <- function(){
   }
   #Pop-up error window
   f_errorWindow <- function(message){
-    # errorWindow <- gWidgets2::gwindow("Error", )
-    # gWidgets2::glabel(message,container=errorWindow, expand=TRUE)
-    # gWidgets2::gbutton("ok", container=errorWindow,handler=function(h,...){
-    #   gWidgets2::dispose(h$obj)
-    # })
     gWidgets2::gmessage(message, title="Error", icon="error")
   }
 
@@ -301,7 +298,7 @@ relMixGUI <- function(){
 
   #Makes pop-up window to fill in dropout values per contributor and drop-in
   f_dropout <- function(h,...){
-    dropWindow <- gWidgets2::gwindow("Dropout and drop-in",width=500,visible=FALSE)
+    dropWindow <- gWidgets2::gwindow("Dropout and drop-in",width=300,visible=FALSE)
     dropGroup <- gWidgets2::ggroup(horizontal = FALSE, container = dropWindow)
     #Get pedigree data
     if(!exists("idxC1",envir=mmTK)){
@@ -314,19 +311,16 @@ relMixGUI <- function(){
     idxC1 <- get("idxC1",envir=mmTK)
     idxC2 <- get("idxC2",envir=mmTK)
     idxC <- union(idxC1,idxC2)
-    #If dropliste has not been updated yet, it contains only one default dropout value
-    #and a drop-in value. Set the default dropout value for all contributors
-    #if(length(dropliste)==2) dropliste <- c(rep(dropliste[1],length(idxC)),dropliste[2])
+
     dropNames <- names(dropliste)
     objDrop <- list()
     for(i in 1:length(idxC)){
       g <- gWidgets2::glabel(idxC[i], container=dropFrame2,horizontal=FALSE)
       #Check if a dropout value is already specified, if not set to 0
       val <- ifelse(idxC[i]%in%dropNames,dropliste[[which(dropNames==idxC[i])]],0)
-      objDrop[[i]] <- gWidgets2::gedit(format(val,digits=4),width=4,container=dropFrame2)
+      objDrop[[i]] <- gWidgets2::gedit(format(val,digits=4),width=2,container=dropFrame2)
     }
     dropinFrame <- gWidgets2::gframe("Drop-in",container=dropGroup)
-    #objDrop[[length(dropliste)]] <- gspinbutton(0,1,by=0.01, value=dropliste[[length(dropliste)]],digits=3,container=dropinFrame)
     objDrop[[length(idxC)+1]] <- gWidgets2::gedit(format(dropliste[[length(dropliste)]],digits=4),width=4,container=dropinFrame)
     names(objDrop) <- c(idxC,"dropin")
     saveButton <- gWidgets2::gbutton(text = "Save",container=dropGroup, handler = function(h,...) {
@@ -356,9 +350,10 @@ relMixGUI <- function(){
     }
     persons1 <- get("persons_ped1",envir=mmTK)
     persons2 <- get("persons_ped2",envir=mmTK)
-    if(!identical(persons1,persons2)) {
-      f_errorWindow("Persons in pedigree 1 and 2 must match!")
-    } else{
+    #Original
+    # if(!identical(persons1,persons2)) {
+    #   f_errorWindow("Persons in pedigree 1 and 2 must match!")
+    # } else{
       contWindow <- gWidgets2::gwindow("Contributors")
       contGroup <- gWidgets2::ggroup(horizontal = FALSE, container = contWindow)
       contFrame <- gWidgets2::gframe("Specify contributors in mixture",container=contGroup)
@@ -369,20 +364,20 @@ relMixGUI <- function(){
         idxC1 <- get("idxC1",envir=mmTK)
         idxC2 <- get("idxC2",envir=mmTK)
       }
-      persons <- union(persons1,persons2)
+      #persons <- union(persons1,persons2) #original
 
       #Different contributors under each hypothesis
       contFrame <- gWidgets2::gframe("Contributors in pedigree 1",container=contGroup)
-      gWidgets2::gcheckboxgroup(persons, checked=persons1%in%idxC1,horizontal=FALSE,container=contFrame,
+      gWidgets2::gcheckboxgroup(persons1, checked=persons1%in%idxC1,horizontal=FALSE,container=contFrame,
                      handler=f_values,action="idxC1")
       contFrame2 <- gWidgets2::gframe("Contributors in pedigree 2",container=contGroup)
-      gWidgets2::gcheckboxgroup(persons, checked=persons2%in%idxC2,horizontal=FALSE,container=contFrame2,
+      gWidgets2::gcheckboxgroup(persons2, checked=persons2%in%idxC2,horizontal=FALSE,container=contFrame2,
                      handler=f_values,action="idxC2")
 
       gWidgets2::gbutton("ok", container=contGroup,handler=function(h,...){
         gWidgets2::dispose(h$obj)
       })
-    }
+    #}# original
   }
 
   #Get mixture in the right format
@@ -490,11 +485,6 @@ relMixGUI <- function(){
   f_MAF <- function(db,MAF){
     db <- get('db',mmTK)
     if(any(db$Frequency<MAF)){ #Frequencies below MAF
-      # gWidgets2::gconfirm("Some frequencies are below the min. allele frequency.
-      #          Change the indicated frequencies?", title="Note",icon = "question",handler = function(h,...){
-      #db$Frequency[db$Frequency<MAF] <- MAF
-      #assign('db',db,mmTK)
-      #})
       w <- gWidgets2::gconfirm("Some frequencies are below the min. allele frequency.
                 Change the indicated frequencies?", title="Note",icon = "question")
       if(w) {
@@ -557,6 +547,41 @@ relMixGUI <- function(){
     assign('db',db,envir=mmTK) #Final database
   }
 
+  # Code by Magnus Dehli Vigeland
+  # Function for plotting a list of pedigrees with typed members specified for each
+  f_plotPeds = function(peds, typed) {
+    npeds <- length(peds)
+
+    # Make sure each pedigree is a list of components
+    pedlist <- lapply(peds, function(p) if(pedtools::is.ped(p)) list(p) else p)
+
+    # Component-wise plot data
+    plotdat <- lapply(1:npeds, function(i) {
+      pedi <- pedlist[[i]]
+      ty <- typed[[i]]
+      lapply(pedi, function(cmp) list(cmp, carrier = ty))
+    })
+
+    # Remove outer list layer
+    plotdat <- unlist(plotdat, recursive = FALSE)
+
+    # Group comps according to original pedigrees
+    ncomps <- lengths(pedlist)
+    groups <- split(seq_along(plotdat), rep(seq_along(ncomps), ncomps))
+
+    # Titles
+    titles <- paste0("H", 1:npeds)
+
+    # Plot!
+    pedtools::plotPedList(plotdat, frames = TRUE, groups = groups, titles = titles,
+                ### Further args to consider/tweak:
+                hatched = pedtools::typedMembers,
+                cex = 1.2,
+                cex.main = 1.2,
+                fmar = 0.02
+    )
+  }
+
 
 
   f_LR <- function(){
@@ -590,6 +615,11 @@ relMixGUI <- function(){
     db2 <- get("db",envir=mmTK)
     alleleNames <- as.character(db2[,2])
 
+    #File names
+    mixfile <- get("mixturefile",envir=mmTK)
+    reffile <- get("referencefile",envir=mmTK)
+    freqfile <- get("frequenciesfile",envir=mmTK)
+
 
     #Check if there are non-numeric allele names and stepwise mutation model
     #If so, give a warning
@@ -609,25 +639,13 @@ relMixGUI <- function(){
     persons1 <- get("persons_ped1",envir=mmTK)
     persons2 <- get("persons_ped2",envir=mmTK)
     pedigrees <- list(ped1,ped2)
-    #idxC <- get("idxC",envir=mmTK) #Individuals who are contributors
     idxC1 <- get("idxC1",envir=mmTK) #Contributors under H1
     idxC2 <- get("idxC2",envir=mmTK) #Contributors under H2
     idxK <- unique(G[,1]) #Individuals with known genotypes
     idxC <- union(idxC1,idxC2)
     idxU <- idxC[!idxC%in%idxK] #Contributors with uknown genotypes. Assuming that all individuals are represented in both pedigrees!
 
-    # #Check if the names of individuals in the reference file correspond to names in pedigree
-    # notFound <- unique(G$SampleName)[!unique(G$SampleName)%in%persons1]
-    # if(length(notFound)>0) { f_errorWindow(c("Following individuals in reference file not found in pedigree:",paste(notFound,collapse=", "))); stop() }
-
     #Dropout/drop-in
-    #Set default dropout 0 for all contributors if none is set
-    # if(!exists('dropliste',envir=mmTK)){
-    #   dDef <- get('drop',envir=mmTK)
-    #   D <- rep(list(dDef$d),length(idxC))
-    #   names(D) <- idxC
-    #   di <- dDef$di
-    # } else{
     drop <- get('dropliste',mmTK)
     if(!all(idxC%in%names(drop))){ f_errorWindow("Specify dropout and drop-in"); stop()
     } else {
@@ -637,8 +655,6 @@ relMixGUI <- function(){
 
 
     ############# Computations ###########
-    #infoWindowLR <- gWidgets2::gwindow("",visible=TRUE)
-    #gWidgets2::glabel("Computing LR...",container=infoWindowLR)
 
     markers <- names(R)
     LRmarker <- numeric(length(markers))
@@ -666,7 +682,6 @@ relMixGUI <- function(){
                                allelenames= newAlleles, MutationModel='Custom', MutationMatrix=mm)
       }
 
-      #datamatrix <- createDatamatrix(locus,knownGenos[[which(names(knownGenos)==markers[i])]],idsU=idxU)
       names(pedigrees) <- c("H1","H2")
 
       if(identical(idxC1,idxC2)){
@@ -698,7 +713,6 @@ relMixGUI <- function(){
 
     #### left col ####
     paramGroup <- gWidgets2::ggroup(horizontal=FALSE,container=LRwindowGroup)
-    #gWidgets2::size(paramGroup) <- c(250,450)
     #Database options
     databaseData <- data.frame(Parameter=c("theta","Silent allele freq.","Min. allele freq."),Value=unlist(optPar))
     databaseData[,1] <- as.character(databaseData[,1])
@@ -751,88 +765,63 @@ relMixGUI <- function(){
 
     #### right col ####
     LRgroup2 <- gWidgets2::ggroup(container=LRwindowGroup,horizontal=FALSE,spacing=7)
-    #Plot pedigrees
+    #Plot pedigrees. First convert FamiliasPedigree to ped
+    peds <- pedFamilias::Familias2ped(pedigrees, datamatrix = NULL, loci = NULL)
     pedGroup <- gWidgets2::ggroup(horizontal=TRUE,container=LRgroup2,spacing=5)
     if (requireNamespace("tkrplot", quietly = TRUE)) {
-      #pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
-      pedFrame1 <- gWidgets2::gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
-      #gWidgets2::size(pedFrame1) <- list(height=110,width=240)
-      pedFrame2 <- gWidgets2::gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
-      #gWidgets2::size(pedFrame2) <- list(height=110,width=240)
-      if(all(ped1$findex==0 & ped1$mindex==0)) {
-        gWidgets2::glabel("No relations",container=pedFrame1)
-      }else{
-        img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame1),
-                                 fun = function() {
-                                   #err <- try(plot(ped1),silent=TRUE)
-                                   #plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
-                                    plot(ped1,cex=0.8)},hscale=0.6,vscale=1)
+      pedFrame <- gWidgets2::gframe("Pedigrees: contributors marked with a dot",container=pedGroup,horizontal=TRUE,expand=TRUE)
+      img1 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame),
+                               fun = function() {
+                                  f_plotPeds(peds,list(idxC1,idxC2))},hscale=1,vscale=0.5)
         gWidgets2::add(pedGroup,img1)
-      }
-      if(all(ped2$findex==0 & ped2$mindex==0)) {
-        gWidgets2::glabel("No relations",container=pedFrame2)
-      }else{
-        img2 <- tkrplot::tkrplot(gWidgets2::getToolkitWidget(pedFrame2),
-                                 fun = function() {
-                                   #err <- try(plot(ped2),silent=TRUE)
-                                   plot(ped2,cex=0.8)},hscale=0.6,vscale=1)
-        gWidgets2::add(pedGroup,img2)
-      }
     } else {
       gWidgets2::glabel('Plotting is not available because the "tkrplot" package is not installed.', container=pedGroup)
     }
 
     #List of LRs
-    print(format(Data[,1:2],digits=4,scientific=TRUE))
+    print(format(Data[,1:2],digits=4,scientific=TRUE),right=F)
     gWidgets2::glabel(paste("Total LR:",format(prod(LRmarker),digits=4,scientific=TRUE)),container=LRgroup2)
-    tab <- gWidgets2::gtable(format(Data[,1:2],digits=4,scientific=TRUE),container=LRgroup2, expand = TRUE)
+    tab <- gWidgets2::gtable(format(Data[,1:2],digits=4,scientific=TRUE,justify="right"),container=LRgroup2, expand = FALSE)
     gWidgets2::size(tab) <- list(height = 300, width=200, column.widths = c(100, 100))
-
 
     #Prepare data to write to file
     allParam <- rbind(databaseData,mutData,dropData)
     colnames(contData) <- paste("Contributors",colnames(contData))
     allParam <- cbind(allParam," "=rep("",nrow(allParam)),rbind(contData,matrix("",nrow=nrow(allParam)-nrow(contData),ncol=ncol(contData))))
-    #exportData <- data.frame(c(allParam[,1],"","Marker",Data[,1],"Total"),c(allParam[,2],"","LR",Data[,2],prod(LRmarker)),
-    #                         c(rep("",nrow(allParam)+1),"Lik H1",Data[,3],prod(Data[,3])),c(rep("",nrow(allParam)+1),"Lik H2",Data[,4],prod(Data[,4])))
-    #Parameters and LR
-    #paramLR <- data.frame(c(allParam[,1],"","Marker",Data[,1],"Total"),c(allParam[,2],"","LR",Data[,2],prod(LRmarker)),
-    #                         c(rep("",nrow(allParam)+1),"Lik H1",Data[,3],prod(Data[,3])),c(rep("",nrow(allParam)+1),"Lik H2",Data[,4],prod(Data[,4])))
+    rownames(allParam) <- NULL
 
     #Reference profiles
-    gtlist <- split(G[,3:4],G[,1])
-    GT <- do.call(cbind,gtlist)
+    GT <- G
+    GT[,3:4] <- apply(G[,3:4],2,prettyNum)
     #Mixture profile
-    mix <- E[-1]
-    colnames(mix) <- c("Marker",paste("Mix.",colnames(mix[,-1]),sep=""))
-    GT <- GT[rep(1:nrow(GT),length(unique(E$SampleName))),]
-    rownames(GT) <- rownames(E)
-    prof <- cbind(E,GT)
-    prof[is.na(prof)] <- ""
+    mix <- E
 
-    #LRgt <- cbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1)))
+    alleles_report <- data.frame()
+    freqs_report <- data.frame()
+    for(i in 1:nrow(mix)){
+      m <- mix$Marker[i]
+      #Unique alleles appearing in mixture and genotypes
+      al <- unique(c(unlist(GT[GT$Marker==m,-c(1,2)]),unlist(mix[i,-c(1,2)])[unlist(mix[i,-c(1,2)])!=""]))
+      al <- al[!is.na(al)]
+      #Frequencies for the unique alleles
+      f <- afreqAll[[m]][match(al,allelesAll[[m]])]
+      freqs_report[i,1:length(f)] <- f
+      alleles_report[i,1:length(al)] <- al
+    }
+    colnames(freqs_report) <- paste0("Allele",1:ncol(freqs_report))
+    colnames(alleles_report) <- paste0("Allele",1:ncol(alleles_report))
+    nc <- ncol(alleles_report)
+    out <- do.call("data.frame", lapply(1:nc, function(j) cbind(alleles_report[,j],signif(freqs_report[,j],3))))
+    colnames(out) <- rep(c("Allele","Freq"),times=ncol(alleles_report))
+    allele_info <- cbind(Marker=mix$Marker,out)
+    allele_info[is.na(allele_info)] <- ""
+    colnames(allele_info) <- c("Marker",paste0(colnames(out),rep(1:(ncol(out)/2),each=2)))
+    mix[is.na(mix)] <- ""
+
     DataTot <- rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4])))
-    fill <- matrix("",nrow=nrow(DataTot),ncol=ncol(prof)-ncol(DataTot))
-    DataTot <- cbind(DataTot,fill)
-    colNames <- c(colnames(Data),rep(" ",ncol(fill)))
-    colNamesFill <- rbind(rep("",length(colNames)),colNames)
-    colnames(colNamesFill) <- colnames(DataTot)
-    DataTot <- rbind(colNamesFill,DataTot)
-
-    colnames(DataTot) <- colnames(prof)
-    LRgt <- rbind(prof,DataTot)
-    #LRgt <- rbind(rbind(Data,c("Total",prod(LRmarker),prod(Data[,3]),prod(Data[,4]))),rbind(prof[,-1],rep("",ncol(prof)-1))))
-    LRgt <- rbind(colnames(LRgt),LRgt)
-    fill <- matrix("",nrow=nrow(allParam),ncol=ncol(LRgt)-ncol(allParam))
-    allParam2 <- rbind(cbind(allParam,fill),rep("",ncol(LRgt)))
-    colnames(LRgt) <- colnames(allParam2)
-    exportData <- rbind(allParam2,LRgt)
-    exportData[is.na(exportData)] <- ""
-    rownames(exportData) <- NULL
-    colnames(exportData) <- c("Parameter","Value","",colnames(contData),rep("",ncol(exportData)-5))
 
     LRbut <- gWidgets2::gbutton("Save results to file", container=LRgroup2,handler=function(h,...){
-      f_export(exportData)
+      f_export(allParam,mix,GT,DataTot,allele_info,peds,list(idxC1,idxC2),mixfile,reffile,freqfile)
       gWidgets2::dispose(h$obj)
     })
 
@@ -867,7 +856,7 @@ relMixGUI <- function(){
   ###### Import data #####
   #Buttons for importing files
   dataGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group1,spacing=7)
-  impFrame <- gWidgets2::gframe("Import data",container=dataGroup,horizontal = FALSE)
+  impFrame <- gWidgets2::gframe("1) Import data",container=dataGroup,horizontal = FALSE)
   objMix <- gWidgets2::gbutton(text="Import mixture profile",container=impFrame,handler=f_importprof,action="mixture")
   objRef <- gWidgets2::gbutton(text="Import reference profiles",container=impFrame,handler=f_importprof,action="reference")
   objDB <- gWidgets2::gbutton(text="Database",container=impFrame,handler=f_database)
@@ -875,7 +864,7 @@ relMixGUI <- function(){
   ###### Mutations #####
   #Mutation frame
   mutGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group1,spacing=7)
-  mutFrame <- gWidgets2::gframe("Mutations",container=mutGroup,horizontal=FALSE)
+  mutFrame <- gWidgets2::gframe("2) Mutations",container=mutGroup,horizontal=FALSE)
   mutButton <- gWidgets2::gbutton("Mutations", handler=f_mutations,container=mutFrame)
 
   group2 <- gWidgets2::ggroup(horizontal = TRUE, container=top)
@@ -883,7 +872,7 @@ relMixGUI <- function(){
   ####### Pedigrees ######
   #Pedigree frame
   pedGroup <- gWidgets2::ggroup(horizontal = FALSE, container=group2,spacing=7)
-  pedFrame <- gWidgets2::gframe("Pedigrees",container=pedGroup)
+  pedFrame <- gWidgets2::gframe("3) Pedigrees",container=pedGroup)
   #Should we have the option to include different contributors under each hypothesis???
   #Pedigree 1 button
   gWidgets2::glabel("Pedigree 1",container=pedFrame)
@@ -893,13 +882,13 @@ relMixGUI <- function(){
   objPed2 <- gcombobox(c("Paternity","Unrelated","Custom"), selected=0,container=pedFrame,handler=f_pedigree,action="2")
 
   ######## Contributors #######
-  contFrame <- gWidgets2::gframe("Contributors",container=group2,horizontal=TRUE)
+  contFrame <- gWidgets2::gframe("4) Contributors",container=group2,horizontal=TRUE)
   objCont <- gWidgets2::gbutton(text="Specify contributors",container=contFrame,handler=f_contributors)
 
   ####### Dropout/drop-in #########
   group3 <- gWidgets2::ggroup(horizontal = TRUE, container=top,spacing=10)
   #Dropout button
-  dropFrame <- gWidgets2::gframe("Dropout and drop-in",container=group3,horizontal=TRUE)
+  dropFrame <- gWidgets2::gframe("5) Dropout and drop-in",container=group3,horizontal=TRUE)
   dropButton <- gWidgets2::gbutton("Specify dropout and drop-in", handler=f_dropout, container=dropFrame)
 
   ###### Compute LR ######

@@ -7,18 +7,18 @@
 checkFrequenciesFile(filename, mix)
 }
 \arguments{
-\item{filename}{Path of the frecuency database file}
+\item{filename}{Path of the frequency database file}
 
 \item{mix}{Data frame with mixture data. See relMix vignette for description of the format}
 }
 \value{
 A list containing
 \itemize{
-\item {\code{df}} {Data frame with frequencies}
-\item {\code{warning}} {List of strings describing the errors that ocurred but could be fixed or that do not prevent
-the execution of the program.}
-\item {\code{error}} {List of strings describing the errors that ocurred that made it imposible to return a valid data frame.
-If this list is not empty, then the dataframe item will be NULL}}
+\item \code{df} Data frame with frequencies
+\item \code{warning} List of strings describing the errors that occurred but could be fixed or that do not prevent
+the execution of the program.
+\item \code{error} List of strings describing the errors that occurred that made it impossible to return a valid data frame.
+If this list is not empty, then the data frame item will be NULL}
 }
 \description{
 Loads a frequency database file and compares it against mixture data to check for common errors.
@@ -27,13 +27,13 @@ Loads a frequency database file and compares it against mixture data to check fo
 The mixture data is used to perform more advanced checks, such as to make sure all alleles present
 in the mixture file have an entry in the frequency database.
 If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
-If an error is found, checking stops and a NULL dataframe is returned. The error is described in the error messages.
+If an error is found, checking stops and a NULL data frame is returned. The error is described in the error messages.
 }
 \examples{
 \dontrun{
 mixfile <- system.file("extdata","mixture.txt",package="relMix")
 mix <- checkMixtureFile(mixfile)
-# note: the mixture dataframe is passed as an argument
+# note: the mixture data frame is passed as an argument
 # if the previous check failed, the program should not continue
 # with the frequencies file check
 freqfile <- system.file('extdata','frequencies22Markers.txt',package='relMix')

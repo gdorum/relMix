@@ -1,4 +1,20 @@
-# relMix 1.3
+# relMix 1.4
+
+#### Changes in v. 1.4
+
+New features
+  
+* Custom pedigree files in ```relMixGUI``` must be specified by text files in ped format instead of R scripts
+
+* ```relMixGUI``` now also accept non-numeric allele names
+  + The exception is if mutation model "stepwise" is used
+
+* An improved report file that includes 
+  + Allele frequencies used in the LR calculations
+  + Plots of pedigrees used under each hypothesis
+  + And is saved as a word file rather than a txt file
+
+
 
 #### Major changes in v. 1.3
 
