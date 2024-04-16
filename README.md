@@ -10,12 +10,11 @@ found here: <https://gdorum.github.io/relMix/articles/relMix.html>
 
 ## Installation
 
-Please follow the instructions here
-<https://www.familias.name/openfamilias.html> to install relMix.
-
+Install from GitHub as follows:
 ``` r
  # First install devtools if needed
 if(!require(devtools)) install.packages("devtools")
+#Install relMix from GitHub:
 devtools::install_github("gdorum/relMix")
 ```
 
