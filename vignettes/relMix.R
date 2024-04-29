@@ -15,8 +15,8 @@ G2 <- rbind(G[1:2,],data.frame(SampleName='...',Marker='...',Allele1='...',Allel
 rownames(G2) <- NULL
 knitr::kable(G2,caption="Table 2: Reference profiles for mother and alleged father in example 1.")
 
-## ----out.width = '40%', fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'----
-knitr::include_graphics("database_crop.png")
+## ----fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'-----
+knitr::include_graphics("database_crop.png",dpi=80)
 
 ## ----echo=FALSE, results='asis'-----------------------------------------------
 freqs <- read.table("frequencies22Markers.txt",sep="\t",header=T,stringsAsFactors=F)

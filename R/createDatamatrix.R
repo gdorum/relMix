@@ -1,12 +1,12 @@
 #' Create data matrix with possible genotype combinations for specified individuals
 #'
 #' A data matrix of genotypes for known individuals and all possible genotypes for unknown individuals is created.
-#' @param locus A Familias locus containing information about the alleles
+#' @param locus A list of class \code{\link{FamiliasLocus}} containing information about the locus
 #' @param knownGenos List of known genotypes. Each element is a vector with genotype for one individual. The elements must be named
 #' @param idsU Vector of indices for unknown individuals
 #' @return A data matrix of genotypes where each row corresponds to an individual.
 #' @author Guro Dorum
-#' @seealso \code{Familias::FamiliasLocus} and \code{\link{relMix}}.
+#' @seealso \code{\link{FamiliasLocus}}.
 #' @examples
 #' #Define alleles and frequencies
 #' alleles <- 1:2

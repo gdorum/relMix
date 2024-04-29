@@ -15,6 +15,10 @@ Matrix of all possible genotypes, one row per genotype
 \description{
 Finds all possible genotypes based on input alleles.
 }
+\examples{
+alleles <- 1:3
+allGenos(alleles)
+}
 \author{
 Guro Dorum
 }

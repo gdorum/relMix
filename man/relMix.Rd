@@ -16,34 +16,35 @@ relMix(
 )
 }
 \arguments{
-\item{pedigrees}{A list of pedigrees defined using FamiliasPedigree in Familias}
+\item{pedigrees}{A list of pedigrees defined using \code{\link{FamiliasPedigree}}}
 
-\item{locus}{A Familias locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)}
+\item{locus}{A list of class \code{\link{FamiliasLocus}} containing information about the locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)}
 
 \item{R}{A vector of mixture alleles, or a list of such if there are multiple replicates}
 
-\item{datamatrix}{Each line corresponds to one constellation of genotypes for the involved individuals.
+\item{datamatrix}{A data frame where each line corresponds to one constellation of genotypes for the involved individuals.
 Indices of individuals must be given as rownames and must correspond to indices in the pedigree}
 
 \item{ids}{Index vector indicating which individuals are contributors to the mixture. The indices must correspond to
 indices in the pedigree}
 
-\item{D}{List of dropout values (between 0 and 1) per contributor.
+\item{D}{List of numeric dropout values (between 0 and 1) per contributor.
 Each element is a vector containing heterozygous and homozygous dropout probability for the given contributor}
 
-\item{di}{Drop-in value (between 0 and 1)}
+\item{di}{A numeric drop-in value (between 0 and 1)}
 
-\item{kinship}{Defines the theta-parameter}
+\item{kinship}{A numeric value between 0 and 1 that defines the theta-parameter}
 }
 \value{
-The likelihoods for the pedigrees and detailed output for each term considered in the calculation.
+A numeric likelihood for each pedigree named according to the pedigrees, and a matrix of likelihoods for each pedigree and each term (genotype constellation) considered in the calculation
+(one row per term).
 }
 \description{
 Calculates likelihoods for relationship inference involving mixtures and missing reference profiles,
 including drop-in and dropout, mutations, silent alleles and theta correction.
 }
 \details{
-The function requires the package \pkg{Familias} and calls on the function \code{FamiliasPedigree}.
+The function requires the package \code{\link{Familias}} and calls on the function \code{\link{FamiliasPosterior}}.
 }
 \examples{
 #Example 1: paternity trio with mixture of mother and child
@@ -119,12 +120,11 @@ res2$H1/res2$H2
 
 }
 \references{
-Dorum et al. (2017) Pedigree-based relationship inference from complex DNA mixtures, Int J Legal Med., doi:10.1007/s00414-016-1526-x; \cr
-Kaur et al. (2016) Relationship inference based on DNA mixtures, Int J Legal Med.;130(2):323-9; \cr
-Egeland, Kling, Mostad (2015) \pkg{Familias}
+Dorum et al. (2017) <doi:10.1007/s00414-016-1526-x> \cr
+Kaur et al. (2016) <doi:10.1007/s00414-015-1276-1> \cr
 }
 \seealso{
-\code{\link{relMixGUI}} for a relMix GUI, and \code{\link{FamiliasLocus}} on how to create a Familias locus.
+\code{\link{relMixGUI}} for the GUI version of relMix, \code{\link{FamiliasLocus}} on how to create a FamiliasLocus and \code{\link{FamiliasPedigree}} on how to create a FamiliasPedigree.
 }
 \author{
 Navreet Kaur, Thore Egeland, Guro Dorum

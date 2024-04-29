@@ -3,11 +3,11 @@
 #' Given a pedigree file path the function attempts to load it and compare it
 #' to the reference profiles to detect possible errors.
 #'
-#'@param filename Path of the pedigree file
-#'@param df Data frame with reference profiles
+#' @param filename Path of the pedigree file
+#' @param df Data frame with reference profiles
 #' @return A list containing
 #' \itemize{
-#' \item \code{df} Pedigree, NULL if errors are present.
+#' \item \code{df} A list of class [Familias::FamiliasPedigree()], or NULL if errors are present.
 #' \item \code{warning} A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.
 #' \item \code{error} A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
 #' If this list is not empty, then the dataframe item will be null.}
@@ -15,7 +15,6 @@
 #' If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
 #' If an error is found, checking stops. The error is described in the error messages.
 #' @examples
-#' \dontrun{
 #' #First load mixture file
 #' mixfile <- system.file("extdata","mixture_silent_ex.txt",package="relMix")
 #' mix <- checkMixtureFile(mixfile);
@@ -23,9 +22,8 @@
 #' reffile <- system.file("extdata","references_silent.txt",package="relMix")
 #' ref <- checkReferenceFile(reffile, mix$df)
 #' #Check pedigree file
-#' pedfile <- system.file("extdata","custom_pedigree_maternity_duo.R",package="relMix")
+#' pedfile <- system.file("extdata","custom_pedigree_maternity_duo.ped",package="relMix")
 #' checkPedigreeFile(pedfile,ref$df);
-#' }
 #' @author Elias Hernandis
 #' @export
 
@@ -42,7 +40,7 @@ checkPedigreeFile <- function(filename, df) {
       df <- tryCatch(
         read.table(filename, header=TRUE, sep="\t", stringsAsFactors=FALSE),
         error = function(e) { NULL });
-      if(!is.null(df)) print(paste("Pedigree file",filename,"is imported"))
+      if(!is.null(df)) message(paste("Pedigree file",filename,"is imported"))
       #FamiliasPedigree requries NA instead of 0
       df$fid[df$fid==0] <- NA
       df$mid[df$mid==0] <- NA

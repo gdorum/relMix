@@ -7,7 +7,7 @@
 createDatamatrix(locus, knownGenos, idsU = NULL)
 }
 \arguments{
-\item{locus}{A Familias locus containing information about the alleles}
+\item{locus}{A list of class \code{\link{FamiliasLocus}} containing information about the locus}
 
 \item{knownGenos}{List of known genotypes. Each element is a vector with genotype for one individual. The elements must be named}
 
@@ -31,7 +31,7 @@ gMO <- c(1,1)
 datamatrix <- createDatamatrix(locus,knownGenos=list(AF=gAF,MO=gMO),idsU=c("CH"))
 }
 \seealso{
-\code{Familias::FamiliasLocus} and \code{\link{relMix}}.
+\code{\link{FamiliasLocus}}.
 }
 \author{
 Guro Dorum

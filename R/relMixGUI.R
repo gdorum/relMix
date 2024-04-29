@@ -1,12 +1,13 @@
 #' GUI for relMix
 #'
 #' User-friendly graphical user interface for relMix.
+#' @return No return value, called for side effects.
 #' @details Includes error checking for the input files.
 #' @author Guro Dorum, Elias Hernandis
 #' @seealso \code{\link{relMix}} for the main function implemented in \code{relMixGUI}.
 #' @examples
 #' #Examples can be found in the vignette and example data files can be found
-#' #in the folder "inst\extdata" in the installation folder for relMix
+#' #in the folder "extdata" in the installation folder for relMix
 #' @import gWidgets2tcltk
 #' @import Familias
 #' @importFrom graphics plot
@@ -125,7 +126,7 @@ relMixGUI <- function(){
       f_errorWindow(paste("There was an error loading the file. It does not look like a ", type, " file. Please make sure the file is correct and try again."))
       return()
     })
-    if(!is.null(Data)) print(paste(type,"file",proffile,"is imported"))
+    if(!is.null(Data)) message(paste(type,"file",proffile,"is imported"))
     assign(h$action,Data,envir=mmTK) #save object
     assign(paste0(type,"file"),proffile,envir=mmTK) #save filename
   }

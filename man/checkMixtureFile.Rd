@@ -25,13 +25,11 @@ If warnings are found, the function attempts to fix them and explains what it ha
 If an error is found, checking stops and a NULL data frame is returned. The error is described in the error messages.
 }
 \examples{
-\dontrun{
 mixfile <- system.file("extdata","mixture.txt",package="relMix")
 result <- checkMixtureFile(mixfile);
 print(result$df);
 print(result$warning);
 print(result$error);
-}
 }
 \author{
 Elias Hernandis

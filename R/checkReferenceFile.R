@@ -15,7 +15,6 @@
 #' If an error is found, checking stops and a NULL dataframe is returned. The error is described in the error messages.
 #' @seealso \code{\link{checkMixtureFile}} for information on how to load a mixture file.
 #' @examples
-#' \dontrun{
 #' #Load a mixture file
 #' mixfile <- system.file("extdata","mixture.txt",package="relMix")
 #' mix <- checkMixtureFile(mixfile);
@@ -23,7 +22,6 @@
 #' #the program should not continue with the reference file check
 #' reffile <- system.file("extdata","references.txt",package="relMix")
 #' checkReferenceFile(reffile, mix$df);
-#' }
 #' @author Elias Hernandis
 #' @export
 checkReferenceFile <- function(filename, mix) {

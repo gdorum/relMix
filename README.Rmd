@@ -14,11 +14,11 @@ knitr::opts_chunk$set(
 
 # relMix
 
-relMix makes relationship inference involving DNA mixtures with unknown profiles and interprets DNA mixtures with related contributors. The main function is the graphical user interface ``` relMixGUI```. A tutorial can be found here: https://gdorum.github.io/relMix/articles/relMix.html
+relMix analyses DNA mixtures involving relatives by computing likelihood ratios that can account for dropout and drop-in, mutations, silent alleles and population substructure. relMix can both be used to make inferences about the relationship between individuals in a DNA mixture such as in non-invasive prenatal paternity testing, and to identify contributors to a mixed DNA stain who may be related. Relationships are represented by pedigrees and can include kinship between more than two individuals. The main function is the graphical user interface ``` relMixGUI```. A tutorial can be found here: https://gdorum.github.io/relMix/articles/relMix.html
 
 ## Installation
 
-Please follow the instructions here https://www.familias.name/openfamilias.html to install relMix.
+Install from GitHub as follows:
 
 ``` r
  # First install devtools if needed

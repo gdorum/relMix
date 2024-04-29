@@ -30,7 +30,6 @@ If warnings are found, the function attempts to fix them and explains what it ha
 If an error is found, checking stops and a NULL data frame is returned. The error is described in the error messages.
 }
 \examples{
-\dontrun{
 mixfile <- system.file("extdata","mixture.txt",package="relMix")
 mix <- checkMixtureFile(mixfile)
 # note: the mixture data frame is passed as an argument
@@ -38,7 +37,6 @@ mix <- checkMixtureFile(mixfile)
 # with the frequencies file check
 freqfile <- system.file('extdata','frequencies22Markers.txt',package='relMix')
 freqs <- checkFrequenciesFile(freqfile, mix$df)
-}
 }
 \seealso{
 \code{\link{checkMixtureFile}} for information on how to load a mixture file.

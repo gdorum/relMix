@@ -22,8 +22,8 @@
 #' @param di Drop-in value (between 0 and 1)
 #' @param alleleNames Vector of allele names for the marker
 #' @param afreq  Vector of allele frequencies for the marker
-#' @return The likelihood
-#' @references The model is specified in the appendix of Haned et al. (2012) Exploratory data analysis for the interpretation of low template DNA mixtures, FSI Genetics Dec;6(6):762-74
+#' @return The likelihood (a numeric)
+#' @references The model is specified in the appendix of Haned et al. (2012) <doi:10.1016/j.fsigen.2012.08.008>.
 #' @author Guro Dorum
 #' @seealso \code{\link{relMix}}
 #' @examples

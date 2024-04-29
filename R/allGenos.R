@@ -3,6 +3,9 @@
 #' Finds all possible genotypes based on input alleles.
 #' @param alleles Vector of input alleles, numeric or character
 #' @return Matrix of all possible genotypes, one row per genotype
+#' @examples
+#' alleles <- 1:3
+#' allGenos(alleles)
 #' @author Guro Dorum
 #' @export
 #Reworked from paramlink's allGenotypes

@@ -20,7 +20,7 @@ mixLikDrop(R, G, D, di = 0, alleleNames, afreq)
 \item{afreq}{Vector of allele frequencies for the marker}
 }
 \value{
-The likelihood
+The likelihood (a numeric)
 }
 \description{
 Computes the likelihood of a mixture conditioned on a given number of known and unknown contributors, and drop-in and dropout probabilities.
@@ -42,7 +42,7 @@ D <- list(c(0,0),c(d,d^2))
 mixLikDrop(R=R,G=list(gM,gC),D=D,di=di,alleleNames=alleles,afreq=afreq)
 }
 \references{
-The model is specified in the appendix of Haned et al. (2012) Exploratory data analysis for the interpretation of low template DNA mixtures, FSI Genetics Dec;6(6):762-74
+The model is specified in the appendix of Haned et al. (2012) <doi:10.1016/j.fsigen.2012.08.008>.
 }
 \seealso{
 \code{\link{relMix}}
