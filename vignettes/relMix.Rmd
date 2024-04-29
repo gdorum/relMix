@@ -21,8 +21,8 @@ which will open the user interface seen in Figure 1.
 
 <br>
 
-```{r, out.width =  "100%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 1: The RelMix main window."}
-knitr::include_graphics("relMix_screenshot.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 1: The RelMix main window."}
+knitr::include_graphics("relMix_screenshot.png",dpi=90)
 ```
 
 ## Example 1: A paternity case
@@ -59,7 +59,7 @@ knitr::kable(G2,caption="Table 2: Reference profiles for mother and alleged fath
 #### 1c. Database
 
 ```{r, fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'}
-knitr::include_graphics("database_crop.png",dpi=80)
+knitr::include_graphics("database_crop.png",dpi=90)
 ```
 When clicking the database button in the main interface, the window in Figure 2 appears.
 Table 3 shows the format of the allele frequencies to be imported here. There is one row per allele and one column per marker. A blank space indicates that the allele is not observed for that marker. Only an excerpt of the database is shown here.
@@ -75,8 +75,8 @@ Clicking the 'Option' button opens up the window in Figure 3 with three addition
 
 <br>
 
-```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 3: Database options. Theta value, silent allele frequency and minimum allele frequency."}
-knitr::include_graphics("database_options.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 3: Database options. Theta value, silent allele frequency and minimum allele frequency."}
+knitr::include_graphics("database_options.png",dpi=90)
 ```
 When clicking 'Save' here we return to the window in Figure 2, where we need to click 'ok' to exit the database settings.
 If a previously unobserved allele (i.e. not in the database) is found in the imported profiles, a notification will be given that the alllele has been added to the database with the minimum allele frequency. If the allele frequencies do not sum to 1, a question will appear of whether you would like to scale the frequencies. If not, a rest allele will be added.
@@ -90,8 +90,8 @@ The pedigrees define the hypotheses.  There are three choices of pedigrees: 'Pat
 
 <br>
 
-```{r, out.width =  "60%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 4: Define the pedigrees in example 1."}
-knitr::include_graphics("pedigrees_ex1.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 4: Define the pedigrees in example 1."}
+knitr::include_graphics("pedigrees_ex1.png",dpi=90)
 ```
 
 ### 4. Contributors
@@ -99,8 +99,8 @@ Clicking the 'Specify contributors' button opens the window in Figure 5. We tick
 
 <br>
 
-```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 5: Specify mother and child as the contributors in both pedigrees in example 1."}
-knitr::include_graphics("contributors_ex1.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 5: Specify mother and child as the contributors in both pedigrees in example 1."}
+knitr::include_graphics("contributors_ex1.png",dpi=90)
 ```
 
 ### 5. Dropout and drop-in
@@ -108,8 +108,8 @@ The last step is to specify dropout and drop-in values. See Dørum et al. (2017)
 
 <br>
 
-```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."}
-knitr::include_graphics("dropout_ex1.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."}
+knitr::include_graphics("dropout_ex1.png",dpi=90)
 ```
 
 Note that if the dropout values are not set, an error window will occur. Even if you do not include dropout and drop-in, you must open the dropout window and click on the save button.
@@ -119,8 +119,8 @@ Finally, we are ready to click the 'Compute LR' button. The result appears in a 
 
 <br>
 
-```{r, out.width="100%",, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."}
-knitr::include_graphics("results_ex1.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."}
+knitr::include_graphics("results_ex1.png",dpi=100)
 ```
 
 
@@ -162,15 +162,15 @@ In the database options we set the silent allele frequency equal to 0.1 (Figure 
 
 <br>
 
-```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 8: Database options for example 2."}
-knitr::include_graphics("database_options_ex2.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 8: Database options for example 2."}
+knitr::include_graphics("database_options_ex2.png",dpi=90)
 ```
 When clicking the 'ok' button we are asked if we want to scale or add a rest allele since the frequencies no longer sum to 1 now that a silent allele frequency has been added. We click yes to scale.
 
 <br>
 
-```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 9: Scale frequencies or add rest allele."}
-knitr::include_graphics("scaling_ex2.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 9: Scale frequencies or add rest allele."}
+knitr::include_graphics("scaling_ex2.png",dpi=90)
 ```
 **Note 1**: A rest allele can only be addded if the sum of frequencies is less than 1. Therefore, enforced scaling will be performed if we click 'No' and the sum is larger than 1.
 
@@ -183,8 +183,8 @@ In this example we will use an equal mutation model with mutation rate 0.1 for b
 
 <br>
 
-```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 10: Mutations in example 2."}
-knitr::include_graphics("mutations_ex2.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 10: Mutations in example 2."}
+knitr::include_graphics("mutations_ex2.png",dpi=90)
 ```
 
 ### 3. Pedigree
@@ -210,8 +210,8 @@ Figure 11 shows how to import the custom pedigrees from R scripts, one script pe
 
 <br>
 
-```{r, out.width =  "60%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."}
-knitr::include_graphics("custom_ped_ex2.png")
+```{r,fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."}
+knitr::include_graphics("custom_ped_ex2.png",dpi=90)
 ```
 
 ### 4. Contributors
@@ -219,8 +219,8 @@ Both individuals defined in the pedigrees are contributors under both hypotheses
 
 <br>
 
-```{r, out.width =  "50%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 12: Tick both individuals as contributors to the mixture in both pedigrees."}
-knitr::include_graphics("contributors_ex2.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 12: Tick both individuals as contributors to the mixture in both pedigrees."}
+knitr::include_graphics("contributors_ex2.png",dpi=90)
 ```
 
 ### 5. Dropout and drop-in
@@ -228,8 +228,8 @@ In this example we believe there may be dropout in both contributors' profiles. 
 
 <br>
 
-```{r, out.width =  "40%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."}
-knitr::include_graphics("dropout_ex2.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."}
+knitr::include_graphics("dropout_ex2.png",dpi=90)
 ```
 
 ### 6. Compute LR
@@ -237,9 +237,13 @@ The resulting LR for example 2 is shown in Figure 14.
 
 <br>
 
-```{r, out.width =  "100%", fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
-knitr::include_graphics("results_ex2.png")
+```{r, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
+knitr::include_graphics("results_ex2.png",dpi=100)
 ```
 
 ### References
-Dørum, G., Kaur, N., & Gysi, M. (2017). Pedigree-based relationship inference from complex DNA mixtures. International journal of legal medicine, 131(3), 629-641.
+Dørum et al. (2017) <doi:doi.org/10.1007/s00414-016-1526-x>
+
+Hernandis et al. (2019) <doi:doi.org/10.1016/j.fsigss.2019.09.085> 
+
+Kaur et al. (2016) <doi:doi.org/10.1007/s00414-015-1276-1>
