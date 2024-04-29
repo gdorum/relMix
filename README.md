@@ -10,7 +10,12 @@ found here: <https://gdorum.github.io/relMix/articles/relMix.html>
 
 ## Installation
 
-Install from GitHub as follows:
+Install from CRAN as follows:
+``` r
+install.packages("relMix")
+```
+
+Alternatively, install the latest development version from GitHub:
 ``` r
  # First install devtools if needed
 if(!require(devtools)) install.packages("devtools")
