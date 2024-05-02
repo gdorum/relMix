@@ -3,7 +3,7 @@
 #' User-friendly graphical user interface for relMix.
 #' @return No return value, called for side effects.
 #' @details Includes error checking for the input files.
-#' @author Guro Dorum, Elias Hernandis
+#' @author Guro Dorum, Elias Hernandis, Magnus Dehli Vigeland
 #' @seealso \code{\link{relMix}} for the main function implemented in \code{relMixGUI}.
 #' @examples
 #' #Examples can be found in the vignette and example data files can be found

@@ -8,6 +8,7 @@ Authors@R: c(
   person('Elias', 'Hernandis', role = c('aut')),
   person('Navreet', 'Kaur', role = c('ctb')),
   person('Thore', 'Egeland', role = c('ctb')))
+  person('Magnus Dehli', 'Vigeland', role = c('ctb')))
 Description: 
   Analysis of DNA mixtures involving relatives by computation of likelihood ratios that account for dropout and drop-in, mutations, silent alleles and population 
   substructure. This is useful in kinship cases, like non-invasive prenatal paternity testing, where deductions about individuals' relationships rely on DNA mixtures, 
