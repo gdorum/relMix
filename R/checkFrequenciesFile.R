@@ -58,7 +58,7 @@ checkFrequenciesFile <- function(filename, mix) {
     #If more than one marker
     if(ncol(df)>2){
     # Check for duplicate markers
-    if (length(error) == 0 && anyDuplicated.default(names(df))) {
+    if (length(error) == 0 && any(duplicated(names(df)))) {
         error <- append(error, paste("There are duplicate markers in your frequency table."));
     }
 
