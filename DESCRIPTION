@@ -7,7 +7,7 @@ Authors@R: c(
   person('Guro', 'Dorum', email = 'guro.dorum@gmail.com', role = c('aut', 'cre')),
   person('Elias', 'Hernandis', role = c('aut')),
   person('Navreet', 'Kaur', role = c('ctb')),
-  person('Thore', 'Egeland', role = c('ctb')))
+  person('Thore', 'Egeland', role = c('ctb')),
   person('Magnus Dehli', 'Vigeland', role = c('ctb')))
 Description: 
   Analysis of DNA mixtures involving relatives by computation of likelihood ratios that account for dropout and drop-in, mutations, silent alleles and population 
