@@ -16,9 +16,9 @@ relMix(
 )
 }
 \arguments{
-\item{pedigrees}{A list of pedigrees defined using \code{\link{FamiliasPedigree}}}
+\item{pedigrees}{A list of pedigrees defined using \code{\link[Familias]{FamiliasPedigree}}}
 
-\item{locus}{A list of class \code{\link{FamiliasLocus}} containing information about the locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)}
+\item{locus}{A list of class \code{\link[Familias]{FamiliasLocus}} containing information about the locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)}
 
 \item{R}{A vector of mixture alleles, or a list of such if there are multiple replicates}
 
@@ -44,7 +44,7 @@ Calculates likelihoods for relationship inference involving mixtures and missing
 including drop-in and dropout, mutations, silent alleles and theta correction.
 }
 \details{
-The function requires the package \code{\link{Familias}} and calls on the function \code{\link{FamiliasPosterior}}.
+The function requires the package \code{\link[Familias]{Familias}} and calls on the function \code{\link[Familias]{FamiliasPosterior}}.
 }
 \examples{
 #Example 1: paternity trio with mixture of mother and child
@@ -124,7 +124,7 @@ Dorum et al. (2017) <doi:10.1007/s00414-016-1526-x> \cr
 Kaur et al. (2016) <doi:10.1007/s00414-015-1276-1> \cr
 }
 \seealso{
-\code{\link{relMixGUI}} for the GUI version of relMix, \code{\link{FamiliasLocus}} on how to create a FamiliasLocus and \code{\link{FamiliasPedigree}} on how to create a FamiliasPedigree.
+\code{\link{relMixGUI}} for the GUI version of relMix, \code{\link[Familias]{FamiliasLocus}} on how to create a FamiliasLocus and \code{\link[Familias]{FamiliasPedigree}} on how to create a FamiliasPedigree.
 }
 \author{
 Navreet Kaur, Thore Egeland, Guro Dorum

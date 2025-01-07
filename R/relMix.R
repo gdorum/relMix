@@ -3,8 +3,8 @@
 #' Calculates likelihoods for relationship inference involving mixtures and missing reference profiles,
 #' including drop-in and dropout, mutations, silent alleles and theta correction.
 #'
-#' @param pedigrees A list of pedigrees defined using \code{\link{FamiliasPedigree}}
-#' @param locus A list of class \code{\link{FamiliasLocus}} containing information about the locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)
+#' @param pedigrees A list of pedigrees defined using \code{\link[Familias]{FamiliasPedigree}}
+#' @param locus A list of class \code{\link[Familias]{FamiliasLocus}} containing information about the locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)
 #' @param R A vector of mixture alleles, or a list of such if there are multiple replicates
 #' @param datamatrix A data frame where each line corresponds to one constellation of genotypes for the involved individuals.
 #'  Indices of individuals must be given as rownames and must correspond to indices in the pedigree
@@ -16,11 +16,11 @@
 #' @param kinship A numeric value between 0 and 1 that defines the theta-parameter
 #' @return A numeric likelihood for each pedigree named according to the pedigrees, and a matrix of likelihoods for each pedigree and each term (genotype constellation) considered in the calculation
 #' (one row per term).
-#' @details The function requires the package \code{\link{Familias}} and calls on the function \code{\link{FamiliasPosterior}}.
+#' @details The function requires the package \code{\link[Familias]{Familias}} and calls on the function \code{\link[Familias]{FamiliasPosterior}}.
 #' @references Dorum et al. (2017) <doi:10.1007/s00414-016-1526-x> \cr
 #' Kaur et al. (2016) <doi:10.1007/s00414-015-1276-1> \cr
 #' @author Navreet Kaur, Thore Egeland, Guro Dorum
-#' @seealso \code{\link{relMixGUI}} for the GUI version of relMix, \code{\link{FamiliasLocus}} on how to create a FamiliasLocus and \code{\link{FamiliasPedigree}} on how to create a FamiliasPedigree.
+#' @seealso \code{\link{relMixGUI}} for the GUI version of relMix, \code{\link[Familias]{FamiliasLocus}} on how to create a FamiliasLocus and \code{\link[Familias]{FamiliasPedigree}} on how to create a FamiliasPedigree.
 #' @examples #Example 1: paternity trio with mixture of mother and child
 #' #Define alleles and frequencies
 #' alleles <- 1:2

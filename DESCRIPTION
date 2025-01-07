@@ -1,8 +1,8 @@
 Package: relMix
 Type: Package
 Title: Relationship Inference for DNA Mixtures
-Version: 1.4
-Date: 2024-04-12
+Version: 1.4.1
+Date: 2025-01-07
 Authors@R: c(
   person('Guro', 'Dorum', email = 'guro.dorum@gmail.com', role = c('aut', 'cre')),
   person('Elias', 'Hernandis', role = c('aut')),
@@ -21,7 +21,7 @@ Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: 
     Familias (>= 2.6.1),
-    gWidgets2,
+    gWidgets2 (>= 1.0-10),
     gWidgets2tcltk,
     flextable,
     officer,
@@ -33,5 +33,5 @@ Suggests:
     rmarkdown,
     tkrplot
 License: GPL (>=2)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 URL: https://gdorum.github.io/relMix/

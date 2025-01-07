@@ -1,4 +1,9 @@
-# relMix 1.4
+# relMix 1.4.1
+
+#### Minor changes in v. 1.4.1
+
+* Fixed links in some Rd files
+* Corrected an *** buffer overflow detected *** error
 
 #### Changes in v. 1.4
 

@@ -23,5 +23,5 @@ Includes error checking for the input files.
 \code{\link{relMix}} for the main function implemented in \code{relMixGUI}.
 }
 \author{
-Guro Dorum, Elias Hernandis
+Guro Dorum, Elias Hernandis, Magnus Dehli Vigeland
 }
