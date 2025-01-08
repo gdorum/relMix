@@ -12,6 +12,12 @@ knitr::opts_chunk$set(
 )
 ```
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/gdorum/relMix/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/gdorum/relMix/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+
+
 # relMix
 
 relMix analyses DNA mixtures involving relatives by computing likelihood ratios that can account for dropout and drop-in, mutations, silent alleles and population substructure. relMix can both be used to make inferences about the relationship between individuals in a DNA mixture such as in non-invasive prenatal paternity testing, and to identify contributors to a mixed DNA stain who may be related. Relationships are represented by pedigrees and can include kinship between more than two individuals. The main function is the graphical user interface ``` relMixGUI```. A tutorial can be found here: https://gdorum.github.io/relMix/articles/relMix.html
