@@ -93,3 +93,12 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
+
+platforms:
+  - name: linux
+    packages:
+      - tk-dev
+  - name: macos
+    packages:
+      - tcl-tk
+

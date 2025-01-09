@@ -32,6 +32,9 @@ Suggests:
     pander,
     rmarkdown,
     tkrplot
+SystemRequirements: 
+  tcltk, 
+  tk
 License: GPL (>=2)
 RoxygenNote: 7.3.2
 URL: https://gdorum.github.io/relMix/
