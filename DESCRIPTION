@@ -21,13 +21,13 @@ Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: 
     Familias (>= 2.6.1),
-    gWidgets2 (>= 1.0-10),
-    gWidgets2tcltk,
     flextable,
     officer,
     pedFamilias,
     pedtools
 Suggests: 
+    gWidgets2 (>= 1.0-10),
+    gWidgets2tcltk,
     knitr,
     pander,
     rmarkdown,

@@ -8,7 +8,6 @@
 #' @examples
 #' #Examples can be found in the vignette and example data files can be found
 #' #in the folder "extdata" in the installation folder for relMix
-#' @import gWidgets2tcltk
 #' @import Familias
 #' @importFrom graphics plot
 #' @importFrom utils read.table write.table packageVersion
@@ -18,6 +17,11 @@
 #' @importFrom pedFamilias Familias2ped
 #' @export
 relMixGUI <- function(){
+
+  if (!requireNamespace("gWidgets2", quietly = TRUE)) {
+    stop("The gWidgets2 package is required for the GUI. Please install it using install.packages('gWidgets2').")}
+  if (!requireNamespace("gWidgets2tcltk", quietly = TRUE)) {
+    stop("The gWidgets2tcltk package is required for the GUI. Please install it using install.packages('gWidgets2tcltk').")}
 
   options("guiToolkit"="tcltk")
 
