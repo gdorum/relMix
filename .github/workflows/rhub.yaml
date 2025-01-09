@@ -102,3 +102,6 @@ platforms:
     packages:
       - tcl-tk
 
+xvfb-run R CMD check relMix.tar.gz
+
+
