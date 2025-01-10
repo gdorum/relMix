@@ -94,8 +94,8 @@ jobs:
 
   platforms:
     - name: linux
-  packages:
-    - tk-dev
-  - name: macos
-  packages:
-    - tcl-tk
+      packages:
+        - tk-dev
+    - name: macos
+      packages:
+        - tcl-tk
