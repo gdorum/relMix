@@ -49,3 +49,14 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+      - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libxt-dev libx11-dev libx11-xcb-dev libxcb1-dev libxkbcommon-x11-dev libxrender-dev xvfb
+
+      - name: Set up xvfb
+      run: |
+        Xvfb :99 -screen 0 1280x1024x24 &
+        export DISPLAY=:99
+
