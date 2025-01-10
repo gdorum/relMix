@@ -94,6 +94,13 @@ jobs:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
 
+      - name: Install dependencies
+      run: |
+        sudo apt-get install -y xvfb
+        xvfb-run R -e 'install.packages("gWidgets2tcltk")'
+      - name: Check package
+      run: xvfb-run R CMD check relMix.tar.gz
+
 platforms:
   - name: linux
     packages:
@@ -102,6 +109,5 @@ platforms:
     packages:
       - tcl-tk
 
-xvfb-run R CMD check relMix.tar.gz
 
 
