@@ -47,6 +47,7 @@ including drop-in and dropout, mutations, silent alleles and theta correction.
 The function requires the package \code{\link[Familias]{Familias}} and calls on the function \code{\link[Familias]{FamiliasPosterior}}.
 }
 \examples{
+\donttest{
 #Example 1: paternity trio with mixture of mother and child
 #Define alleles and frequencies
 alleles <- 1:2
@@ -117,6 +118,7 @@ res2 <- relMix(pedigrees, locus, R, datamatrix, ids=c("MO","CH"),
               D=list(c(d,d^2),c(d,d^2)),di=di, kinship=0)
 #LR=1.68
 res2$H1/res2$H2
+}
 
 }
 \references{
