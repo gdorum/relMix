@@ -1,16 +1,40 @@
-# rhubv2 configuration for testing on r-devel-linux-x86_64-debian-clang
+# rhub.yaml for testing on r-devel-linux-x86_64-debian-clang
+# Version 2 schema for rhubv2
 
 version: 2
 
+# List of tasks to perform
 tasks:
-  - platform: r-devel-linux-x86_64-debian-clang
-    timeout: 3600
+  - name: "Check on r-devel-linux-x86_64-debian-clang"
+    platform: r-devel-linux-x86_64-debian-clang
+    timeout: 3600  # Set timeout in seconds (1 hour)
+    
+    # Environment variables to customize R CMD check behavior
     env:
-      _R_CHECK_FORCE_SUGGESTS_: false
-      _R_CHECK_CRAN_INCOMING_: true
+      _R_CHECK_FORCE_SUGGESTS_: false   # Don't fail if suggested packages are missing
+      _R_CHECK_CRAN_INCOMING_: true    # Simulate CRAN incoming check
+
+    # Options for skipping parts of the check
     skip:
-      examples: false
-      tests: false
+      examples: false      # Set to true if examples should be skipped
+      tests: false         # Set to true if tests should be skipped
+      vignettes: false     # Set to true if vignettes should be skipped
+    
+    # Additional R CMD check options
     options:
-      manual: false
-      build_vignettes: true
+      manual: false          # Skip building the manual
+      build_vignettes: true  # Build vignettes during the check
+
+    # Custom arguments for R CMD check (if needed)
+    rcmdcheck_args: []
+    
+    # Extra packages to install before running checks
+    extra_packages:
+      - Rcpp          # Add any necessary dependencies here
+      - dplyr
+      - ggplot2
+
+    # Custom scripts to run before or after the check
+    scripts:
+      before: []
+      after: []
