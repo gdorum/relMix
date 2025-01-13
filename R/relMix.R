@@ -21,7 +21,9 @@
 #' Kaur et al. (2016) <doi:10.1007/s00414-015-1276-1> \cr
 #' @author Navreet Kaur, Thore Egeland, Guro Dorum
 #' @seealso \code{\link{relMixGUI}} for the GUI version of relMix, \code{\link[Familias]{FamiliasLocus}} on how to create a FamiliasLocus and \code{\link[Familias]{FamiliasPedigree}} on how to create a FamiliasPedigree.
-#' @examples #Example 1: paternity trio with mixture of mother and child
+#' @examples
+#' \donttest{
+#' #Example 1: paternity trio with mixture of mother and child
 #' #Define alleles and frequencies
 #' alleles <- 1:2
 #' afreq <- c(0.4,0.6)
@@ -91,6 +93,7 @@
 #'               D=list(c(d,d^2),c(d,d^2)),di=di, kinship=0)
 #' #LR=1.68
 #' res2$H1/res2$H2
+#' }
 #'
 #' @export
 relMix <- function(pedigrees, locus, R, datamatrix, ids, D=rep(list(c(0,0)),length(ids)),di=0, kinship=0){
