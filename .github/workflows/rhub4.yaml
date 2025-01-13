@@ -1,40 +1,61 @@
-# rhub.yaml for testing on r-devel-linux-x86_64-debian-clang
-# Version 2 schema for rhubv2
+name: RHub Check
 
-version: 2
+on:
+  # Triggers the workflow on push to the main branch and on pull requests
+  push:
+    branches:
+      - main
+  pull_request:
+  # Allows manual triggering of the workflow
+  workflow_dispatch:
 
-# List of tasks to perform
-tasks:
-  - name: "Check on r-devel-linux-x86_64-debian-clang"
-    platform: r-devel-linux-x86_64-debian-clang
-    timeout: 3600  # Set timeout in seconds (1 hour)
-    
-    # Environment variables to customize R CMD check behavior
-    env:
-      _R_CHECK_FORCE_SUGGESTS_: false   # Don't fail if suggested packages are missing
-      _R_CHECK_CRAN_INCOMING_: true    # Simulate CRAN incoming check
+jobs:
+  rhub-check:
+    runs-on: ubuntu-latest
 
-    # Options for skipping parts of the check
-    skip:
-      examples: false      # Set to true if examples should be skipped
-      tests: false         # Set to true if tests should be skipped
-      vignettes: false     # Set to true if vignettes should be skipped
-    
-    # Additional R CMD check options
-    options:
-      manual: false          # Skip building the manual
-      build_vignettes: true  # Build vignettes during the check
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Custom arguments for R CMD check (if needed)
-    rcmdcheck_args: []
-    
-    # Extra packages to install before running checks
-    extra_packages:
-      - Rcpp          # Add any necessary dependencies here
-      - dplyr
-      - ggplot2
+      # Set up R environment
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'devel'
 
-    # Custom scripts to run before or after the check
-    scripts:
-      before: []
-      after: []
+      # Install rhubv2
+      - name: Install rhubv2
+        run: |
+          Rscript -e 'install.packages("remotes")'
+          Rscript -e 'remotes::install_github("r-hub/rhubv2")'
+
+      # Run the rhub check
+      - name: Run rhub check
+        run: |
+          cat <<EOF > rhub.yaml
+          version: 2
+          tasks:
+            - name: "Check on r-devel-linux-x86_64-debian-clang"
+              platform: r-devel-linux-x86_64-debian-clang
+              timeout: 3600
+              env:
+                _R_CHECK_FORCE_SUGGESTS_: false
+                _R_CHECK_CRAN_INCOMING_: true
+              skip:
+                examples: false
+                tests: false
+                vignettes: false
+              options:
+                manual: false
+                build_vignettes: true
+              rcmdcheck_args: []
+              extra_packages:
+                - Rcpp
+                - dplyr
+                - ggplot2
+              scripts:
+                before: []
+                after: []
+          EOF
+          Rscript -e 'library(rhubv2); rhubv2::check_with_yaml()'
